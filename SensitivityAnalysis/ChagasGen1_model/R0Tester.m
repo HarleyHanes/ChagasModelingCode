@@ -1,0 +1,11 @@
+params=baseline_params();
+% params.theta.SV_SH=0;
+% params.theta.SV_DH=0;
+% params.theta.SH_SV=0;
+% params.theta.DH_SV=0;
+% params.theta.DV_SH=0;
+% params.theta.DV_DH=0;
+% params.theta.SH_DV=0;
+% params.theta.DH_DV=0;
+% params.lambda.V=0;
+[R0,N_eig] = QOI_R0(params,'sym')
