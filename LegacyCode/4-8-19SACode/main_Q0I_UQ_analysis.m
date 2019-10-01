@@ -1,0 +1,149 @@
+function main_Q0I_UQ_analysis
+clear;
+% main program to preform sensitivity analysis on the output quantities of 
+% interest (QOIs) as a function of input parameters of interest (POIs)
+
+% the user must a code to generate the QOIs from the POIs 
+str.QOI_model_eval = @my_model;% QOI=my_model(POI)
+% If there constraints on the POIs the user must provide
+str.POI_constraints= @constraints; % POI = constraints(POI_input)
+
+% change the default str.* values in the user code
+% str=QOI_change_default_params(str)
+
+% set up the solver environment ----------
+% set the path for the current directory and subdirectories 
+%restoredefaultpath ;prefix = mfilename('fullpath');
+%dirs = regexp(prefix,'[\\/]');addpath(genpath(prefix(1:dirs(end))))
+
+clear global ; clf; format shortE; close all;% close previous sessions
+
+set(0,'DefaultAxesFontSize',18,'defaultlinelinewidth',2);set(gca,'FontSize',18);close(gcf);% increase font size
+rng(101);% set the random number generator seed for reproducibility
+
+str.QOI_model_name='Chikv_HBC'; % define the problem to be solved
+
+str= QOI_define_default_params(str);% set the default parameter values
+str= QOI_change_default_params(str);% user code to change the default parameter values
+
+% disp(str) % display the variables for solving the problem - needs a better print format
+
+% 1. analyze the problem setup
+%  str.QOI_pre_analysis(str);
+% 
+% % 2. local sensitivity analysis
+%  [USI,RSI]=str.QOI_LSA(str); % unscaled and relative sensitivity indices
+% 
+% % 3. extended sensitivity analysis
+%  [POI_ESA,QOI_ESA]=str.QOI_ESA(str);
+% 
+% %4. global sensitivity analysis
+ [POI_GSA,QOI_GSA]=str.QOI_GSA(str);
+
+%global sensitivity sobol indices
+% [sobol_indices]=Sobol_GSA(str);
+% sobol_indices
+
+% 5. final analysis the problem solution
+%  str.QOI_post_analysis(str);
+
+end
+
+function str= QOI_change_default_params(str)
+%% QOI_change_default_params change default parameters
+
+
+switch str.QOI_model_name
+    case 'SIR'
+        str.POI_names =  {'beta', 'gamma'};
+        str.nPOI=2;
+        
+        str.QOI_names =  {'Total Infected','Infected(t=2)','R0'};
+        str.nQOI=3;
+        
+        str.QOI_model_eval = @Big_Black_Box_SIR_model;
+        str.POI_baseline=[ 0.7; 0.3];
+        str.POI_min=[ 0.1; 0.2] ;
+        str.POI_max=[ 2; 0.7] ;
+        str.POI_mode=str.POI_baseline;
+        str.POI_pdf='beta';% uniform triangle beta
+        
+    case 'PP'
+        str.POI_names =  {'\alpha','\beta', '\delta','\gamma'};
+        str.nPOI=4;
+        
+        str.QOI_names =  {'Maximum Predator Pop','Maximum Prey Pop','Minimum Prey Pop', 'Minimum Predator Pop'};
+        str.nQOI=4;
+        
+        str.QOI_model_eval = @Big_Black_Box_PP_model;
+        str.POI_baseline=[10;5;2;1];
+        str.POI_min=[ 5; 2.5;1;0.5]; 
+        str.POI_max=[ 20;7.5;3;3];
+        str.POI_mode=str.POI_baseline;
+        str.POI_pdf='beta';% uniform triangle beta
+    case 'Chikv_HBC'
+        str.POI_names =  {'\theta_2', '\pi_1', '\pi_2','Initial Cumulative Infected', 'K_v'};
+        str.nPOI=5;
+        
+        str.QOI_names =  {'Total Infected','R0'};
+        str.nQOI=2;
+        
+        str.QOI_model_eval = @BBB_Chikv_HBC_model;
+        str.POI_baseline=[0.7,0.8,.4,4 11000]';
+        str.POI_min=[0.5,0.5,0,1, 9000]'; 
+        str.POI_max=[1,1, 0.6,10, 14000]';
+        str.POI_mode=str.POI_baseline;
+        str.POI_pdf='beta';% uniform triangle beta
+        str.number_ESA_samples = 20;
+    case 'Chagas-Gen1-PopParm'
+        str.POI_names =  {'\lambda_H','\lambda_V','\mu_{SH}','\mu_{SV}','\mu_{DH}','\mu_{DV}'};
+                      str.nPOI=length(str.POI_names);
+        global POInames  %names is called on only in get_p_struct to determine
+                      %which parameters need to be updated
+           POInames = str.POI_names;
+        str.QOI_names =  {'Proportion DV Infected','R_0'};
+        str.nQOI=length(str.QOI_names);
+        global QOInames
+            QOInames=str.QOI_names;
+        str.QOI_model_eval = @BBB_Chagas_Gen1_model;
+        %str.POI_baseline=[.015 .003 .015 .003 .003 .015 .003 .015]';
+        str.POI_baseline=[.05 .05 .83/365 .271/365 .83/365 .271/365 ]';
+        if length(str.POI_baseline)~=str.nPOI
+            fprintf('ERROR!!! Different number of parameters named than entered\n')
+        end
+        str.POI_min=str.POI_baseline-1*str.POI_baseline;
+        str.POI_max=str.POI_baseline+2*str.POI_baseline;
+        str.POI_mode=str.POI_baseline;
+        str.POI_pdf='beta';% uniform triangle beta
+        str.number_ESA_samples = 30;
+    case 'Chagas-Gen1-Thetas'
+        str.POI_names =  {'\theta^{SV}_{SH}','\theta^{DV}_{SH}','\theta^{SH}_{SV}','\theta^{DH}_{SV}',...
+                          '\theta^{SV}_{DH}','\theta^{DV}_{DH}','\theta^{SH}_{DV}','\theta^{DH}_{DV}'};
+            %NAMES MUST MATCH THOSE IN get_p_struct
+        str.nPOI=length(str.POI_names);
+        global POInames  %names is called on only in get_p_struct to determine
+                      %which parameters need to be updated
+           POInames = str.POI_names;
+        str.QOI_names =  {'Proportion DV Infected','R_0'};
+        str.nQOI=length(str.QOI_names);
+        global QOInames
+            QOInames=str.QOI_names;
+        str.QOI_model_eval = @BBB_Chagas_Gen1_model;
+        
+        %str.POI_baseline=[.015 .003 .015 .003 .003 .015 .003 .015]';
+        str.POI_baseline=[.002 .0004 .002 .0004 .0004 .002 .0004 .002]';
+        if length(str.POI_baseline)~=str.nPOI
+            fprintf('ERROR!!! Different number of parameters named than entered\n')
+        end
+        str.POI_min=str.POI_baseline/3;
+        str.POI_max=str.POI_baseline*3;
+        str.POI_mode=str.POI_baseline;
+        str.POI_pdf='beta';% uniform triangle beta
+        str.number_ESA_samples = 30;
+    otherwise
+        error([' str.QOI_model =',str.QOI_model,' is not available'])
+end
+
+end
+
+
