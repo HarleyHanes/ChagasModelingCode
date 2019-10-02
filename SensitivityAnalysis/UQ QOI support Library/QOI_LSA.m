@@ -12,14 +12,14 @@ function [USI,RSI]=QOI_LSA(str)
 
 %disp('Local Sensitivity Matrices')
 %disp(['column variables =',str.POI_names])
-USI = getJacobian(str.POI_baseline,str.QOI_model_eval,'raw',true);
+USI = getJacobian(str.POI_baseline,str.QOI_model_eval,str.select,'raw',true);
 table_USI = table(USI,'RowNames',str.QOI_names);
 disp(table_USI)
 
 
 % Multiply by QOI/POI at the baseline for relative sensitivity analysis
 
-RSI = getJacobian(str.POI_baseline,str.QOI_model_eval);
+RSI = getJacobian(str.POI_baseline,str.QOI_model_eval,str.select);
 table_RSI = table(RSI,'RowNames',str.QOI_names);
 disp(table_RSI)
 

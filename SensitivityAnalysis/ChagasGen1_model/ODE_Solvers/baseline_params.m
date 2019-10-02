@@ -8,7 +8,7 @@ function [params] = baseline_params(varagin)
 %   Outputs: params- Structure of model parameters, solver, initial
 %                    conditions, and time constraints
 %Set up variable input
-if length(varagin)>=1
+if nargin>=1
     settings=varagin{1};
 else
     settings.paramset='base';
@@ -71,8 +71,13 @@ switch settings.paramset
         years=50;
     case InvestigateLambda
         %Check existence of required params
-            if isfield(settings,'DomestDefficient')==0
-                warning(['settings is missing DomestDefficient element required'...
+            if isfield(settings,'PropDomestDefficient')==0
+                warning(['settings is missing PropDomestDefficient element required'...
+                ' for InvestigateLambda.'])
+                keyboard
+            end
+            if isfield(settings,'PropSpatialTrans')==0
+                warning(['settings is missing PropSpatialTrans element required'...
                 ' for InvestigateLambda.'])
                 keyboard
             end
@@ -89,8 +94,8 @@ switch settings.paramset
             %Currently coded so v->t and t->v are same if in between same compartment
                 %but 1/5 if between dif compartment
             %Base Rates
-            theta.SH_SV=.102;
-            theta.DH_SV=0;
+            theta.SH_SV=.102*(1-settings.PropSpatialTrans);
+            theta.DH_SV=.102*settings.PropSpatialTrans;
 
             theta.DH_DV=theta.SH_SV*settings.DomestDefficient;
             theta.SH_DV=theta.DH_SV;
@@ -134,6 +139,8 @@ end
         theta.DV_SH=theta.SH_DV*ratio.V_H;%popsize.DV/popsize.SH;
         theta.DV_DH=theta.DH_DV*ratio.V_H;%popsize.DH/popsize.DV;
         theta.SV_DH=theta.DH_SV*ratio.V_H;%popsize.DH/popsize.DV;
+        
+        
         theta.SV_SH=theta.SV_SH*ratio.competant_SV;
         theta.DV_SH=theta.DV_SH*ratio.competant_DV;
         theta.SH_SV=theta.SH_SV*ratio.competant_SV;

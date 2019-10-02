@@ -1,4 +1,4 @@
-function jac = getJacobian(params_, evalFcn_, varargin)
+function jac = getJacobian(params_, evalFcn_, select_, varargin)
 % Takes a set of parameters for the function bHandle
 %  as well as any arguments you'd like to pass to bHandle
 %
@@ -13,19 +13,21 @@ p = inputParser;
 
 addRequired(p,'params',@isnumeric);
 addRequired(p,'evalFcn',@(fh) isa(fh,'function_handle'));
+addRequired(p,'select',@isstruct);
 
 addOptional(p,'raw',false,@islogical);
 
-parse(p, params_, evalFcn_, varargin{:});
+parse(p, params_, evalFcn_, select_, varargin{:});
 
 params = p.Results.params;
 evalFcn = p.Results.evalFcn;
 raw = p.Results.raw;
+select=p.Results.select;
 %%
 nParams = length(params);
 
 % calculate baseline point
-baseQuants = evalFcn(params);
+baseQuants = evalFcn(params,select);
 
 nQuants = length(baseQuants);
 
@@ -46,10 +48,10 @@ for i = 1:nParams
     xi = params;
     % basic centered difference approximation of Jacobian
     xi(i) = init_x0(i) - delta_x0(i);
-    yLo = evalFcn(xi);
+    yLo = evalFcn(xi,select);
     
     xi(i) = init_x0(i) + delta_x0(i);
-    yHi = evalFcn(xi);
+    yHi = evalFcn(xi,select);
     
     for j = 1:nQuants
         % Calculate partial

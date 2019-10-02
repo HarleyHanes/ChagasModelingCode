@@ -1,7 +1,16 @@
-function main_Q0I_UQ_analysis
+function main_Q0I_UQ_analysis(varagin)
 clear; clear global;
 % main program to preform sensitivity analysis on the output quantities of 
 % interest (QOIs) as a function of input parameters of interest (POIs)
+if nargin>=1
+    str.QOI_model_name=varagin{1};
+    if nargin>=2
+        settings=varagin{2};
+    end
+else
+    str.QOI_model_name='Chagas-Gen1-AssessLambda';
+end
+
 
 % the user must a code to generate the QOIs from the POIs 
 str.QOI_model_eval = @my_model;% QOI=my_model(POI)
@@ -21,8 +30,6 @@ set_workspace; clear global ; clf; format shortE; close all;% close previous ses
 set(0,'DefaultAxesFontSize',18,'defaultlinelinewidth',2);set(gca,'FontSize',18);close(gcf);% increase font size
 rng(101);% set the random number generator seed for reproducibility
 
-str.QOI_model_name='Chagas-Gen1-ConstrainedTrans'; % define the problem to be solved
-
 str= QOI_define_default_params(str);% set the default parameter values
 str= QOI_change_default_params(str);% user code to change the default parameter values
 
@@ -35,10 +42,10 @@ str= QOI_change_default_params(str);% user code to change the default parameter 
  [USI,RSI]=str.QOI_LSA(str); % unscaled and relative sensitivity indices
 % 
 % % 3. extended sensitivity analysis
- [POI_ESA,QOI_ESA]=str.QOI_ESA(str);
+% [POI_ESA,QOI_ESA]=str.QOI_ESA(str)
 % 
 % %4. global sensitivity analysis
- [POI_GSA,QOI_GSA]=str.QOI_GSA(str);
+% [POI_GSA,QOI_GSA]=str.QOI_GSA(str);
 
 %global sensitivity sobol indices
 % [sobol_indices]=Sobol_GSA(str);
@@ -172,6 +179,27 @@ switch str.QOI_model_name
         str.POI_max=str.POI_baseline+.75*str.POI_baseline;
         str.POI_min(5:6)=0;
         str.POI_max(5:6)=str.POI_baseline(5:6);
+        str.POI_mode=str.POI_baseline;
+        str.POI_pdf='beta';% uniform triangle beta
+        str.number_ESA_samples = 40;
+    case 'Chagas-Gen1-AssessLambda'
+        str.POI_names =  {'\lambda_H','\lambda_V'};
+            %NAMES MUST MATCH THOSE IN get_p_struct
+        str.nPOI=length(str.POI_names);
+        str.select.POI=str.POI_names;
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium','Proportion I_{DV} at t=5', 'R_0'};
+        str.nQOI=length(str.QOI_names);
+        str.select.QOI=str.QOI_names;
+        str.QOI_model_eval = @BBB_Chagas_Gen1_model;
+        params=baseline_params();
+        lambda=params.lambda;
+        str.POI_baseline=[lambda.H lambda.V]';
+        %str.POI_baseline=[.01 .002 .01 .002 .002 .01 .002 .01]';
+        if length(str.POI_baseline)~=str.nPOI
+            fprintf('ERROR!!! Different number of parameters named than entered\n')
+        end
+        str.POI_min=zeros(1,2);
+        str.POI_max=2*str.POI_baseline;
         str.POI_mode=str.POI_baseline;
         str.POI_pdf='beta';% uniform triangle beta
         str.number_ESA_samples = 40;
