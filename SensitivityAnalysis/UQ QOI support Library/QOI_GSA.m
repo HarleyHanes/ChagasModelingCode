@@ -28,7 +28,7 @@ end
 % evaluate the model
 QOI_samp=NaN(nsamp,str.nQOI);
 for ix=1:nsamp
-    QOI_samp(ix,:)=str.QOI_model_eval(POI_samp(ix,:));
+    QOI_samp(ix,:)=str.QOI_model_eval(POI_samp(ix,:),str.select);
 end
 
 %% QOI versus QOI correlation plots

@@ -39,13 +39,13 @@ str= QOI_change_default_params(str);% user code to change the default parameter 
 %  str.QOI_pre_analysis(str);
 % 
 % % 2. local sensitivity analysis
- [USI,RSI]=str.QOI_LSA(str); % unscaled and relative sensitivity indices
+% [USI,RSI]=str.QOI_LSA(str); % unscaled and relative sensitivity indices
 % 
 % % 3. extended sensitivity analysis
 % [POI_ESA,QOI_ESA]=str.QOI_ESA(str)
 % 
 % %4. global sensitivity analysis
-% [POI_GSA,QOI_GSA]=str.QOI_GSA(str);
+ [POI_GSA,QOI_GSA]=str.QOI_GSA(str);
 
 %global sensitivity sobol indices
 % [sobol_indices]=Sobol_GSA(str);
@@ -198,7 +198,7 @@ switch str.QOI_model_name
         if length(str.POI_baseline)~=str.nPOI
             fprintf('ERROR!!! Different number of parameters named than entered\n')
         end
-        str.POI_min=zeros(1,2);
+        str.POI_min=zeros(2,1);
         str.POI_max=2*str.POI_baseline;
         str.POI_mode=str.POI_baseline;
         str.POI_pdf='beta';% uniform triangle beta
