@@ -1,4 +1,4 @@
-function [params] = baseline_params(varagin)
+function [params] = baseline_params(varargin)
 %baseline_params Creates structure of Model Parameters for Chagas Gen 1
 %   Authors: Harley Hanes (harleyhanes97@gmail.com), Jessica Conrad
 %   Inputs: varagin- expects no inputs (in which case uses base parameter
@@ -9,17 +9,17 @@ function [params] = baseline_params(varagin)
 %                    conditions, and time constraints
 %Set up variable input
 if nargin>=1
-    settings=varagin{1};
+    ParamSettings=varargin{1};
 else
-    settings.paramset='base';
+    ParamSettings.paramset='base';
 end
 %Check existence of paramset element
-if isfield(settings,'paramset')==0
+if isfield(ParamSettings,'paramset')==0
     warning('settings needs element paramset identifying parameters to use')
     keyboard
 end
 %% Parameters (all time components need to be in days)
-switch settings.paramset
+switch ParamSettings.paramset
     case 'base'
         %Pop proportion
         %Doesn't leave function but determines popsizes and movement rates
@@ -69,14 +69,14 @@ switch settings.paramset
         solver=@ode23tb;
         %Max time of simulation
         years=50;
-    case InvestigateLambda
+    case 'InvestigateLambda'
         %Check existence of required params
-            if isfield(settings,'PropDomestDefficient')==0
+            if isfield(ParamSettings,'PropDomestDefficient')==0
                 warning(['settings is missing PropDomestDefficient element required'...
                 ' for InvestigateLambda.'])
                 keyboard
             end
-            if isfield(settings,'PropSpatialTrans')==0
+            if isfield(ParamSettings,'PropSpatialTrans')==0
                 warning(['settings is missing PropSpatialTrans element required'...
                 ' for InvestigateLambda.'])
                 keyboard
@@ -94,10 +94,12 @@ switch settings.paramset
             %Currently coded so v->t and t->v are same if in between same compartment
                 %but 1/5 if between dif compartment
             %Base Rates
-            theta.SH_SV=.102*(1-settings.PropSpatialTrans);
-            theta.DH_SV=.102*settings.PropSpatialTrans;
+            ParamSettings.PropSpatialTrans
+            ParamSettings.PropDomestDefficient
+            theta.SH_SV=.102*(1-ParamSettings.PropSpatialTrans);
+            theta.DH_SV=.102*ParamSettings.PropSpatialTrans;
 
-            theta.DH_DV=theta.SH_SV*settings.DomestDefficient;
+            theta.DH_DV=theta.SH_SV*ParamSettings.PropDomestDefficient;
             theta.SH_DV=theta.DH_SV;
                 %Adjusted according to blood meal analysis
                  %--Where does this come from??????

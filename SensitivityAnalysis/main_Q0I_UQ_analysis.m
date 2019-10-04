@@ -1,16 +1,15 @@
-function main_Q0I_UQ_analysis(varagin)
-clear; clear global;
+function [POI,QOI]=main_Q0I_UQ_analysis(varargin)
 % main program to preform sensitivity analysis on the output quantities of 
 % interest (QOIs) as a function of input parameters of interest (POIs)
+
 if nargin>=1
-    str.QOI_model_name=varagin{1};
+        str.QOI_model_name=varargin{1};
     if nargin>=2
-        settings=varagin{2};
+        str.ParamSettings=varargin{2};
     end
 else
     str.QOI_model_name='Chagas-Gen1-AssessLambda';
 end
-
 
 % the user must a code to generate the QOIs from the POIs 
 str.QOI_model_eval = @my_model;% QOI=my_model(POI)
@@ -39,13 +38,13 @@ str= QOI_change_default_params(str);% user code to change the default parameter 
 %  str.QOI_pre_analysis(str);
 % 
 % % 2. local sensitivity analysis
-% [USI,RSI]=str.QOI_LSA(str); % unscaled and relative sensitivity indices
+% [USI,RSI]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
 % 
 % % 3. extended sensitivity analysis
-% [POI_ESA,QOI_ESA]=str.QOI_ESA(str)
+ [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;
 % 
 % %4. global sensitivity analysis
- [POI_GSA,QOI_GSA]=str.QOI_GSA(str);
+% [POI_GSA,QOI_GSA]=str.QOI_GSA(str); POI.GSA=POI_GSA; QOI.GSA=QOI_GSA;
 
 %global sensitivity sobol indices
 % [sobol_indices]=Sobol_GSA(str);
@@ -58,7 +57,6 @@ end
 
 function str= QOI_change_default_params(str)
 %% QOI_change_default_params change default parameters
-global POInames QOInames;
 switch str.QOI_model_name
     case 'Chagas-Gen1-lambda'
         str.POI_names =  {'\lambda_H','\lambda_V'};
@@ -191,7 +189,8 @@ switch str.QOI_model_name
         str.nQOI=length(str.QOI_names);
         str.select.QOI=str.QOI_names;
         str.QOI_model_eval = @BBB_Chagas_Gen1_model;
-        params=baseline_params();
+        ParamSettings=str.ParamSettings;
+        params=baseline_params(ParamSettings);
         lambda=params.lambda;
         str.POI_baseline=[lambda.H lambda.V]';
         %str.POI_baseline=[.01 .002 .01 .002 .002 .01 .002 .01]';
@@ -202,7 +201,7 @@ switch str.QOI_model_name
         str.POI_max=2*str.POI_baseline;
         str.POI_mode=str.POI_baseline;
         str.POI_pdf='beta';% uniform triangle beta
-        str.number_ESA_samples = 40;
+        str.number_ESA_samples = 15;
     otherwise
         error([' str.QOI_model =',str.QOI_model,' is not available'])
 end
