@@ -8,8 +8,6 @@ function [params] = baseline_params(varargin)
 %   Outputs: params- Structure of model parameters, solver, initial
 %                    conditions, and time constraints
 %Set up variable input
-global SaveTheta %DO NOT Leave ACTive, Test purposes only
-
 if nargin>=1
     ParamSettings=varargin{1};
 else
@@ -189,9 +187,6 @@ end
     params.popsize=popsize;
     params.fracinfect=fracinfect;
     params.ratio=ratio;
-    params.tspan=tspan;
-    
-SaveTheta(end+1,:)=[theta.SH_SV theta.DH_SV theta.DH_DV theta.SH_DV];
-            
+    params.tspan=tspan;            
 end
 
