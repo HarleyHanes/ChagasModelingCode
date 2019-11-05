@@ -8,6 +8,8 @@ function [params] = baseline_params(varargin)
 %   Outputs: params- Structure of model parameters, solver, initial
 %                    conditions, and time constraints
 %Set up variable input
+global SaveTheta %DO NOT Leave ACTive, Test purposes only
+fprintf("Loading parameters\n")
 if nargin>=1
     ParamSettings=varargin{1};
 else
@@ -137,11 +139,13 @@ switch ParamSettings.paramset
 end
 %% Scaling 
     % Thetas
+        %Generate V->H transmission by pop ratio * H->V transmission
         theta.SV_SH=theta.SH_SV*ratio.V_H;%popsize.SV/popsize.SH;
         theta.DV_SH=theta.SH_DV*ratio.V_H;%popsize.DV/popsize.SH;
         theta.DV_DH=theta.DH_DV*ratio.V_H;%popsize.DH/popsize.DV;
         theta.SV_DH=theta.DH_SV*ratio.V_H;%popsize.DH/popsize.DV;
         
+%SaveTheta(end+1,:)=[theta.SH_SV theta.DH_SV theta.DH_DV theta.SH_DV];
         
         theta.SV_SH=theta.SV_SH*ratio.competant_SV;
         theta.DV_SH=theta.DV_SH*ratio.competant_DV;
@@ -189,5 +193,8 @@ end
     params.fracinfect=fracinfect;
     params.ratio=ratio;
     params.tspan=tspan;
+    
+%SaveTheta(end+1,:)=[theta.SH_SV theta.DH_SV theta.DH_DV theta.SH_DV]
+            
 end
 

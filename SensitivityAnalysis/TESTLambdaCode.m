@@ -9,6 +9,9 @@ clear;clc;
     ParamSettings.paramset='InvestigateLambda';
     PropSpatialTrans=[0,.2];
     PropDomestDefficient=linspace(0,1,4);
+clear global;
+global SaveTheta %DO NOT LEAVE ACTIVE, test purposes only. see baseline_params
+SaveTheta=[0 0 0 0]; SaveTheta(1,:)=[];
 for i=1:length(PropSpatialTrans)
     ParamSettings.PropSpatialTrans=PropSpatialTrans(i);
     for j=1:length(PropDomestDefficient)
@@ -48,3 +51,8 @@ ylabel(sprintf('Trans-spatial +\n%% I_{DT}'))
 xlabel('% Decreased Peridomestic Transmission')
 subplot(2,2,4)
 xlabel('% Decreased Peridomestic Transmission')
+
+
+
+figure
+plot(1:size(SaveTheta,1),SaveTheta)
