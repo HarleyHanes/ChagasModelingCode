@@ -1,43 +1,41 @@
-function params= get_p_struct_CG1(POIs,pnames)
+function params= get_p_struct_CG1(POIs,pnames,baseParams)
 %Parameter Loading
-params=baseline_params();
+params=baseParams;
 theta=params.theta;
 lambda=params.lambda;
 mu=params.mu;
 for i=1:length(pnames)
-    W=0;
     switch pnames{i}
         case '\theta^{SV}_{SH}'
-            theta.SV_SH=POIs(i);W=1;
+            theta.SV_SH=POIs(i);
         case '\theta^{DV}_{SH}'
-            theta.DV_SH=POIs(i);W=1;
+            theta.DV_SH=POIs(i);
         case '\theta^{SH}_{SV}'
-            theta.SH_SV=POIs(i);W=1;
+            theta.SH_SV=POIs(i);
         case '\theta^{DH}_{SV}'
-            theta.DH_SV=POIs(i);W=1;
+            theta.DH_SV=POIs(i);
         case '\theta^{SV}_{DH}'
-            theta.SV_DH=POIs(i);W=1;
+            theta.SV_DH=POIs(i);
         case '\theta^{DV}_{DH}'
-            theta.DV_DH=POIs(i);W=1;
+            theta.DV_DH=POIs(i);
         case '\theta^{SH}_{DV}'
-            theta.SH_DV=POIs(i);W=1;
+            theta.SH_DV=POIs(i);
         case '\theta^{DH}_{DV}'
-            theta.DH_DV=POIs(i);W=1;
+            theta.DH_DV=POIs(i);
         case '\lambda_H'
-            lambda.H=POIs(i);W=1;
+            lambda.H=POIs(i);
         case '\lambda_V'
-            lambda.V=POIs(i);W=1;
+            lambda.V=POIs(i);
         case '\mu_{SH}'
-            mu.SH=POIs(i);W=1;
+            mu.SH=POIs(i);
         case '\mu_{SV}'
-            mu.SV=POIs(i);W=1;
+            mu.SV=POIs(i);
         case '\mu_{DH}'
-            mu.DH=POIs(i);W=1;
+            mu.DH=POIs(i);
         case '\mu_{DV}'
-            mu.DV=POIs(i); W=1;
-    end 
-    if W==0
-        error(['Error!! ',pnames{i},' could not be identified as a parameter'])
+            mu.DV=POIs(i); 
+        otherwise
+            error(['Error!! ',pnames{i},' could not be identified as a parameter'])
     end
 end
 

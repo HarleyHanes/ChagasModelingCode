@@ -9,7 +9,7 @@ function [params] = baseline_params(varargin)
 %                    conditions, and time constraints
 %Set up variable input
 global SaveTheta %DO NOT Leave ACTive, Test purposes only
-fprintf("Loading parameters\n")
+
 if nargin>=1
     ParamSettings=varargin{1};
 else
@@ -17,9 +17,10 @@ else
 end
 %Check existence of paramset element
 if isfield(ParamSettings,'paramset')==0
-    warning('settings needs element paramset identifying parameters to use')
+    warning('settings needs element "paramset" identifying parameters to use')
     keyboard
 end
+fprintf("Loading '%s' parameters\n",ParamSettings.paramset)
 %% Parameters (all time components need to be in days)
 switch ParamSettings.paramset
     case 'base'
@@ -96,8 +97,6 @@ switch ParamSettings.paramset
             %Currently coded so v->t and t->v are same if in between same compartment
                 %but 1/5 if between dif compartment
             %Base Rates
-            ParamSettings.PropSpatialTrans
-            ParamSettings.PropDomestDefficient
             theta.SH_SV=.102*(1-ParamSettings.PropSpatialTrans);
             theta.DH_SV=.102*ParamSettings.PropSpatialTrans;
 
@@ -144,8 +143,6 @@ end
         theta.DV_SH=theta.SH_DV*ratio.V_H;%popsize.DV/popsize.SH;
         theta.DV_DH=theta.DH_DV*ratio.V_H;%popsize.DH/popsize.DV;
         theta.SV_DH=theta.DH_SV*ratio.V_H;%popsize.DH/popsize.DV;
-        
-%SaveTheta(end+1,:)=[theta.SH_SV theta.DH_SV theta.DH_DV theta.SH_DV];
         
         theta.SV_SH=theta.SV_SH*ratio.competant_SV;
         theta.DV_SH=theta.DV_SH*ratio.competant_DV;
@@ -194,7 +191,7 @@ end
     params.ratio=ratio;
     params.tspan=tspan;
     
-%SaveTheta(end+1,:)=[theta.SH_SV theta.DH_SV theta.DH_DV theta.SH_DV]
+SaveTheta(end+1,:)=[theta.SH_SV theta.DH_SV theta.DH_DV theta.SH_DV];
             
 end
 

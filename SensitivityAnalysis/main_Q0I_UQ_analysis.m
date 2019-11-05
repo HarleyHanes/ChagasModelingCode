@@ -9,7 +9,7 @@ if nargin>=1
     end
 else
     str.QOI_model_name='Chagas-Gen1-Full';   %Model to run if no inputs
-    str.ParamSettings='base';
+    str.ParamSettings.paramset='base';
 end
 
 % the user must a code to generate the QOIs from the POIs 
@@ -39,13 +39,13 @@ str= QOI_change_default_params(str);% user code to change the default parameter 
 %  str.QOI_pre_analysis(str);
 % 
 % % 2. local sensitivity analysis
-% [POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
+ [POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
 % 
 % % 3. extended sensitivity analysis
  [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;
 % 
 % %4. global sensitivity analysis
-% [POI_GSA,QOI_GSA]=str.QOI_GSA(str); POI.GSA=POI_GSA; QOI.GSA=QOI_GSA;
+ [POI_GSA,QOI_GSA]=str.QOI_GSA(str); POI.GSA=POI_GSA; QOI.GSA=QOI_GSA;
 
 %global sensitivity sobol indices
 % [sobol_indices]=Sobol_GSA(str);
@@ -59,10 +59,10 @@ end
 function str= QOI_change_default_params(str)
 %% QOI_change_default_params change default parameters
 %Load parameters
-    params=baseline_params(str.ParamSettings);
-        theta=params.theta;
-        lambda=params.lambda;
-        mu=params.mu;
+    str.baseParams=baseline_params(str.ParamSettings);
+        theta=str.baseParams.theta;
+        lambda=str.baseParams.lambda;
+        mu=str.baseParams.mu;
 switch str.QOI_model_name
     case 'Chagas-Gen1-lambda'
         %Select POI's and QOI's
@@ -77,7 +77,7 @@ switch str.QOI_model_name
         %Set parameter Sampling
         str.POI_baseline=[lambda.H lambda.V]';
         if length(str.POI_baseline)~=str.nPOI
-            fprintf('ERROR!!! Different number of parameters named than entered\n')
+            error("Different number of parameters named than entered")
         end
         str.POI_min=str.POI_baseline-.8*str.POI_baseline;
         str.POI_max=str.POI_baseline+.8*str.POI_baseline;
@@ -96,7 +96,7 @@ switch str.QOI_model_name
         str.POI_baseline=[lambda.H lambda.V mu.SH mu.SV mu.DH mu.DV ]';
         %str.POI_baseline=[.05 .05 .83/365 .271/365 .83/365 .271/365 ]';
         if length(str.POI_baseline)~=str.nPOI
-            fprintf('ERROR!!! Different number of parameters named than entered\n')
+            error("Different number of parameters named than entered")
         end
         str.POI_min=str.POI_baseline-.8*str.POI_baseline;
         str.POI_max=str.POI_baseline+.8*str.POI_baseline;
@@ -120,7 +120,7 @@ switch str.QOI_model_name
                           theta.SV_DH theta.DV_DH theta.SH_DV theta.DH_DV]';
         %str.POI_baseline=[.01 .002 .01 .002 .002 .01 .002 .01]';
         if length(str.POI_baseline)~=str.nPOI
-            fprintf('ERROR!!! Different number of parameters named than entered\n')
+            error("Different number of parameters named than entered")
         end
         str.POI_min=str.POI_baseline-.5*str.POI_baseline;
         str.POI_max=str.POI_baseline+.5*str.POI_baseline;
@@ -143,7 +143,7 @@ switch str.QOI_model_name
                           lambda.H lambda.V mu.SH mu.SV mu.DH mu.DV ]';
         %str.POI_baseline=[.01 .002 .01 .002 .002 .01 .002 .01]';
         if length(str.POI_baseline)~=str.nPOI
-            fprintf('ERROR!!! Different number of parameters named than entered\n')
+           	error("Different number of parameters named than entered")
         end
         str.POI_min=str.POI_baseline-.75*str.POI_baseline;
         str.POI_max=str.POI_baseline+.75*str.POI_baseline;
@@ -168,7 +168,7 @@ switch str.QOI_model_name
                           lambda.H lambda.V mu.SH mu.SV mu.DH mu.DV ]';
         %str.POI_baseline=[.01 .002 .01 .002 .002 .01 .002 .01]';
         if length(str.POI_baseline)~=str.nPOI
-            fprintf('ERROR!!! Different number of parameters named than entered\n')
+            error("Different number of parameters named than entered")
         end
         str.POI_min=str.POI_baseline-.75*str.POI_baseline;
         str.POI_max=str.POI_baseline+.75*str.POI_baseline;
@@ -189,7 +189,7 @@ switch str.QOI_model_name
         str.POI_baseline=[lambda.H lambda.V]';
         %str.POI_baseline=[.01 .002 .01 .002 .002 .01 .002 .01]';
         if length(str.POI_baseline)~=str.nPOI
-            fprintf('ERROR!!! Different number of parameters named than entered\n')
+            error('Different number of parameters named than entered')
         end
         str.POI_min=zeros(2,1);
         str.POI_max=2*str.POI_baseline;

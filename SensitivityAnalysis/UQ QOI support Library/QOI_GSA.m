@@ -1,6 +1,6 @@
 function [POI_samp,QOI_samp]=QOI_GSA(str)
 %% QOI_GSA Global Sensitivity Anaysis
-
+fprintf("Beginning Global Sensitivity Analysis\n")
 % generate the samples
 ndim=length(str.POI_baseline);
 nsamp=str.number_GSA_samples;
@@ -28,7 +28,7 @@ end
 % evaluate the model
 QOI_samp=NaN(nsamp,str.nQOI);
 for ix=1:nsamp
-    QOI_samp(ix,:)=str.QOI_model_eval(POI_samp(ix,:),str.select);
+    QOI_samp(ix,:)=str.QOI_model_eval(POI_samp(ix,:),str.select,str.baseParams);
 end
 
 %% QOI versus QOI correlation plots
@@ -42,6 +42,7 @@ end
 
 %% QOI versus POI correlation plots
 %scatterplot of the correlations of the bootstrap solutions
+fprintf("Plotting GSA Results")
 figure; [~,ax]=plotmatrix(POI_samp,QOI_samp);
 title('correlation scatter plots of QOIs')
 for iq=1:str.nQOI
