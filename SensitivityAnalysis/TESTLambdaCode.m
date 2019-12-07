@@ -8,7 +8,7 @@ clear;clc;
 %Binary SpatialTrans
     ParamSettings.paramset='InvestigateLambda';
     PropSpatialTrans=[0,.2];
-    PropDomestDefficient=linspace(0,1,4);
+    PropDomestDefficient=linspace(0,1,15);
 for i=1:length(PropSpatialTrans)
     ParamSettings.PropSpatialTrans=PropSpatialTrans(i);
     for j=1:length(PropDomestDefficient)

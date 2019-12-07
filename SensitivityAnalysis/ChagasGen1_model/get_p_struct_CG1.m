@@ -34,8 +34,9 @@ for i=1:length(pnames)
             mu.DH=POIs(i);
         case '\mu_{DV}'
             mu.DV=POIs(i); 
+        case 'null'
         otherwise
-            error(['Error!! ',pnames{i},' could not be identified as a parameter'])
+            warning("Error!! '%s' could not be identified as a parameter",pnames{i})
     end
 end
 

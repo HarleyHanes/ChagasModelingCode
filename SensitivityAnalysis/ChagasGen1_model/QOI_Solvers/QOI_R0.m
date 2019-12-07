@@ -82,7 +82,7 @@ N=F*Vinv;
 N_eig=eig(N);
 if strcmpi(bool,'numeric')==1
     %R0= max(N_eig);
-    R0=max(abs(N_eig));
+    R0=max(abs(real(N_eig)));
     a=a_1*a_2*a_3*a_4*a_5*a_6*a_7*a_8;
     g=(g_SH+l_SH_DH)*(g_SV+l_SV_DV)*(g_DH+l_DH_SH)*(g_DV+l_DV_SV);
     r=(g_DH*g_SH+g_DH*l_DH_SH+g_SH*l_SH_DH)*(g_DV*g_SV+g_DV*l_DV_SV+g_SV*l_SV_DV);
