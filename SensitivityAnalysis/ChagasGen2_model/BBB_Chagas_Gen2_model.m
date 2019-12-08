@@ -5,8 +5,8 @@ pnames=select.POI;
 %% Initialize ODE solver
 % convert the list of POIs into model variable names
 % POIs will be same parameters as being optimized
-%params = get_p_struct_CG1(POIs,pnames,baseParams);
-params=baseParams;
+params = get_p_struct_CG2(POIs,pnames,baseParams);
+%params=baseParams;
 
 
 % initial conditions for y=(S_SV, I_SV S_SS I_SS S_SR I_SR S_DV I_DV S_DR I_DR S_DD I_DD)
@@ -46,7 +46,6 @@ dydt_fn = @(t,y) Chagas_Gen2_ODEs(t, y, params);
 %% Return quantities to analyze
 QOIs=NaN(1,length(qnames));
 for i=1:length(qnames)
-    W=0;
     switch qnames{i}
 %         case 'Final Number of Infected DV'
 %              QOIs(i) = QOI_DV_number_infected_final_time(soln);
