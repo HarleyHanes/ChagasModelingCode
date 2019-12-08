@@ -1,18 +1,17 @@
-function [QOIs,soln] = BBB_Chagas_Gen1_model(POIs)
+function [QOIs,soln] = BBB_Chagas_Gen1_model(POIs,select,baseParams)
 % This takes parameters, solves the ODE and returns desired quantities
-global QOInames POInames
-qnames=QOInames;
-pnames=POInames;
+qnames=select.QOI;
+pnames=select.POI;
 %% Initialize ODE solver
 % convert the list of POIs into model variable names
 % POIs will be same parameters as being optimized
-params = get_p_struct_CG1(POIs,pnames);
+params = get_p_struct_CG1(POIs,pnames,baseParams);
 %params=baseline_params();
 % initial conditions for y=(S1_h, S2_h, I1_h, I2_h, R1_h, R2_h, S_v, E_v, I_v) )
 yzero=get_init_CG1(params);
 % final integration time
-maxyears=20;
-tspan=0:maxyears*365;
+
+tspan=params.tspan;
 
 % Bake the parameters into ode_rhs (aka currying)
 yzero = balance_model(yzero, params);

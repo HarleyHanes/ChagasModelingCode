@@ -1,5 +1,6 @@
 function [POI_ESA,QOI_ESA]=QOI_ESA(str)
 %% QOI_ESA Extended Sensitivity Anaysis
+fprintf("Beginning Extended Sensitivity Analysis\n")
 
 % This calculates QOI responses around the baseline set of parameters
 % and creates one at a time sensitivity analysis plots
@@ -11,13 +12,13 @@ function [POI_ESA,QOI_ESA]=QOI_ESA(str)
 
 POI_ranges = [ str.POI_min,  str.POI_max];% POI ranges
 
-[POI_ESA, QOI_ESA] = getData(str.POI_baseline, POI_ranges, str.QOI_model_eval, str.number_ESA_samples);
+[POI_ESA, QOI_ESA] = getData(str.POI_baseline, POI_ranges, str.QOI_model_eval, str.select, str.baseParams, str.number_ESA_samples);
 
 % These are the str.POI_baseline at the baseline
 str.QOI_baseline = QOI_ESA.base;
 
 %% Response Plots
-
+fprintf("Plotting ESA Results\n")
 % We asign the figures to the structure 'ESA_plots', 
 % you do not have to call figure on each entry.
 % this is done for display purposes when publishing this example

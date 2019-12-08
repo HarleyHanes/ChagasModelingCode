@@ -1,8 +1,8 @@
-function jac = getJacobian(params_, evalFcn_, varargin)
+function jac = getJacobian(POIs_, evalFcn_, select_, baseParams_,varargin)
 % Takes a set of parameters for the function bHandle
 %  as well as any arguments you'd like to pass to bHandle
 %
-% params - baseline parameters, p
+% POIs - baseline parameters, p
 % evalFcn - q(params)
 %
 % Returns the normalized jacobian evaluated at p:
@@ -11,30 +11,34 @@ function jac = getJacobian(params_, evalFcn_, varargin)
 %% Input Management
 p = inputParser;
 
-addRequired(p,'params',@isnumeric);
+addRequired(p,'POIs',@isnumeric);
 addRequired(p,'evalFcn',@(fh) isa(fh,'function_handle'));
+addRequired(p,'select',@isstruct);
+addRequired(p,'baseParams',@isstruct);
 
 addOptional(p,'raw',false,@islogical);
 
-parse(p, params_, evalFcn_, varargin{:});
+parse(p, POIs_, evalFcn_, select_, baseParams_, varargin{:});
 
-params = p.Results.params;
+POIs = p.Results.POIs;
 evalFcn = p.Results.evalFcn;
 raw = p.Results.raw;
+select=p.Results.select;
+baseParams=p.Results.baseParams;
 %%
-nParams = length(params);
+nPOIs = length(POIs);
 
 % calculate baseline point
-baseQuants = evalFcn(params);
+baseQuants = evalFcn(POIs,select,baseParams);
 
 nQuants = length(baseQuants);
 
 %%
-for i = nParams:-1:1
-    init_x0(i) = params(i);
+for i = nPOIs:-1:1
+    init_x0(i) = POIs(i);
 end
 
-jac = NaN(nQuants, nParams);
+jac = NaN(nQuants, nPOIs);
 
 factor = .001; % get .1% of initial parameters, HARD
 delta_x0 = abs(init_x0 * factor);
@@ -42,14 +46,14 @@ delta_x0 = abs(init_x0 * factor);
 % fudge number if delta is 0
 delta_x0(delta_x0==0) = factor;
 y0 = baseQuants;
-for i = 1:nParams
-    xi = params;
+for i = 1:nPOIs
+    xi = POIs;
     % basic centered difference approximation of Jacobian
     xi(i) = init_x0(i) - delta_x0(i);
-    yLo = evalFcn(xi);
+    yLo = evalFcn(xi,select,baseParams);
     
     xi(i) = init_x0(i) + delta_x0(i);
-    yHi = evalFcn(xi);
+    yHi = evalFcn(xi,select,baseParams);
     
     for j = 1:nQuants
         % Calculate partial

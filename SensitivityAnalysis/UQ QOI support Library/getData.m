@@ -1,42 +1,45 @@
-function [param_data,quant_data] = getData(baseParams_,baseRanges_,evalFcn_,varargin)
+function [param_data,quant_data] = getData(basePOIs_,baseRanges_,evalFcn_,select_,baseParams_,varargin)
 % eg.
 % getData([.1,.2],[0,1; 0.01,.1], @(x) x(1,:)*x(2,:)
 
 %% Input Management
 p = inputParser;
 
-addRequired(p,'baseParams',@isnumeric);
+addRequired(p,'basePOIs',@isnumeric);
 addRequired(p,'baseRanges',@isnumeric);
 addRequired(p,'evalFcn',@(fh) isa(fh,'function_handle'));
+addRequired(p,'select',@isstruct);
+addRequired(p,'baseParams',@isstruct);
 
 defaultNumPoints = 10;
 addOptional(p,'numPoints',defaultNumPoints,@isnumeric);
+parse(p, basePOIs_, baseRanges_, evalFcn_, select_, baseParams_, varargin{:});
 
-parse(p, baseParams_, baseRanges_, evalFcn_, varargin{:});
-
-baseParams = p.Results.baseParams;
+basePOIs = p.Results.basePOIs;
 baseRanges = p.Results.baseRanges;
+select=p.Results.select;
+baseParams=p.Results.baseParams;
 evalFcn = p.Results.evalFcn;
 nPoints = p.Results.numPoints;
 %
-nBaseParams = length(baseParams);
+nbasePOIs = length(basePOIs);
 [nBaseRanges,two] = size(baseRanges);
 
-assert(nBaseParams == nBaseRanges, 'Every parameter needs a range');
+assert(nbasePOIs == nBaseRanges, 'Every parameter needs a range');
 assert(two == 2, 'Param ranges are two columns, [ min, max ]');
 %%
 % Evaluate at the base point
-baseQuants = evalFcn(baseParams);
+baseQuants = evalFcn(basePOIs,select,baseParams);
 
-param_data.base = baseParams;
+param_data.base = basePOIs;
 quant_data.base = baseQuants;
 
-param_data.range = NaN(nBaseParams,nPoints);
-quant_data.range = NaN(nBaseParams,length(baseQuants),nPoints);
+param_data.range = NaN(nbasePOIs,nPoints);
+quant_data.range = NaN(nbasePOIs,length(baseQuants),nPoints);
 
 % First data point is baseline
-for i = 1:nBaseParams
-    params = baseParams; % copy to mutate
+for i = 1:nbasePOIs
+    params = basePOIs; % copy to mutate
     if isnan(baseRanges(i,1)) || isnan(baseRanges(i,1)) || baseRanges(i,1) > baseRanges(i,2)
         continue % Don't calulate the param if the range is not a proper range
     end
@@ -45,7 +48,7 @@ for i = 1:nBaseParams
     for j = 1:nPoints
         params(i) = range(j);
         % Calculate and save quants
-        out = evalFcn(params);
+        out = evalFcn(params,select,baseParams);
         quant_data.range(i,:,j) = out;
     end
 end

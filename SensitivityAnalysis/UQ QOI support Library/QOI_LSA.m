@@ -2,7 +2,7 @@ function [USI,RSI]=QOI_LSA(str)
 %% QOI_LSA  local sensitivity analysis of QOIs
 % computes the unscaled and relative sensitivity matrices and writes them
 % to the file str.LSA_LaTeX_filename
-
+fprintf("Beginning Local Sensitivity Analysis\n")
 % output
 % USI = unscaled_sensitivity_indicies
 % RSI = relative_sensitivity_indicies
@@ -12,14 +12,14 @@ function [USI,RSI]=QOI_LSA(str)
 
 %disp('Local Sensitivity Matrices')
 %disp(['column variables =',str.POI_names])
-USI = getJacobian(str.POI_baseline,str.QOI_model_eval,'raw',true);
+USI = getJacobian(str.POI_baseline,str.QOI_model_eval,str.select,str.baseParams,'raw',true);
 table_USI = table(USI,'RowNames',str.QOI_names);
 disp(table_USI)
 
 
 % Multiply by QOI/POI at the baseline for relative sensitivity analysis
 
-RSI = getJacobian(str.POI_baseline,str.QOI_model_eval);
+RSI = getJacobian(str.POI_baseline,str.QOI_model_eval,str.select,str.baseParams);
 table_RSI = table(RSI,'RowNames',str.QOI_names);
 disp(table_RSI)
 
