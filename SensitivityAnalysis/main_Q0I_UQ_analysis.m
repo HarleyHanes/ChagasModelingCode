@@ -1,7 +1,6 @@
 function [POI,QOI]=main_Q0I_UQ_analysis(varargin)
 % main program to preform sensitivity analysis on the output quantities of 
 % interest (QOIs) as a function of input parameters of interest (POIs)
-
 if nargin>=1
         str.QOI_model_name=varargin{1};      %Model to run is first input
     if nargin>=2
@@ -42,10 +41,10 @@ str= QOI_change_default_params(str);% user code to change the default parameter 
  [POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
 % 
 % % 3. extended sensitivity analysis
-% [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;
+ [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;
 % 
 % %4. global sensitivity analysis
-% [POI_GSA,QOI_GSA]=str.QOI_GSA(str); POI.GSA=POI_GSA; QOI.GSA=QOI_GSA;
+ [POI_GSA,QOI_GSA]=str.QOI_GSA(str); POI.GSA=POI_GSA; QOI.GSA=QOI_GSA;
 
 %global sensitivity sobol indices
 % [sobol_indices]=Sobol_GSA(str);
@@ -59,10 +58,10 @@ end
 function str= QOI_change_default_params(str)
 %% QOI_change_default_params change default parameters
 %Load parameters
-    str.baseParams=baseline_params(str.ParamSettings);
-        theta=str.baseParams.theta;
+    str.baseParams=Gen1_params(str.ParamSettings);
+        alpha=str.baseParams.alpha;
         lambda=str.baseParams.lambda;
-        mu=str.baseParams.mu;
+        gamma=str.baseParams.gamma;
 switch str.QOI_model_name
     case 'Chagas-Gen1-lambda'
         %Select POI's and QOI's
@@ -127,9 +126,9 @@ switch str.QOI_model_name
         str.POI_mode=str.POI_baseline;
     case 'Chagas-Gen1-Full'
         %Select POIs and QOIs
-        str.POI_names =  {'\theta^{SV}_{SH}','\theta^{DV}_{SH}','\theta^{SH}_{SV}','\theta^{DH}_{SV}',...
-                          '\theta^{SV}_{DH}','\theta^{DV}_{DH}','\theta^{SH}_{DV}','\theta^{DH}_{DV}',...
-                          '\lambda_H','\lambda_V','\mu_{SH}','\mu_{SV}','\mu_{DH}','\mu_{DV}'};
+        str.POI_names =  {'\alpha^{SV}_{SH}','\alpha^{DV}_{SH}','\alpha^{SH}_{SV}','\alpha^{DH}_{SV}',...
+                          '\alpha^{SV}_{DH}','\alpha^{DV}_{DH}','\alpha^{SH}_{DV}','\alpha^{DH}_{DV}',...
+                          '\lambda_H','\lambda_V','\gamma_{SH}','\gamma_{SV}','\gamma_{DH}','\gamma_{DV}'};
             str.nPOI=length(str.POI_names);
         str.QOI_names =  {'Proportion I_{DV} at equilibirium','Proportion I_{DV} at t=5', 'R_0'};
             str.nQOI=length(str.QOI_names);
@@ -138,9 +137,9 @@ switch str.QOI_model_name
         str.QOI_model_eval = @BBB_Chagas_Gen1_model;
         
         %Set ESA and GSA Ranges
-        str.POI_baseline=[theta.SV_SH theta.DV_SH theta.SH_SV theta.DH_SV...
-                          theta.SV_DH theta.DV_DH theta.SH_DV theta.DH_DV ...
-                          lambda.H lambda.V mu.SH mu.SV mu.DH mu.DV ]';
+        str.POI_baseline=[alpha.SV_SH alpha.DV_SH alpha.SH_SV alpha.DH_SV...
+                          alpha.SV_DH alpha.DV_DH alpha.SH_DV alpha.DH_DV ...
+                          lambda.H lambda.V gamma.SH gamma.SV gamma.DH gamma.DV ]';
         %str.POI_baseline=[.01 .002 .01 .002 .002 .01 .002 .01]';
         if length(str.POI_baseline)~=str.nPOI
            	error("Different number of parameters named than entered")
