@@ -16,7 +16,7 @@ yf=params.init(1:8);
 %% Jessi uses balncing because she is testing intervention introduction
 %% So she creates a stable population based on initial conditions
 %% and then disrupts it but that is not what we're doing. 
-model_fn = @(t,y) Chagas_Gen1_ODEs(t, y, params);
+model_fn = @(t,y) Chagas_Gen2_ODEs(t, y, params);
 tspan=params.tspan;
 
 [soln.x,soln.y]=ode45(model_fn, tspan, yf);

@@ -31,11 +31,6 @@ dydt_fn = @(t,y) Chagas_Gen1_ODEs(t, y, params);
         soln.py(:,8)=soln.y(:,8)./(soln.y(1,7)+soln.y(1,8));
     soln.py=soln.py';
     soln.y=soln.y';
-%     plot(soln.x,soln.y(2:2:8,:))
-%     legend
-%     figure
-%     plot(soln.x,soln.py(2:2:8,:))
-%     legend
 %% Return quantities to analyze
 QOIs=NaN(1,length(qnames));
 for i=1:length(qnames)
