@@ -27,7 +27,7 @@ fprintf("Loading '%s' parameters\n",paramset)
 %Define areas in in hectares and densities in per hecatre
 SylvaticArea=5;
 PeridomesticArea=2;
-DensityOfHouseholds=5;
+DensityOfHouseholds=3;
 tmax=10; %In years
 
 %Initial Conditions
@@ -80,7 +80,7 @@ fracinfect.DD=.01;
             Density.DD=Density.DDog+Density.DCat;
 %Lifespans
     %Vectors
-        Lifespan.V=1346.86;
+        Lifespan.V=456.6;%1346.86;
     %Synanthropes
         Lifespan.Raccoon=912.5;
         Lifespan.Opossum=439.76;
@@ -119,30 +119,135 @@ fracinfect.DD=.01;
     p.V_D=p.V_Dog;
 %Vector-->Host transmission (oral)
     b.Opossum=4.108;    %Assume this is the maximal rate for all hosts
-    b.H=b.Opossum;
-    b.SS=b.H;
-    b.DS=b.H;
-    b.SR=b.H*min(1,Density.SV/(10*Density.SR));
-    b.DR=b.H*min(1,Density.DV/(10*Density.DR));
-    b.DD=b.H;
+    b.SS=b.Opossum;
+    b.DS=b.Opossum;
+    b.SR=b.Opossum*min(1,Density.SV/(10*Density.SR));
+    b.DR=b.Opossum*min(1,Density.DV/(10*Density.DR));
+    b.DD=b.Opossum;
     q.V_Opossum= .075;  
     q.V_S=q.V_Opossum;
     q.V_R=q.V_Opossum;
     q.V_D=q.V_Opossum;
 %Host vertical transmission
     r.R=.091;
-%Movement rates
+%Movement Rates
+    %Vectors
+        lambda.V=.06775;
+    %Synanthropic Mammals
+        lambda.S=.24;
+    %Rodents
+        lambda.R=.1;
 switch paramset
     case'base'
-    case'scaled'
+    case 'random'
+        %Lifespans
+            %Vectors
+                Vliferand=randn*(609-251)+456.6;
+                if Vliferand < 0
+                    Vliferand=0;
+                end
+                Lifespan.V=Vliferand;
+            %Synanthropes
+                Lifespan.Raccoon=912.5;
+                Lifespan.Opossum=439.76;
+            %Rodents
+                %Lifespan.RBlack=NaN;
+                Lifespan.Brown=121.839;
+                %Lifespan.RMarsh=NaN;
+                %Lifespan.RCotton=NaN;
+                %Lifespan.RHouse=NaN;
+            %Domestic Mammals
+                Lifespan.Dog=200;
+                Lifespan.Cat=200;
+        %Vector Feeding
+            %Feeding Rates
+                b.SV=.187;          %Hays1965Longevity
+                b.DV=b.SV;          %Assumed to be same as b_SV
+            %Proportion of feeding
+                %Periomestic
+                    rho.DS=.3843;
+                    rho.DR=.0494;
+                    rho.DD=.2209;
+                    rho.H=.3313;
+                %Sylvatic
+                    rho.SS=rho.DS+(rho.DS/(rho.DS+rho.DR))*(rho.DD+rho.H);  %Assume vector feedings on domestic mammals and humans are distributed proportionally among rodents and synanthropes
+                    rho.SR=rho.DR+(rho.DR/(rho.DS+rho.DR))*(rho.DD+rho.H);
+        %Host-->Vector transmission
+            pHVrand=randn*(.94-.92)+.92;
+            if pHVrand < 0
+                pHVrand=0;
+            end
+            p.Dog_V=pHVrand; 
+            p.S_V=p.Dog_V;
+            p.R_V=p.Dog_V;
+            p.D_V=p.Dog_V;
+        %Vector-->Host transmission (stechorian)
+            pVHrand=rand*(.162-.023)+.06;
+            if pVHrand < 0
+                pVHrand=0;
+            end
+            p.V_Opossum=pVHrand;   %Currently the only one that could be found
+            p.V_S=p.V_Opossum;
+            p.V_R=p.V_Opossum;
+            p.V_Dog=.001;
+            p.V_D=p.V_Dog;
+        %Vector-->Host transmission (oral)
+            b.Opossum=4.108;    %Assume this is the maximal rate for all hosts
+            b.SS=b.Opossum;
+            b.DS=b.Opossum;
+            b.SR=b.Opossum*min(1,Density.SV/(10*Density.SR));
+            b.DR=b.Opossum*min(1,Density.DV/(10*Density.DR));
+            b.DD=b.Opossum;
+            qVHrand=randn*.265+.075;
+            if qVHrand < 0
+                qVHrand=0;
+            end
+            q.V_Opossum= qVHrand;  
+            q.V_S=q.V_Opossum;
+            q.V_R=q.V_Opossum;
+            q.V_D=q.V_Opossum;
+        %Host vertical transmission
+            r.R=.091;
+        %Movement Rates
+            LambdaVrand=randn*(.06775*.25)+.06775;
+            LambdaSrand=randn*(.24*.25)+.24;
+            LambdaRrand=randn*(.1*.25)+.1;
+            if LambdaVrand<0
+                LambdaVrand=0;
+            end
+            if LambdaRrand<0
+                LambdaRrand=0;
+            end
+            if LambdaSrand<0
+                LambdaSrand=0;
+            end
+                %Vectors
+        lambda.V=LambdaVrand;
+    %Synanthropic Mammals
+        lambda.S=LambdaSrand;
+    %Rodents
+        lambda.R=LambdaRrand;
+    %Implement Scaling
     %Update Rodent Population
-%        Density.SR=Density.SBrown/Density.SR;
-%        Density.DR=Density.DBrown/Density.DR;
+        Density.SR=Density.SR/4;
+        Density.DR=Density.SR/4;
     %Update Host feeding rates
         b.SR=.15*b.SR;
         b.DR=.15*b.DR;
     %Update probability of stechorian infection
-        p.V_R=.5*p.V_R;
+        p.V_R=.05*p.V_R;
+        q.V_R=.05*q.V_R;
+    
+    case 'scaled'
+    %Update Rodent Population
+        Density.SR=Density.SR/4;
+        Density.DR=Density.SR/4;
+    %Update Host feeding rates
+        b.SR=.15*b.SR;
+        b.DR=.15*b.DR;
+    %Update probability of stechorian infection
+        p.V_R=.05*p.V_R;
+        q.V_R=.05*q.V_R;
 end
 %% Model Parameters-- These generally should not be changed
 %Population Sizes
@@ -193,13 +298,6 @@ end
         beta.DV_DS=q.V_D*b.DS;%q_V_H*b_SH;
         beta.DV_DR=q.V_R*b.DR;%q_V_H*b_SH;
         beta.DV_DD=q.V_D*b.DD;%q_V_H*b_SH;
-%Movement Rates
-    %Vectors
-        lambda.V=.06775;
-    %Synanthropic Mammals
-        lambda.S=.24;
-    %Rodents
-        lambda.R=.1;
         
 
 %% Simulation Parameters 

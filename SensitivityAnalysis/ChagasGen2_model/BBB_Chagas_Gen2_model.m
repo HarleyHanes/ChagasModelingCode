@@ -58,8 +58,8 @@ for i=1:length(qnames)
              QOIs(i) = QOI_DV_prop_infected_fixed_time(soln,5);
         case 'R_0'
              QOIs(i) = QOI_R0(params,'numeric');
-        case 'Vectors Consumed per Day'
-            QOIs(i)=QOI_Contacts_per_Day(params);
+        case 'Derived Params'
+            QOIs(i)=QOI_Derived_Params(params);
     otherwise
         error(['ERROR!!! ',qnames{i},' could not be identified as a QOI'])
     end
