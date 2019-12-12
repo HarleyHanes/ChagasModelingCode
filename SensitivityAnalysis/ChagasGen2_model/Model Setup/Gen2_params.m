@@ -12,7 +12,7 @@ function [params] = Gen2_params(varargin)
 if nargin>=1
     ParamSettings=varargin{1};
 else
-    ParamSettings.paramset='base';
+    ParamSettings.paramset='scaled';
 end
 %Check existence of paramset element
 % if isfield(ParamSettings,'paramset')==0
@@ -229,30 +229,56 @@ switch ParamSettings.paramset
         lambda.R=LambdaRrand;
     %Implement Scaling
     %Update Rodent Population
-        Density.SR=Density.SR/4;
-        Density.DR=Density.SR/4;
+         Density.SS=Density.SS*3;
+         Density.DS=Density.DS*3;
+%          Density.SV=Density.SR/100;
+%          Density.DV=Density.DR/100;
+         Density.SR=Density.SR/4;
+         Density.DR=Density.DR/4;
+         b.SR=.015*b.SR;
+         b.DR=.015*b.DR;
+         b.DD=.015*b.DD;
     %Update Host feeding rates
-        b.SR=.15*b.SR;
-        b.DR=.15*b.DR;
+         rho.SS=.98*(Density.SS)/(Density.SS+Density.SR)*8;
+         rho.SR=.98-rho.SS;
+         rho.DS=rho.DS/5;
+         rho.DR=rho.DR*10;
+         rho.DD=rho.DD/10;
     %Update probability of stechorian infection
         p.V_R=.05*p.V_R;
         q.V_R=.05*q.V_R;
     
     case 'scaled'
+    %Update vec infection prob
+%     p.S_V=.001;
     %Update Rodent Population
-        Density.SR=Density.SR/4;
-        Density.DR=Density.DR/4;
+         Density.SS=Density.SS*3;
+         Density.DS=Density.DS*3;
+%          Density.SV=Density.SR/100;
+%          Density.DV=Density.DR/100;
+         Density.SR=Density.SR/4;
+         Density.DR=Density.DR/4;
     %Update Host feeding rates
-             b.DV=.0001;
+%             b.DV=.0001;
 %             b.SV=.0001;
 %              b.SS=.0001;
 %              b.DS=.0001;
 %              b.SR=.0001*min(1,Density.SV/(10*Density.SR));
 %              b.DR=.0001*min(1,Density.DV/(10*Density.DR));
 %              b.DD=.0001;
-%         b.SR=.15*b.SR;
-%         b.DR=.15*b.DR;
-    %Update probability of stechorian infection
+         b.SR=.015*b.SR;
+         b.DR=.015*b.DR;
+         b.DD=.015*b.DD;
+     %Adjust rhos to pop %s
+         rho.SS=.98*(Density.SS)/(Density.SS+Density.SR)*8;
+         rho.SR=.98-rho.SS;
+         rho.DS=rho.DS/5;
+         rho.DR=rho.DR*10;
+         rho.DD=rho.DD/10;
+%          rho.DS=.6545*(Density.DS)/(Density.DS+Density.DR+Density.DD)*2;
+%          rho.DR=.6545*(Density.DR)/(Density.DS+Density.DR+Density.DD)/8;
+%          rho.DD=.6545*-rho.DR-rho.DS;
+%     %Update probability of stechorian infection
         p.V_R=.05*p.V_R;
         q.V_R=.05*q.V_R;
 end

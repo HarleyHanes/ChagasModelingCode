@@ -1,6 +1,7 @@
 function params= get_p_struct_CG2(POIs,pnames,baseParams)
 %Parameter Loading
 params=baseParams;
+beta=params.beta;
 alpha=params.alpha;
 gamma=params.gamma;
 b=params.b;
@@ -34,7 +35,7 @@ for i=1:length(pnames)
             b.SR=b.SR*POIs(i)/beta.SV_SR;
             beta.SV_SR=POIs(i);
         case '\beta^{DV}_{DS}'
-            b.DS=b.DS*POIs(i)/beta.SV_DS;
+            b.DS=b.DS*POIs(i)/beta.DV_DS;
             beta.SV_DS=POIs(i);
         case '\beta^{DV}_{DR}'
             b.DR=b.DR*POIs(i)/beta.DV_DR;

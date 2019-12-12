@@ -15,6 +15,9 @@ beta=params.beta;
 lambda=params.lambda;
 r=params.r;
 
+%Redefine b's in case beta is in sensitivity analysis
+
+
 %We compute lambda's in ODE so that we perserve their balance during
 %sensitivity analysis because we can't change one without changing the
 %other

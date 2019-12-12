@@ -18,7 +18,7 @@ tspan=params.tspan;
 yzero = balance_model(yzero, params);
 dydt_fn = @(t,y) Chagas_Gen2_ODEs(t, y, params);
 %% Solve ODE
-
+if ~(strcmpi(qnames{1},'R_0') && length(qnames)==1)
 %soln = ode23tb(dydt_fn, tspan, yzero);
 [soln.x,soln.y]=ode45(dydt_fn, tspan, yzero);
 %soln.y=soln.y'
@@ -43,6 +43,7 @@ dydt_fn = @(t,y) Chagas_Gen2_ODEs(t, y, params);
 %     figure
 %     plot(soln.x,soln.py(2:2:8,:))
 %     legend
+end
 %% Return quantities to analyze
 QOIs=NaN(1,length(qnames));
 for i=1:length(qnames)
@@ -54,8 +55,8 @@ for i=1:length(qnames)
              QOIs(i)= QOI_DV_prop_infected_final_time(soln);
 %         case 'Number of I_{DV} at t=5'
 %              QOIs(i) = QOI_DV_number_infected_fixed_time(soln,5);
-        case 'Proportion I_{DV} at t=5'
-             QOIs(i) = QOI_DV_prop_infected_fixed_time(soln,5);
+        case 'Proportion I_{DV} at t=1'
+             QOIs(i) = QOI_DV_prop_infected_fixed_time(soln,1);
         case 'R_0'
              QOIs(i) = QOI_R0(params,'numeric');
         case 'Derived Params'

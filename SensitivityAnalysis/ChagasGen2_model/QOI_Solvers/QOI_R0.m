@@ -9,7 +9,7 @@ if strcmpi('numeric',bool)==1
     NDS=N.DS;
     NSR=N.SR;
     NDR=N.DR;
-%    NDD=N.DD;
+    NDD=N.DD;
 %     y=[NSV-1;
 %         1;
 %         NSS-1;
@@ -40,11 +40,17 @@ if strcmpi('numeric',bool)==1
     aDR_DV=alpha.DR_DV;
     aDD_DV=alpha.DD_DV;
     
-    bSV_SS=beta.SV_SS;
-    bSV_SR=beta.SV_SR;
-    bDV_DS=beta.DV_DS;
-    bDV_DR=beta.DV_DR;
-    bDV_DD=beta.DV_DD;
+    betaSV_SS=beta.SV_SS;
+    betaSV_SR=beta.SV_SR;
+    betaDV_DS=beta.DV_DS;
+    betaDV_DR=beta.DV_DR;
+    betaDV_DD=beta.DV_DD;
+    
+    bSS=params.b.SS;
+    bSR=params.b.SR;
+    bDS=params.b.DS;
+    bDR=params.b.DR;
+    bDD=params.b.DD;
     
     gSV=gamma.SV;
     gDV=gamma.DV;
@@ -74,29 +80,45 @@ end
 
 % [   SV       SS       SR       DV          DS      DR      DD ]
 F=[   0      aSS_SV   aSR_SV     0           0       0       0 ;  %SV
-  aSV_SS+bSV_SS 0       0        0           0       0       0 ;  %SS
-  aSV_SR+bSV_SR 0       0        0           0       0       0 ;  %SR
-      0         0       0        0        aDS_DV  aDR_DV aDD_DV;  %DV
-      0         0       0  aDV_DS+bDV_DS     0       0       0 ;  %DS
-      0         0       0  aDV_DR+bDV_DR     0       0       0 ;  %DR
-      0         0       0  aDV_DD+bDV_DD     0       0       0    %DD
+  aSV_SS+betaSV_SS 0       0        0           0       0       0 ;  %SS
+  aSV_SR+betaSV_SR 0       0        0           0       0       0 ;  %SR
+      0         0       0        0        aDS_DV  aDR_DV aDD_DV   ;  %DV
+      0         0       0  aDV_DS+betaDV_DS     0       0       0 ;  %DS
+      0         0       0  aDV_DR+betaDV_DR     0       0       0 ;  %DR
+      0         0       0  aDV_DD+betaDV_DD     0       0       0    %DD
 ];
 
 
-% [   SV       SS       SR       DV          DS      DR      DD ]
-V=[gSV+lDV_SV   0       0     -lSV_DV        0       0       0 ;  %SV
+%[   SV       SS       SR       DV          DS      DR      DD ]
+V=[gSV+lDV_SV  bSS*NSS/NSV     bSR*NSR/NSV    -lSV_DV        0       0       0 ;  %SV
       0    gSS+lDS_SS   0        0        -lSS_DS    0       0 ;  %SS
-      0         0   gSR+lDR_SR   0           0    -lSR_DR    0 ;  %SR
-    -lDV_SV     0       0    gDV+lSV_DV      0       0       0 ;  %DV
-      0      -lDS_SS    0        0       gDS+lSS_DS  0       0 ;  %DS
+      0        0   gSR+lDR_SR   0           0    -lSR_DR    0 ;  %SR
+    -lDV_SV     0       0    gDV+lSV_DV     bDS*NDS/NDV     bDR*NDR/NDV     bDD*NDD/NDV ;  %DV
+      0      -lDS_SS    0        0        gDS+lSS_DS  0       0 ;  %DS
       0         0     -lDR_SR    0           0   gDR+lSR_DR  0 ;  %DR
       0         0       0        0           0       0      gDD   %DD
 ];
+% 
+% V=[gSV+lDV_SV   0      0    -lSV_DV        0       0       0 ;  %SV
+%       0    gSS+lDS_SS   0        0        -lSS_DS    0       0 ;  %SS
+%       0        0   gSR+lDR_SR   0           0    -lSR_DR    0 ;  %SR
+%     -lDV_SV     0       0    gDV+lSV_DV     0      0       0 ;  %DV
+%       0      -lDS_SS    0        0        gDS+lSS_DS  0       0 ;  %DS
+%       0         0     -lDR_SR    0           0   gDR+lSR_DR  0 ;  %DR
+%       0         0       0        0           0       0      gDD   %DD
+% ];
+% V=[gSV+lDV_SV   0      0    -lSV_DV        0       0       0 ;  %SV
+%       bSS    gSS+lDS_SS   0        0        -lSS_DS    0       0 ;  %SS
+%       bSR       0   gSR+lDR_SR   0           0    -lSR_DR    0 ;  %SR
+%     -lDV_SV     0       0    gDV+lSV_DV     0      0       0 ;  %DV
+%       0      -lDS_SS    0        bDS       gDS+lSS_DS  0       0 ;  %DS
+%       0         0     -lDR_SR    bDR           0   gDR+lSR_DR  0 ;  %DR
+%       0         0       0        bDR           0       0      gDD   %DD
+% ];
 
-
-%Vinv=inv(V);
-%N=F*Vinv;
-N=F/V;
+Vinv=inv(V);
+N=F*Vinv;
+%N=F/V;
 N_eig=eig(N);
 if strcmpi(bool,'numeric')==1
     R0=max(abs(real(N_eig)));

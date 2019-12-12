@@ -1,6 +1,6 @@
 %Plot Chagas Model
 clear; close all;
-params=Gen2_params('scaled');
+params=Gen2_params;
 POIs=0;%;[.0001,.00001]; 
 select.QOI={'Proportion I_{DV} at equilibirium','R_0'};
 select.POI={"null"};%{"\gamma_{SV}", "\gamma_{DV}"};
