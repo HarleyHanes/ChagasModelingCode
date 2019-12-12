@@ -1,5 +1,5 @@
 function [dydt] = Chagas_Gen2_ODEs(t,y,params)
-%Chagas_Gen1_ODEs Buils ODE function for Gen1 Chagas Model
+%Chagas_Gen2_ODEs Buils ODE function for Gen1 Chagas Model
 %   t: current time (unused currently)
 %   y: vector of y values for current time
 %   params: struct of paramter values

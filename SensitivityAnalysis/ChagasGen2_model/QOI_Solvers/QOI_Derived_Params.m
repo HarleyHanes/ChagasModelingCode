@@ -20,7 +20,8 @@ Metrics={
 "Total Triatomine Feedings", b.SV*N.SV, b.DV*N.DV;
 "Triatomine Feedings per synanthrope", b.SV*rho.SS*N.SV/N.SS, b.DV*rho.DS*N.DV/N.DS;
 "Triatomine Feedings per rodent", b.SV*rho.SR*N.SV/N.SR, b.DV*rho.DR*N.DV/N.DR;
-"Triatomine Feedings per pet", 0, b.DV*rho.DD*N.DV/N.DD};
+"Triatomine Feedings per pet", 0, b.DV*rho.DD*N.DV/N.DD;
+"R0",                   QOI_R0(params,'numeric'),          ""};
 % %Total triatomines consumed per day
 % Metrics{6,2}=b.SS*N.SS+b.SR*N.SR; Metrics{6,3}=b.DS*N.DS+b.DR*N.DR+b.DD*N.DD;
 % Metrics{7,2}=b.SS*N.SS; Metrics{7,3}=b.DS*N.DS;

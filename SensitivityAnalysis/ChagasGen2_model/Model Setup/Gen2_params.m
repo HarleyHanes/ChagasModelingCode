@@ -10,16 +10,16 @@ function [params] = Gen2_params(varargin)
 %Set up variable input
 %Param settings non functional
 if nargin>=1
-    paramset=varargin{1};
+    ParamSettings=varargin{1};
 else
-    paramset='base';
+    ParamSettings.paramset='base';
 end
 %Check existence of paramset element
 % if isfield(ParamSettings,'paramset')==0
 %     warning('settings needs element "paramset" identifying parameters to use')
 %     keyboard
 % end
-fprintf("Loading '%s' parameters\n",paramset)
+fprintf("Loading '%s' parameters\n",ParamSettings.paramset)
 
 %% Simulation Settings
 %These are Parameters that are variable based on the conditions we wish to
@@ -137,7 +137,7 @@ fracinfect.DD=.01;
         lambda.S=.24;
     %Rodents
         lambda.R=.1;
-switch paramset
+switch ParamSettings.paramset
     case'base'
     case 'random'
         %Lifespans
@@ -241,10 +241,17 @@ switch paramset
     case 'scaled'
     %Update Rodent Population
         Density.SR=Density.SR/4;
-        Density.DR=Density.SR/4;
+        Density.DR=Density.DR/4;
     %Update Host feeding rates
-        b.SR=.15*b.SR;
-        b.DR=.15*b.DR;
+             b.DV=.0001;
+%             b.SV=.0001;
+%              b.SS=.0001;
+%              b.DS=.0001;
+%              b.SR=.0001*min(1,Density.SV/(10*Density.SR));
+%              b.DR=.0001*min(1,Density.DV/(10*Density.DR));
+%              b.DD=.0001;
+%         b.SR=.15*b.SR;
+%         b.DR=.15*b.DR;
     %Update probability of stechorian infection
         p.V_R=.05*p.V_R;
         q.V_R=.05*q.V_R;
