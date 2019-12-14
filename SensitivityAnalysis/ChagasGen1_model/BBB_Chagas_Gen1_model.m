@@ -45,8 +45,8 @@ for i=1:length(qnames)
         case 'Number of I_{DV} at t=5'
              QOIs(i) = QOI_DV_number_infected_fixed_time(soln,5);
              W=1;
-        case 'Proportion I_{DV} at t=5'
-             QOIs(i) = QOI_DV_prop_infected_fixed_time(soln,5);
+        case 'Proportion I_{DV} at t=1'
+             QOIs(i) = QOI_DV_prop_infected_fixed_time(soln,1);
              W=1;
         case 'R_0'
              QOIs(i) = QOI_R0(params,'numeric');

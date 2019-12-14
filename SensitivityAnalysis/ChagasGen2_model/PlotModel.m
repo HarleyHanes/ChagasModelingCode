@@ -1,6 +1,7 @@
 %Plot Chagas Model
 clear; close all;
-params=Gen2_params;
+ParamSettings.paramset='random';
+params=Gen2_params(ParamSettings);
 POIs=0;%;[.0001,.00001]; 
 select.QOI={'Proportion I_{DV} at equilibirium','R_0'};
 select.POI={"null"};%{"\gamma_{SV}", "\gamma_{DV}"};
@@ -18,7 +19,7 @@ plot(soln.x(1:10:end)/365,soln.py(1:10:end,14),":","MarkerSize",.2)
 legend("I_{SV}","I_{SS}","I_{SR}","I_{DV}","I_{DS}","I_{DR}","I_{DD}","Interpreter","LaTex")
 %legend("SV","SS","SR","DV","DS","DR","DD")
 xlabel('Years')
-ylabel('% Infected')
+ylabel('Proportion Infected')
 
 figure
 %Check Popsizes
