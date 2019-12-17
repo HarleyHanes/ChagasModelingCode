@@ -7,8 +7,8 @@ if nargin>=1
         str.ParamSettings=varargin{2};       %parameter settings are second input
     end
 else
-    ModelName={'CG2' 'All Infection'};
-    str.ParamSettings.paramset='scaled';
+    ModelName={'CG1' 'Vis Project'};
+    str.ParamSettings.paramset='base';
 end
 
 % the user must a code to generate the QOIs from the POIs 
@@ -27,7 +27,7 @@ str.POI_constraints= @constraints; % POI = constraints(POI_input)
 clear global ; clf; format shortE; close all;% close previous sessions
 
 set(0,'DefaultAxesFontSize',18,'defaultlinelinewidth',2);set(gca,'FontSize',18);close(gcf);% increase font size
-rng(101);% set the random number generator seed for reproducibility
+rng(10);% set the random number generator seed for reproducibility
 
 
 str = QOI_define_default_params(str);
@@ -52,10 +52,10 @@ end
 %  str.QOI_pre_analysis(str);
 % 
 % % 2. local sensitivity analysis
- [POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
+% [POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
 % 
 % % 3. extended sensitivity analysis
- [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;
+% [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;
 % 
 % %4. global sensitivity analysis
  [POI_GSA,QOI_GSA]=str.QOI_GSA(str); POI.GSA=POI_GSA; QOI.GSA=QOI_GSA;

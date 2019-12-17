@@ -73,7 +73,7 @@ switch str.QOI_model_name
                           '\alpha^{SV}_{DH}','\alpha^{DV}_{DH}','\alpha^{SH}_{DV}','\alpha^{DH}_{DV}',...
                           '\lambda_H','\lambda_V','\gamma_{SH}','\gamma_{SV}','\gamma_{DH}','\gamma_{DV}'};
             str.nPOI=length(str.POI_names);
-        str.QOI_names =  {'Proportion I_{DV} at equilibirium','Proportion I_{DV} at t=5', 'R_0'};
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium','Proportion I_{DV} at t=1', 'R_0'};
             str.nQOI=length(str.QOI_names);
         
         %Select Model
@@ -91,6 +91,31 @@ switch str.QOI_model_name
         str.POI_max=str.POI_baseline+.75*str.POI_baseline;
         str.POI_min(9:10)=0;
         str.POI_max(9:10)=2*str.POI_baseline(9:10);
+        str.POI_mode=str.POI_baseline;
+    case 'Vis Project'
+        %Select POIs and QOIs
+        str.POI_names =  {'\alpha^{SV}_{SH}','\alpha^{SH}_{SV}',...
+                          '\alpha^{DV}_{DH}','\alpha^{DH}_{DV}',...
+                          '\lambda_V','\gamma_{DV}'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium','Proportion I_{DV} at t=1', 'R_0'};
+            str.nQOI=length(str.QOI_names);
+        
+        %Select Model
+        str.QOI_model_eval = @BBB_Chagas_Gen1_model;
+        
+        %Set ESA and GSA Ranges
+        str.POI_baseline=[alpha.SV_SH alpha.SH_SV ...
+                          alpha.DV_DH  alpha.DH_DV ...
+                          lambda.V gamma.DV ]';
+        %str.POI_baseline=[.01 .002 .01 .002 .002 .01 .002 .01]';
+        if length(str.POI_baseline)~=str.nPOI
+           	error("Different number of parameters named than entered")
+        end
+        str.POI_min=str.POI_baseline-.75*str.POI_baseline;
+        str.POI_max=str.POI_baseline+.75*str.POI_baseline;
+        str.POI_min(5)=0;
+        str.POI_max(5)=2*str.POI_baseline(5);
         str.POI_mode=str.POI_baseline;
     case 'Chagas-Gen1-ConstrainedTrans' %Note: meant to be used with InvestigateLambda
         %Select POIs and QOIs
