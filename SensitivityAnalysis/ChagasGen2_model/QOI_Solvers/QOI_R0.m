@@ -78,14 +78,14 @@ else
 
 end
 
-% [   SV       SS       SR       DV          DS      DR      DD ]
-F=[   0      aSS_SV   aSR_SV     0           0       0       0 ;  %SV
-  aSV_SS+betaSV_SS 0       0        0           0       0       0 ;  %SS
-  aSV_SR+betaSV_SR 0       0        0           0       0       0 ;  %SR
-      0         0       0        0        aDS_DV  aDR_DV aDD_DV   ;  %DV
-      0         0       0  aDV_DS+betaDV_DS     0       0       0 ;  %DS
-      0         0       0  aDV_DR+betaDV_DR     0       0       0 ;  %DR
-      0         0       0  aDV_DD+betaDV_DD     0       0       0    %DD
+% [   SV       SS            SR       DV          DS      DR      DD ]
+F=[   0  aSS_SV*N.SV/N.SS   aSR_SV*N.SV/N.SR     0           0       0       0 ;  %SV
+  (aSV_SS+betaSV_SS)*N.SS/N.SV 0       0        0           0       0       0 ;  %SS
+  (aSV_SR+betaSV_SR)*N.SR/N.SV 0       0        0           0       0       0 ;  %SR
+      0         0       0        0        aDS_DV*N.DV/N.DS  aDR_DV*N.DV/N.DR aDD_DV*N.DV/N.DD   ;  %DV
+      0         0       0  (aDV_DS+betaDV_DS)*N.DS/N.DV     0       0       0 ;  %DS
+      0         0       0  (aDV_DR+betaDV_DR)*N.DR/N.DV     0       0       0 ;  %DR
+      0         0       0  (aDV_DD+betaDV_DD)*N.DD/N.DV     0       0       0    %DD
 ];
 
 

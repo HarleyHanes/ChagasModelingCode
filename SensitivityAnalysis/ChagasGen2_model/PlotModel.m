@@ -11,12 +11,12 @@ select.POI={"null"};%{"\gamma_{SV}", "\gamma_{DV}"};
 plot(soln.x(1:10:end)/365,soln.py(1:10:end,[2,8]))
 hold on
 %plot Synanthropes
-plot(soln.x(1:10:end)/365,soln.py(1:10:end,[4,10]),"--","MarkerSize",.2)
+plot(soln.x(1:10:end)/365,soln.py(1:10:end,[4,10]),"--","MarkerSize",2)
 %Plot Rodents
-plot(soln.x(1:10:end)/365,soln.py(1:10:end,[6,12]),".-","MarkerSize",.2)
+plot(soln.x(1:10:end)/365,soln.py(1:10:end,[6,12]),".-","MarkerSize",2)
 %Plot Pets
 plot(soln.x(1:10:end)/365,soln.py(1:10:end,14),":","MarkerSize",.2)
-legend("I_{SV}","I_{SS}","I_{SR}","I_{DV}","I_{DS}","I_{DR}","I_{DD}","Interpreter","LaTex")
+legend("I_{SV}","I_{DV}","I_{SS}","I_{DS}","I_{SR}","I_{DR}","I_{DD}","Interpreter","LaTex")
 %legend("SV","SS","SR","DV","DS","DR","DD")
 xlabel('Years')
 ylabel('Proportion Infected')

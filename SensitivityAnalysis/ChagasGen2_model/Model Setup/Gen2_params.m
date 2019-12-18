@@ -270,16 +270,20 @@ switch ParamSettings.paramset
          b.DR=.015*b.DR;
          b.DD=.015*b.DD;
      %Adjust rhos to pop %s
-         rho.SS=.98*(Density.SS)/(Density.SS+Density.SR)*8;
-         rho.SR=.98-rho.SS;
-         rho.DS=rho.DS/5;
-         rho.DR=rho.DR*10;
-         rho.DD=rho.DD/10;
+                
+           rho.SS=.98*(Density.SS)/(Density.SS+Density.SR)*8;
+           rho.SR=.98-rho.SS;
+           rho.DS=rho.DS/5;
+           rho.DR=rho.DR*10;
+          rho.DD=rho.DD/10;
 %          rho.DS=.6545*(Density.DS)/(Density.DS+Density.DR+Density.DD)*2;
 %          rho.DR=.6545*(Density.DR)/(Density.DS+Density.DR+Density.DD)/8;
 %          rho.DD=.6545*-rho.DR-rho.DS;
 %     %Update probability of stechorian infection
         p.V_R=.05*p.V_R;
+%         p.S_V=.5*p.S_V;
+%         p.R_V=.5*p.S_V;
+%         q.V_S=.5*q.V_S;
         q.V_R=.05*q.V_R;
 end
 %% Model Parameters-- These generally should not be changed
