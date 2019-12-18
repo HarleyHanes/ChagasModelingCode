@@ -2,9 +2,9 @@ function [POI,QOI]=main_Q0I_UQ_analysis(varargin)
 % main program to preform sensitivity analysis on the output quantities of 
 % interest (QOIs) as a function of input parameters of interest (POIs)
 if nargin>=1
-        str.QOI_model_name=varargin{1};      %Model to run is first input
+        ModelName=varargin{1};      %Model to run is first input
     if nargin>=2
-        str.ParamSettings=varargin{2};       %parameter settings are second input
+        str.ParamSettings.paramset=varargin{2};       %parameter settings are second input
     end
 else
     ModelName={'CG1' 'Vis Project'};
@@ -24,23 +24,27 @@ str.POI_constraints= @constraints; % POI = constraints(POI_input)
 % restoredefaultpath ;prefix = mfilename('fullpath');
 % dirs = regexp(prefix,'[\\/]');addpath(genpath(prefix(1:dirs(end))))
 
-clear global ; clf; format shortE; close all;% close previous sessions
+clear global ; clf; format shortE;% close previous sessions
 
 set(0,'DefaultAxesFontSize',18,'defaultlinelinewidth',2);set(gca,'FontSize',18);close(gcf);% increase font size
 rng(10);% set the random number generator seed for reproducibility
 
 
 str = QOI_define_default_params(str);
-switch ModelName{1}
-    case 'CG1'
+if strcmpi(ModelName{1},'CG1')
         set_workspace('CG1')
         str.QOI_model_name=ModelName{2};   %Model to run if no inputs
         str=CG1_change_default_params(str);% set the default parameter values
-    case 'CG2'
+elseif strcmpi(ModelName{1},'CG2')||strcmpi(ModelName{1},'10ODE')||strcmpi(ModelName{1},'8ODE')
         set_workspace('CG2')
         str.QOI_model_name=ModelName{2};   %Model to run if no inputs
         str=CG2_change_default_params(str);% set the default parameter values
-    otherwise
+        if strcmpi(ModelName{1},'10ODE')
+            str.select.model='10ODE';
+        elseif strcmpi(ModelName{1},'8ODE')
+            str.select.model='8ODE';
+        end
+else
         error('Unrecognized Model Name')
 end
 
@@ -55,10 +59,10 @@ end
 % [POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
 % 
 % % 3. extended sensitivity analysis
-% [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;
+ [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;
 % 
 % %4. global sensitivity analysis
- [POI_GSA,QOI_GSA]=str.QOI_GSA(str); POI.GSA=POI_GSA; QOI.GSA=QOI_GSA;
+% [POI_GSA,QOI_GSA]=str.QOI_GSA(str); POI.GSA=POI_GSA; QOI.GSA=QOI_GSA;
 
 %global sensitivity sobol indices
 % [sobol_indices]=Sobol_GSA(str);

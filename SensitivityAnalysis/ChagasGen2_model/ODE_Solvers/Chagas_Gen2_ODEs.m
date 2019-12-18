@@ -15,6 +15,19 @@ beta=params.beta;
 lambda=params.lambda;
 r=params.r;
 
+
+if N.SR==0 && N.DR==0
+    N.SR=10^(-12);
+    N.DR=10^(-12);
+end
+if N.SS==0 && N.DS==0
+    N.SS=10^(-12);
+    N.DS=10^(-12);
+end
+if N.DD==0
+    N.DD=10^(-12);
+end
+
 %Redefine b's in case beta is in sensitivity analysis
 
 
@@ -69,5 +82,6 @@ dydt=NaN(length(y),1);
      
      dydt(13)=gamma.DD*I_DD-(alpha.DV_DD+beta.DV_DD)*(I_DV/N.DV)*S_DD;
      dydt(14)=-gamma.DD*I_DD+(alpha.DV_DD+beta.DV_DD)*(I_DV/N.DV)*S_DD;
+
 end
 

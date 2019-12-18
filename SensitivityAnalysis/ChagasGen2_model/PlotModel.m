@@ -1,6 +1,6 @@
 %Plot Chagas Model
 clear; close all;
-ParamSettings.paramset='random';
+ParamSettings.paramset='scaled';
 params=Gen2_params(ParamSettings);
 POIs=0;%;[.0001,.00001]; 
 select.QOI={'Proportion I_{DV} at equilibirium','R_0'};

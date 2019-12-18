@@ -2,10 +2,23 @@ function [QOIs,soln] = BBB_Chagas_Gen2_model(POIs,select,baseParams)
 % This takes parameters, solves the ODE and returns desired quantities
 qnames=select.QOI;
 pnames=select.POI;
+if isfield(select,'model')
+    model=select.model;
+else
+    model='full';
+end
 %% Initialize ODE solver
 % convert the list of POIs into model variable names
 % POIs will be same parameters as being optimized
 params = get_p_struct_CG2(POIs,pnames,baseParams);
+if strcmpi(model,'10ODE')
+    params=CG2toODE10params(params);
+elseif strcmpi(model,'8ODE')
+    params=CG2toCG1params(params);
+elseif ~strcmpi(model,'full')
+    error('Unrecognized model type')
+end
+    
 %params=baseParams;
 
 

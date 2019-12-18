@@ -26,9 +26,9 @@ fprintf("Loading '%s' parameters\n",ParamSettings.paramset)
 %assess.
 %Define areas in in hectares and densities in per hecatre
 SylvaticArea=5;
-PeridomesticArea=2;
+PeridomesticArea=5;
 DensityOfHouseholds=3;
-tmax=10; %In years
+tmax=5; %In years
 
 %Initial Conditions
 fracinfect.SV=.01;
@@ -134,9 +134,9 @@ fracinfect.DD=.01;
     %Vectors
         lambda.V=.06775;
     %Synanthropic Mammals
-        lambda.S=.24;
+        lambda.S=.1;
     %Rodents
-        lambda.R=.1;
+        lambda.R=.05;
 switch ParamSettings.paramset
     case'base'
     case 'random'
@@ -229,8 +229,8 @@ switch ParamSettings.paramset
         lambda.R=LambdaRrand;
     %Implement Scaling
     %Update Rodent Population
-         Density.SS=Density.SS*3;
-         Density.DS=Density.DS*3;
+         Density.SS=Density.SS;
+         Density.DS=Density.DS;
 %          Density.SV=Density.SR/100;
 %          Density.DV=Density.DR/100;
          Density.SR=Density.SR/4;
@@ -252,12 +252,12 @@ switch ParamSettings.paramset
     %Update vec infection prob
 %     p.S_V=.001;
     %Update Rodent Population
-         Density.SS=Density.SS*3;
-         Density.DS=Density.DS*3;
+         Density.SS=Density.SS*2;
+         Density.DS=Density.DS*2;
 %          Density.SV=Density.SR/100;
 %          Density.DV=Density.DR/100;
-         Density.SR=Density.SR/4;
-         Density.DR=Density.DR/4;
+         Density.SR=Density.SBrown;
+         Density.DR=Density.DBrown;
     %Update Host feeding rates
 %             b.DV=.0001;
 %             b.SV=.0001;
@@ -361,6 +361,16 @@ end
         %Domestic Mammals
             init(13,1)=N.DD*(1-fracinfect.DD); %Susceptible
             init(14,1)=N.DD*fracinfect.DD; %Infected
+            
+% Scaling Assumptions
+    c.SS_ST=N.SS/(N.SS+N.SR);
+    c.DS_DT=N.DS/(N.DS+N.DR);
+    c.DD_DH=N.DD/(N.DS+N.DR+N.DD);
+    d.SS=.8;
+    d.DS=.8;
+    d.SR=.1;
+    d.DR=.2;
+    d.DD=.5;
 % Compile Variables
     params.b=b;
     params.bio.p=p;
@@ -374,5 +384,7 @@ end
     params.r=r;
     params.init=init;
     params.fracinfect=fracinfect;
-    params.tspan=tspan;            
+    params.tspan=tspan; 
+    params.PopProportions.c=c;
+    params.PopProportions.d=d;
 end

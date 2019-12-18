@@ -2,15 +2,34 @@ function str= CG2_change_default_params(str)
 %% QOI_change_default_params change default parameters
 %Load parameters
     str.baseParams=Gen2_params(str.ParamSettings);
+        N=str.baseParams.N;
         alpha=str.baseParams.alpha;
         beta=str.baseParams.beta;
         b=str.baseParams.b;
         r=str.baseParams.r;
         lambda=str.baseParams.lambda;
         gamma=str.baseParams.gamma;
+        if isfield(str.baseParams,'PopProportions')
+            c=str.baseParams.PopProportions.c;
+            d=str.baseParams.PopProportions.d;
+        end
         %SelectModel 
         str.QOI_model_eval = @BBB_Chagas_Gen2_model;
 switch str.QOI_model_name
+    case 'Assumptions'
+        str.POI_names={'c^{SS}_{ST}','c^{DS}_{DT}','c^{DD}_{DH}','d_{SS}','d_{SR}',...
+            'd_{DS}','d_{DR}','d_{DD}'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
+            str.nQOI=length(str.QOI_names);
+            
+       str.POI_baseline=[c.SS_ST c.DS_DT c.DD_DH d.SS d.SR d.DS d.DR d.DD]';
+       str.POI_min(1:3,1)=.8*str.POI_baseline(1:3);
+       str.POI_min(4:8,1)=zeros(1,5);
+       str.POI_max(1:3,1)=1.2*str.POI_baseline(1:3);
+       str.POI_max(4:8,1)=ones(1,5);
+       str.POI_mode=str.POI_baseline;
+        
     case 'lambda'
         %Select POI's and QOI's
         str.POI_names =  {'\lambda_R','\lambda_S','\lambda_V'};

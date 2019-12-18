@@ -60,7 +60,7 @@ for i=1:nQuants
             paramData.base(j), quantData.base(i), '*','MarkerSize',14);
       
         xlim(a, [xpt_min(j) xpt_max(j)])
-        ylim(a, [min(yval_min(:,i)) max(yval_max(:,i))])
+        ylim(a, [min(yval_min(:,i)) max(yval_max(:,i))+10^(-12)])
         xlabel(a,['POI = ', paramNames{j}],'fontsize',22)
         if j > 1
             set(a,'YTickLabel',{})

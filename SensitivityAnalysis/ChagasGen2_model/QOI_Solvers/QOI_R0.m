@@ -61,13 +61,13 @@ if strcmpi('numeric',bool)==1
     gDD=gamma.DD;
     
     lDV_SV=lambda.V;
-    lSV_DV=lambda.V*(NSV/NDV);   %Check this is correct
+    lSV_DV=lambda.V*(NSV/(NDV+10^(-12)));   %Check this is correct
 
     lDS_SS=lambda.S;
-    lSS_DS=lambda.S*(NSS/NDS);   %Check this is correct
+    lSS_DS=lambda.S*(NSS/(NDS+10^(-12)));   %Check this is correct
 
     lDR_SR=lambda.R;
-    lSR_DR=lambda.R*(NSR/NDR);   %Check this is correct
+    lSR_DR=lambda.R*(NSR/(NDR+10^(-12)));   %Check this is correct
 
 else
     syms aSV_SS aSV_SR aDV_DS aDV_DR aDV_DD aSS_SV aSR_SV aDS_DV aDR_DV aDD_DV
@@ -89,14 +89,14 @@ F=[   0      aSS_SV   aSR_SV     0           0       0       0 ;  %SV
 ];
 
 
-%[   SV       SS       SR       DV          DS      DR      DD ]
-V=[gSV+lDV_SV  bSS*NSS/NSV     bSR*NSR/NSV    -lSV_DV        0       0       0 ;  %SV
-      0    gSS+lDS_SS   0        0        -lSS_DS    0       0 ;  %SS
-      0        0   gSR+lDR_SR   0           0    -lSR_DR    0 ;  %SR
-    -lDV_SV     0       0    gDV+lSV_DV     bDS*NDS/NDV     bDR*NDR/NDV     bDD*NDD/NDV ;  %DV
-      0      -lDS_SS    0        0        gDS+lSS_DS  0       0 ;  %DS
-      0         0     -lDR_SR    0           0   gDR+lSR_DR  0 ;  %DR
-      0         0       0        0           0       0      gDD   %DD
+%[   SV            SS             SR         DV          DS            DR             DD ]
+V=[gSV+lDV_SV  bSS*NSS/NSV^2  bSR*NSR/NSV^2   -lSV_DV        0             0              0     ;  %SV
+      0        gSS+lDS_SS         0          0        -lSS_DS          0              0     ;  %SS
+      0            0          gSR+lDR_SR     0           0          -lSR_DR           0     ;  %SR
+    -lDV_SV        0              0      gDV+lSV_DV  bDS*NDS/NDV^2   bDR*NDR/NDV^2   bDD*NDD/NDV^2;  %DV
+      0         -lDS_SS           0          0        gDS+lSS_DS       0              0     ;  %DS
+      0            0          -lDR_SR        0           0         gDR+lSR_DR         0     ;  %DR
+      0            0              0          0           0             0              gDD      %DD
 ];
 % 
 % V=[gSV+lDV_SV   0      0    -lSV_DV        0       0       0 ;  %SV
@@ -116,6 +116,18 @@ V=[gSV+lDV_SV  bSS*NSS/NSV     bSR*NSR/NSV    -lSV_DV        0       0       0 ;
 %       0         0       0        bDR           0       0      gDD   %DD
 % ];
 
+%Resize V for 0's
+i=1;
+while i<=length(V)
+    if sum(V(:,i))==0
+        V(:,i)=[];
+        V(i,:)=[];
+        F(:,i)=[];
+        F(i,:)=[];
+    else
+        i=i+1;
+    end
+end
 Vinv=inv(V);
 N=F*Vinv;
 %N=F/V;

@@ -28,7 +28,7 @@ for i=1:length(pnames)
             alpha.DR_DV=POIs(i);
         case '\alpha^{DD}_{DV}'
             alpha.DD_DV=POIs(i); 
-        case '\beta^{SV}_{SS}'  %Currently have it where you can only change b, will need to be changed later
+        case '\beta^{SV}_{SS}'  %Changing beta also changes b
             b.SS=b.SS*POIs(i)/beta.SV_SS;
             beta.SV_SS=POIs(i);
         case '\beta^{SV}_{SR}'
@@ -63,6 +63,22 @@ for i=1:length(pnames)
             lambda.R=POIs(i);
         case '\lambda_V'
             lambda.V=POIs(i);
+        case 'c^{SS}_{ST}'
+            params.PopProportions.c.SS_ST=POIs(i);
+        case 'd_{SS}'
+            params.PopProportions.d.SS=POIs(i);
+        case 'd_{SR}'
+            params.PopProportions.d.SR=POIs(i);
+        case 'c^{DS}_{DT}'
+            params.PopProportions.c.DS_DT=POIs(i);
+        case 'd_{DS}'
+            params.PopProportions.d.DS=POIs(i);
+        case 'd_{DR}'
+            params.PopProportions.d.DR=POIs(i);
+        case 'c^{DD}_{DH}'
+            params.PopProportions.c.DD_DH=POIs(i);
+        case'd_{DD}'
+            params.PopProportions.d.DD=POIs(i);
         case 'null'
         otherwise
             warning("Error!! '%s' could not be identified as a parameter",pnames{i})
