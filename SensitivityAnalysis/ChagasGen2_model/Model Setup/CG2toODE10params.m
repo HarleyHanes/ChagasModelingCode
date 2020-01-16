@@ -39,7 +39,7 @@ d=CG2.PopProportions.d;
         alpha.DD_DV=CG2.alpha.DD_DV;
 %Vector-->Host transmission rates (stechorian)
     %Sylvatic Hosts
-        alpha.SV_SS=(CG2.alpha.SS_SV*d.SS+CG2.alpha.SR_SV*d.SR)...
+        alpha.SV_SS=(CG2.alpha.SV_SS*d.SS+CG2.alpha.SV_SR*d.SR)...
             /(d.SS*c.SS_ST+d.SR*(1-c.SS_ST));
         alpha.SV_SR=0;
     %Peridomestic Hosts

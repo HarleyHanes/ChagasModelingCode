@@ -74,6 +74,10 @@ for i=1:length(qnames)
              QOIs(i) = QOI_R0(params,'numeric');
         case 'Derived Params'
             QOIs(i)=QOI_Derived_Params(params);
+        case 'Error in R_0'
+            QOIs(i)=QOI_R0Error(params,65.56);
+        case 'Proportion I_{DV} at equilibirium Error'
+            QOIs(i)=QOI_DV_prop_infected_final_timeErr(soln,.7216);
     otherwise
         error(['ERROR!!! ',qnames{i},' could not be identified as a QOI'])
     end

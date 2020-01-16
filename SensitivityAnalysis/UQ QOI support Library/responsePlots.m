@@ -61,7 +61,7 @@ for i=1:nQuants
       
         xlim(a, [xpt_min(j) xpt_max(j)])
         ylim(a, [min(yval_min(:,i)) max(yval_max(:,i))+10^(-12)])
-        xlabel(a,['POI = ', paramNames{j}],'fontsize',22)
+        xlabel(a,[paramNames{j}],'fontsize',22)
         if j > 1
             set(a,'YTickLabel',{})
         else

@@ -370,11 +370,11 @@ end
     c.SS_ST=N.SS/(N.SS+N.SR);
     c.DS_DT=N.DS/(N.DS+N.DR);
     c.DD_DH=N.DD/(N.DS+N.DR+N.DD);
-    d.SS=.8;
-    d.DS=.8;
-    d.SR=.1;
-    d.DR=.2;
-    d.DD=.5;
+    d.SS=.99;
+    d.DS=.99;
+    d.SR=.15;
+    d.DR=.15;
+    d.DD=.4;
 % Compile Variables
     params.b=b;
     params.bio.p=p;

@@ -3,13 +3,15 @@
 %constructions. Selects the model by adding a .model element of the select
 
 %Base Model
-[POIBase,QOIBase]=main_Q0I_UQ_analysis({'CG2','Assumptions'},'scaled');
-
+% [POIBase,QOIBase]=main_Q0I_UQ_analysis({'CG2','Vec Infection'},'scaled');
+% figure
+ %keyboard
 %10ODE
-[POI10,QOI10]=main_Q0I_UQ_analysis({'10ODE','Assumptions'},'scaled');
-
+[POI10,QOI10]=main_Q0I_UQ_analysis({'10ODE','Assumptions Error 2'},'scaled');
+figure
 %8ODE
-[POI8,QOI8]=main_Q0I_UQ_analysis({'8ODE','Assumptions'},'scaled');
+[POI8,QOI8]=main_Q0I_UQ_analysis({'8ODE','Assumptions Error 2'},'scaled');
+
 
 % str.POI_names={'c^{SS}_{ST}','c^{DS}_{DT}','c^{DD}_{DH}','d_{SS}','d_{SR}',...
 %             'd_{DS}','d_{DR}','d_{DD}'}
