@@ -7,12 +7,22 @@
 % figure
  %keyboard
 %10ODE
-[POI10,QOI10]=main_Q0I_UQ_analysis({'10ODE','Assumptions Error 2'},'scaled');
+
+%% Test scaled model
+clear;
+%[POI10,QOI10]=main_Q0I_UQ_analysis({'10ODE','Assumptions Error: All Assumptions'},'scaled');
 figure
 %8ODE
-[POI8,QOI8]=main_Q0I_UQ_analysis({'8ODE','Assumptions Error 2'},'scaled');
-
-
+[POI8,QOI8]=main_Q0I_UQ_analysis({'8ODE','Assumptions Error: All Assumptions'},'scaled');
+figure
+%% Test scaled model with identicle compartments
+clear;
+% [POI10,QOI10]=main_Q0I_UQ_analysis({'10ODE','Assumptions Error: All Assumptions'},...
+% 'Identicle Compartments (Scaled)');
+figure
+%8ODE
+[POI8,QOI8]=main_Q0I_UQ_analysis({'8ODE','Assumptions Error: All Assumptions'},...
+'Identicle Compartments (Scaled)');
 % str.POI_names={'c^{SS}_{ST}','c^{DS}_{DT}','c^{DD}_{DH}','d_{SS}','d_{SR}',...
 %             'd_{DS}','d_{DR}','d_{DD}'}
 % str.QOI_names={'Proportion I_{DV} at equilibirium', 'R_0'}

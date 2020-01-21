@@ -16,7 +16,33 @@ function str= CG2_change_default_params(str)
         %SelectModel 
         str.QOI_model_eval = @BBB_Chagas_Gen2_model;
 switch str.QOI_model_name
-        case 'Assumptions Error 2'
+    case 'Assumptions Error: d'
+        str.POI_names={'d_{SS}','d_{SR}',...
+            'd_{DS}','d_{DR}','d_{DD}'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium Error', 'Error in R_0'};
+            str.nQOI=length(str.QOI_names);
+            
+       str.POI_baseline=[d.SS d.SR d.DS d.DR d.DD]';
+       str.POI_min(1:5,1)=zeros(5,1)+.1;
+       str.POI_max(1:5,1)=ones(5,1)-.1;
+       str.POI_mode=str.POI_baseline;
+        
+    case 'Assumptions Error: All Assumptions'
+        str.POI_names={'c^{SS}_{ST}','c^{DS}_{DT}','c^{DD}_{DH}','d_{SS}','d_{SR}',...
+            'd_{DS}','d_{DR}','d_{DD}'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium Error', 'Error in R_0'};
+            str.nQOI=length(str.QOI_names);
+            
+       str.POI_baseline=[c.SS_ST c.DS_DT c.DD_DH d.SS d.SR d.DS d.DR d.DD]';
+       str.POI_min(1:3,1)=.8*str.POI_baseline(1:3);
+       str.POI_min(4:8,1)=zeros(1,5)+.1;
+       str.POI_max(1:3,1)=1.2*str.POI_baseline(1:3);
+       str.POI_max(4:8,1)=ones(1,5)-.1;
+       str.POI_mode=str.POI_baseline;
+        
+    case 'Assumptions: d'
         str.POI_names={'d_{SS}','d_{SR}',...
             'd_{DS}','d_{DR}','d_{DD}'};
             str.nPOI=length(str.POI_names);
@@ -28,7 +54,7 @@ switch str.QOI_model_name
        str.POI_max(1:5,1)=ones(5,1)-.1;
        str.POI_mode=str.POI_baseline;
         
-    case 'Assumptions Error'
+    case 'Assumptions: All Assumptions'
         str.POI_names={'c^{SS}_{ST}','c^{DS}_{DT}','c^{DD}_{DH}','d_{SS}','d_{SR}',...
             'd_{DS}','d_{DR}','d_{DD}'};
             str.nPOI=length(str.POI_names);

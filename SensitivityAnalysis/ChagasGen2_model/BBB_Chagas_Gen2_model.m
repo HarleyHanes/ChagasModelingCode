@@ -56,6 +56,8 @@ if ~(strcmpi(qnames{1},'R_0') && length(qnames)==1)
 %     figure
 %     plot(soln.x,soln.py(2:2:8,:))
 %     legend
+else
+    soln=zeros(size(yzero));
 end
 %% Return quantities to analyze
 QOIs=NaN(1,length(qnames));
@@ -75,9 +77,9 @@ for i=1:length(qnames)
         case 'Derived Params'
             QOIs(i)=QOI_Derived_Params(params);
         case 'Error in R_0'
-            QOIs(i)=QOI_R0Error(params,65.56);
+            QOIs(i)=QOI_R0Error(params,POIs,select,baseParams);
         case 'Proportion I_{DV} at equilibirium Error'
-            QOIs(i)=QOI_DV_prop_infected_final_timeErr(soln,.7216);
+            QOIs(i)=QOI_DV_prop_infected_final_timeErr(soln,POIs,select,baseParams);
     otherwise
         error(['ERROR!!! ',qnames{i},' could not be identified as a QOI'])
     end

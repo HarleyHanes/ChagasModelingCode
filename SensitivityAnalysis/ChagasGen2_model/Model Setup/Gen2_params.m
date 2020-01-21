@@ -248,7 +248,7 @@ switch ParamSettings.paramset
         p.V_R=.05*p.V_R;
         q.V_R=.05*q.V_R;
     
-    case 'scaled'
+    case {'scaled','Identicle Compartments (Scaled)'}
     %Update vec infection prob
 %     p.S_V=.001;
     %Update Rodent Population
@@ -285,6 +285,7 @@ switch ParamSettings.paramset
 %         p.R_V=.5*p.S_V;
 %         q.V_S=.5*q.V_S;
         q.V_R=.05*q.V_R;
+    
 end
 %% Model Parameters-- These generally should not be changed
 %Population Sizes
@@ -375,6 +376,46 @@ end
     d.SR=.15;
     d.DR=.15;
     d.DD=.4;
+    switch ParamSettings.paramset
+        case 'Identicle Compartments (Scaled)'
+                %Set equal biting rates
+                b.SS=b.SR;
+                b.DS=b.DR; b.DD=b.DR;
+
+                %Set equal p's and q's
+                p.S_V=p.R_V; p.D_V=p.R_V;
+                p.V_S=p.V_R; p.V_D=p.V_R;
+                q.V_S=q.V_R; q.V_D=q.V_R;
+
+                %Set equal rho's
+                rho.SS=rho.SR;
+                rho.DS=rho.DR; rho.DD=rho.DR;
+                gamma.SS=gamma.SR;
+                gamma.DS=gamma.DR; gamma.DD=gamma.DD;
+                
+                %Set equal gamma's
+                gamma.SS=gamma.SR;
+                gamma.DS=gamma.DR; gamma.DD=gamma.DR;
+                
+                %Note that the formula's for alpha contain a conversion in
+                %population units from vectors to host which is dependent
+                %upon each's relative size. This way of doing it ignores
+                %that which may be inaccurate.
+                %Set equal alpha's
+                alpha.SS_SV=alpha.SR_SV; alpha.SV_SS=alpha.SV_SR;
+                alpha.DS_DV=alpha.DR_DV; alpha.DV_DS=alpha.DV_DR;
+                alpha.DD_DV=alpha.DR_DV; alpha.DV_DD=alpha.DV_DR;
+                
+                %Set equal beta's
+                beta.SV_SS=beta.SV_SR;
+                beta.DV_DS=beta.DV_DR; beta.DV_DD=beta.DV_DR;
+                
+                %Set eqaul lambda's
+                lambda.S=lambda.R;
+        
+                %Set equal r's
+                r.R=0;
+    end
 % Compile Variables
     params.b=b;
     params.bio.p=p;

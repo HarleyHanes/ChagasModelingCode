@@ -1,6 +1,6 @@
 %Plot Chagas Model
 clear; close all;
-ParamSettings.paramset='scaled';
+ParamSettings.paramset='Identicle Compartments (Scaled)';
 params=Gen2_params(ParamSettings);
 POIs=0;%;[.0001,.00001]; 
 select.QOI={'Proportion I_{DV} at equilibirium','R_0'};
@@ -8,7 +8,7 @@ select.POI={"null"};%{"\gamma_{SV}", "\gamma_{DV}"};
 [QOIs,soln]=BBB_Chagas_Gen2_model(POIs,select,params);
 %Check %infected
 %Plot Vectors
-plot(soln.x(1:10:end)/365,soln.py(1:10:end,[2,8]))
+%plot(soln.x(1:10:end)/365,soln.py(1:10:end,[2,8]))
 hold on
 %plot Synanthropes
 plot(soln.x(1:10:end)/365,soln.py(1:10:end,[4,10]),"--","MarkerSize",2)
