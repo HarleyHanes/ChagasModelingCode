@@ -7,7 +7,7 @@ if nargin>=1
         str.ParamSettings.paramset=varargin{2};       %parameter settings are second input
     end
 else
-    ModelName={'CG1' 'Vis Project'};
+    ModelName={'CG2' 'All Infection'};
     str.ParamSettings.paramset='base';
 end
 
@@ -30,13 +30,15 @@ set(0,'DefaultAxesFontSize',18,'defaultlinelinewidth',2);set(gca,'FontSize',18);
 rng(10);% set the random number generator seed for reproducibility
 
 
-str = QOI_define_default_params(str);
+
 if strcmpi(ModelName{1},'CG1')
         set_workspace('CG1')
+        str = QOI_define_default_params(str);
         str.QOI_model_name=ModelName{2};   %Model to run if no inputs
         str=CG1_change_default_params(str);% set the default parameter values
 elseif strcmpi(ModelName{1},'CG2')||strcmpi(ModelName{1},'10ODE')||strcmpi(ModelName{1},'8ODE')
         set_workspace('CG2')
+        str = QOI_define_default_params(str);
         str.QOI_model_name=ModelName{2};   %Model to run if no inputs
         str=CG2_change_default_params(str);% set the default parameter values
         if strcmpi(ModelName{1},'10ODE')

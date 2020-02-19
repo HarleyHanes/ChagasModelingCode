@@ -13,12 +13,12 @@ clear;
 %[POI10,QOI10]=main_Q0I_UQ_analysis({'10ODE','Assumptions Error: All Assumptions'},'scaled');
 figure
 %8ODE
-[POI8,QOI8]=main_Q0I_UQ_analysis({'8ODE','Assumptions Error: All Assumptions'},'scaled');
-figure
+% [POI8,QOI8]=main_Q0I_UQ_analysis({'8ODE','Assumptions Error: All Assumptions'},'scaled');
+% figure
 %% Test scaled model with identicle compartments
 clear;
-% [POI10,QOI10]=main_Q0I_UQ_analysis({'10ODE','Assumptions Error: All Assumptions'},...
-% 'Identicle Compartments (Scaled)');
+ [POI10,QOI10]=main_Q0I_UQ_analysis({'10ODE','Assumptions Error: All Assumptions'},...
+ 'Identicle Compartments (Scaled)');
 figure
 %8ODE
 [POI8,QOI8]=main_Q0I_UQ_analysis({'8ODE','Assumptions Error: All Assumptions'},...

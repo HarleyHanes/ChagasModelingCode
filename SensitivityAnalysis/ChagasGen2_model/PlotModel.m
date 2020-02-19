@@ -1,6 +1,6 @@
 %Plot Chagas Model
 clear; close all;
-ParamSettings.paramset='Identicle Compartments (Scaled)';
+ParamSettings.paramset='scaled';
 params=Gen2_params(ParamSettings);
 POIs=0;%;[.0001,.00001]; 
 select.QOI={'Proportion I_{DV} at equilibirium','R_0'};
@@ -20,6 +20,21 @@ legend("I_{SV}","I_{DV}","I_{SS}","I_{DS}","I_{SR}","I_{DR}","I_{DD}","Interpret
 %legend("SV","SS","SR","DV","DS","DR","DD")
 xlabel('Years')
 ylabel('Proportion Infected')
+
+timeDerivatives=QOI_Time_Derivatives(soln,params);
+
+figure
+hold on
+%plot Synanthropes
+plot(soln.x(1:10:end)/365,timeDerivatives(1:10:end,[4,10]),"--","MarkerSize",2)
+%Plot Rodents
+plot(soln.x(1:10:end)/365,timeDerivatives(1:10:end,[6,12]),".-","MarkerSize",2)
+%Plot Pets
+plot(soln.x(1:10:end)/365,timeDerivatives(1:10:end,14),":","MarkerSize",.2)
+legend("I_{SV}","I_{DV}","I_{SS}","I_{DS}","I_{SR}","I_{DR}","I_{DD}","Interpreter","LaTex")
+%legend("SV","SS","SR","DV","DS","DR","DD")
+xlabel('Years')
+ylabel('d/dt*Proportion Infected')
 
 figure
 %Check Popsizes

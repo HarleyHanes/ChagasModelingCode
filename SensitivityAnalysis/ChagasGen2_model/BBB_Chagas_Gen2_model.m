@@ -1,25 +1,7 @@
 function [QOIs,soln] = BBB_Chagas_Gen2_model(POIs,select,baseParams)
 % This takes parameters, solves the ODE and returns desired quantities
 qnames=select.QOI;
-pnames=select.POI;
-if isfield(select,'model')
-    model=select.model;
-else
-    model='full';
-end
-%% Initialize ODE solver
-% convert the list of POIs into model variable names
-% POIs will be same parameters as being optimized
-params = get_p_struct_CG2(POIs,pnames,baseParams);
-if strcmpi(model,'10ODE')
-    params=CG2toODE10params(params);
-elseif strcmpi(model,'8ODE')
-    params=CG2toCG1params(params);
-elseif ~strcmpi(model,'full')
-    error('Unrecognized model type')
-end
-    
-%params=baseParams;
+params=modify_params(POIs,select,baseParams);
 
 
 % initial conditions for y=(S_SV, I_SV S_SS I_SS S_SR I_SR S_DV I_DV S_DR I_DR S_DD I_DD)
@@ -80,6 +62,18 @@ for i=1:length(qnames)
             QOIs(i)=QOI_R0Error(params,POIs,select,baseParams);
         case 'Proportion I_{DV} at equilibirium Error'
             QOIs(i)=QOI_DV_prop_infected_final_timeErr(soln,POIs,select,baseParams);
+        case 'Time Derivatives'
+            QOIs(i)=QOI_Time_Derivatives(soln,params);            
+        case 'Time Derivatives at t=0'
+            QOIs(i)=QOI_Time_Derivatives(soln,params,0);
+        case 'Time Derivatives at Equil'
+            QOIs(i)=QOI_Time_Derivatives(soln,params,max(soln.x));
+        case 'Time Derivatives Err'
+            QOIs(i)=QOI_Time_DerivativesErr(soln,POIs,select,baseParams);            
+        case 'Time Derivatives at t=0 Err'
+            QOIs(i)=QOI_Time_DerivativesErr(soln,POIs,select,baseParams,0);
+        case 'Time Derivatives at Equil Err'
+            QOIs(i)=QOI_Time_DerivativesErr(soln,POIs,select,baseParams,max(soln.x));
     otherwise
         error(['ERROR!!! ',qnames{i},' could not be identified as a QOI'])
     end
