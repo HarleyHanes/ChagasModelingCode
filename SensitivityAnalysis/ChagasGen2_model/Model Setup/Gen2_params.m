@@ -138,7 +138,28 @@ fracinfect.DD=.01;
     %Rodents
         lambda.R=.05;
 switch ParamSettings.paramset
-    case'base'
+    case 'test'
+         Density.SS=10.22;
+         Density.DS=10.22;
+         b.SS=.05*b.SS;
+         b.DS=.05*b.DS;
+    %Update Rodent Population
+         Density.SS=Density.SS*2;
+         Density.DS=Density.DS*2;
+         Density.SR=Density.SBrown;
+         Density.DR=Density.DBrown;
+    %Update Host feeding rates
+         b.SR=.015*b.SR;
+         b.DR=.015*b.DR;
+         b.DD=.015*b.DD;
+     %Adjust rhos to pop %s
+           rho.SS=.98*(Density.SS)/(Density.SS+Density.SR)*8;
+           rho.SR=.98-rho.SS;
+           rho.DS=rho.DS/5;
+           rho.DR=rho.DR*10;
+          rho.DD=rho.DD/10;
+            p.V_R=.05*p.V_R;
+            q.V_R=.05*q.V_R;
     case 'random'
         %Lifespans
             %Vectors
