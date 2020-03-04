@@ -16,7 +16,36 @@ function str= CG2_change_default_params(str)
         %SelectModel 
         str.QOI_model_eval = @BBB_Chagas_Gen2_model;
 switch str.QOI_model_name
-        case 'Assumptions Error 2'
+    case 'High Sensitivities'
+        str.POI_names={'\alpha^{DR}_{DV}','\alpha^{DV}_{DR}','\beta^{DV}_{DS}','\gamma_{DR}','\gamma_{SR}','\gamma_{DV}'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
+            str.nQOI=length(str.QOI_names);
+        str.POI_baseline=[alpha.DR_DV alpha.DV_DR beta.DV_DS gamma.DR gamma.SR gamma.DV]';
+        str.POI_min=str.POI_baseline*.8;
+        str.POI_max=str.POI_baseline*1.2;
+        str.POI_mode=str.POI_baseline;
+    case 'All Params'
+         str.POI_names ={'\lambda_R','\lambda_S','\lambda_V',... %Movement Rates
+             '\alpha^{SS}_{SV}' '\alpha^{SR}_{SV}' '\alpha^{DS}_{DV}'...
+            '\alpha^{DR}_{DV}' '\alpha^{DD}_{DV}'... %Vec Infection
+            '\alpha^{SV}_{SS}' '\alpha^{SV}_{SR}' '\alpha^{DV}_{DS}'...
+            '\alpha^{DV}_{DR}' '\alpha^{DV}_{DD}' '\beta^{SV}_{SS}' '\beta^{SV}_{SR}'...
+            '\beta^{DV}_{DS}' '\beta^{DV}_{DR}' '\beta^{DV}_{DD}'... %Host Infection
+            '\gamma_{SS}','\gamma_{SR}','\gamma_{SV}',...
+            '\gamma_{DS}','\gamma_{DR}','\gamma_{DV}','\gamma_{DD}'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
+            str.nQOI=length(str.QOI_names);
+        str.POI_baseline=[lambda.R lambda.S lambda.V...
+            alpha.SS_SV alpha.SR_SV alpha.DS_DV alpha.DR_DV alpha.DD_DV...
+            alpha.SV_SS alpha.SV_SR alpha.DV_DS alpha.DV_DR alpha.DV_DD...
+            beta.SV_SS beta.SV_SR beta.DV_DS beta.DV_DR beta.DV_DD...
+            gamma.SS gamma.SR gamma.SV gamma.DS gamma.DR gamma.DV gamma.DD]';
+        str.POI_min=str.POI_baseline*.8;
+        str.POI_max=str.POI_baseline*1.2;
+        str.POI_mode=str.POI_baseline;
+    case 'Assumptions Error 2'
         str.POI_names={'d_{SS}','d_{SR}',...
             'd_{DS}','d_{DR}','d_{DD}'};
             str.nPOI=length(str.POI_names);
