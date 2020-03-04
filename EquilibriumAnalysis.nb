@@ -1,0 +1,2831 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[    123500,       2823]
+NotebookOptionsPosition[    119967,       2768]
+NotebookOutlinePosition[    120309,       2783]
+CellTagsIndexPosition[    120266,       2780]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+Analyze 8 ODE Model
+\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.7892245074006186`*^9, 
+  3.789224546237995*^9}},ExpressionUUID->"8bb04f87-83e8-4081-add7-\
+759f1a95e98b"],
+
+Cell["Define Equations", "Text",
+ CellChangeTimes->{{3.7892245724398513`*^9, 
+  3.789224577244773*^9}},ExpressionUUID->"29d0113c-3ad0-42f7-9061-\
+ed5af839a6eb"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"eqn8ODE", "=", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"dsSH", "\[Equal]", 
+       RowBox[{
+        SubscriptBox["\[Nu]", "SH"], "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Alpha]", "SH", "SV"], "*", "sSH", "*", "iSV"}], 
+        "+", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], "sDH"}], "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], "sSH"}]}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"diSH", "\[Equal]", 
+       RowBox[{
+        RowBox[{
+         SubsuperscriptBox["\[Alpha]", "SH", "SV"], "*", "sSH", "*", "iSV"}], 
+        "-", 
+        RowBox[{
+         SubscriptBox["\[Mu]", "SH"], "*", "iSH"}], "+", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], "iDH"}], "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], "iSH"}]}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"dsSV", "\[Equal]", 
+       RowBox[{
+        SubscriptBox["\[Nu]", "SV"], "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], "*", "iSH", "*", "sSV"}], 
+        "+", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], "sDV"}], "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], "sSV"}]}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"diSV", "\[Equal]", 
+       RowBox[{
+        RowBox[{
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], "*", "iSH", "*", "sSV"}], 
+        "-", 
+        RowBox[{
+         SubscriptBox["\[Mu]", "SV"], "*", "iSV"}], "+", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], "iDV"}], "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], "iSV"}]}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"dsDH", "\[Equal]", 
+       RowBox[{
+        SubscriptBox["\[Nu]", "DH"], "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Alpha]", "DH", "DV"], "*", "sDH", "*", "iDV"}], 
+        "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], "sDH"}], "+", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], "sSH"}]}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"diDH", "\[Equal]", 
+       RowBox[{
+        RowBox[{
+         SubsuperscriptBox["\[Alpha]", "DH", "DV"], "*", "sDH", "*", "iDV"}], 
+        "-", 
+        RowBox[{
+         SubscriptBox["\[Mu]", "DH"], "*", "iDH"}], "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], "iDH"}], "+", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], "iSH"}]}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"dsDV", "\[Equal]", 
+       RowBox[{
+        SubscriptBox["\[Nu]", "DV"], "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], "*", "iDH", "*", "sDV"}], 
+        "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], "sDV"}], "+", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], "sSV"}]}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"diDV", "\[Equal]", 
+       RowBox[{
+        RowBox[{
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], "*", "iDH", "*", "sDV"}], 
+        "-", 
+        RowBox[{
+         SubscriptBox["\[Mu]", "DV"], "*", "iDV"}], "-", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], "iDV"}], "+", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], "iSV"}]}]}]}], "}"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"dsSH", "=", "0"}], ";", " ", 
+   RowBox[{"diSH", "=", "0"}], ";", " ", 
+   RowBox[{"dsSV", "=", "0"}], ";", " ", 
+   RowBox[{"diSV", "=", "0"}], ";", " ", 
+   RowBox[{"dsDH", "=", "0"}], ";", " ", 
+   RowBox[{"diDH", "=", "0"}], ";", " ", 
+   RowBox[{"dsDV", "=", "0"}], ";", " ", 
+   RowBox[{"diDV", "=", "0"}], ";"}], " "}], "\[IndentingNewLine]", 
+ RowBox[{"Solve", "[", 
+  RowBox[{"eqn8ODE", ",", " ", 
+   RowBox[{"{", 
+    RowBox[{
+    "sSH", ",", "iSH", ",", "sSV", ",", "iSV", ",", "sDH", ",", "iDH", ",", 
+     " ", "sDV", ",", "iDV"}], "}"}]}], "]"}]}], "Input",
+ CellChangeTimes->{3.789224582755898*^9},
+ CellLabel->"In[1]:=",ExpressionUUID->"304a59a2-b589-4e42-86e9-5f4777ec0cf8"],
+
+Cell[BoxData["$Aborted"], "Output",
+ CellChangeTimes->{3.789248059122398*^9},
+ CellLabel->"Out[3]=",ExpressionUUID->"ba8fc492-d597-41d9-97ae-36cf235523dd"]
+}, Open  ]],
+
+Cell["R0 Analysis", "Text",
+ CellChangeTimes->{{3.7894840930942264`*^9, 
+  3.789484095329275*^9}},ExpressionUUID->"a1d9db66-1675-4fc0-9cec-\
+6081e3a4db7f"],
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"F", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], ",", " ", "0", ",", " ", 
+         "0"}], "}"}], ",", "\[IndentingNewLine]", "    ", 
+       RowBox[{"{", " ", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], ",", " ", "0", " ", ",", " ", 
+         "0", ",", "0"}], "}"}], ",", "\[IndentingNewLine]", "     ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", " ", "0", ",", " ", "0", ",", " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"]}], "}"}], ",", 
+       "\[IndentingNewLine]", "     ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", " ", "0", ",", " ", 
+         SubsuperscriptBox["\[Alpha]", "DH", "DV"], ",", " ", "0"}], "}"}]}], 
+      "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"V", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          SubscriptBox["\[Mu]", "SV"], "+", 
+          SubsuperscriptBox["\[Lambda]", "DV", "SV"]}], ",", " ", "0", ",", 
+         RowBox[{"-", 
+          SubsuperscriptBox["\[Lambda]", "SV", "DV"]}], ",", "0"}], "}"}], 
+       ",", "\[IndentingNewLine]", "   ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", 
+         RowBox[{
+          SubscriptBox["\[Mu]", "SH"], "+", 
+          SubsuperscriptBox["\[Lambda]", "DH", "SH"]}], ",", " ", "0", ",", 
+         RowBox[{"-", 
+          SubsuperscriptBox["\[Lambda]", "SH", "DH"]}]}], "}"}], ",", 
+       "\[IndentingNewLine]", "   ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", 
+          SubsuperscriptBox["\[Lambda]", "DV", "SV"]}], ",", "0", ",", 
+         RowBox[{
+          SubscriptBox["\[Mu]", "DV"], "+", 
+          SubsuperscriptBox["\[Lambda]", "SV", "DV"]}], ",", " ", "0"}], 
+        "}"}], ",", "\[IndentingNewLine]", "  ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", 
+         RowBox[{"-", 
+          SubsuperscriptBox["\[Lambda]", "DH", "SH"]}], ",", "0", ",", 
+         RowBox[{
+          SubscriptBox["\[Mu]", "DH"], "+", 
+          SubsuperscriptBox["\[Lambda]", "SH", "DH"]}]}], "}"}]}], "}"}]}], 
+    ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.789247853286902*^9, 3.789248040275351*^9}, {
+  3.789248074183528*^9, 3.789248542221986*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"1a3c82e6-620e-451c-b612-ee3ca0c310c7"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"F", "//", "MatrixForm"}], "\[IndentingNewLine]", 
+ RowBox[{"V", "//", "MatrixForm"}]}], "Input",
+ CellChangeTimes->{{3.7892481634403577`*^9, 3.789248169076744*^9}, {
+  3.7892485455296288`*^9, 3.789248579029682*^9}},
+ CellLabel->"In[3]:=",ExpressionUUID->"0ccbd7e5-ea81-4385-8514-de035f7d7364"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {"0", 
+      SubsuperscriptBox["\[Alpha]", "SV", "SH"], "0", "0"},
+     {
+      SubsuperscriptBox["a", "SH", "SV"], "0", "0", "0"},
+     {"0", "0", "0", 
+      SubsuperscriptBox["\[Alpha]", "DV", "DH"]},
+     {"0", "0", 
+      SubsuperscriptBox["\[Alpha]", "DH", "DV"], "0"}
+    },
+    GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.789484173710576*^9},
+ CellLabel->
+  "Out[3]//MatrixForm=",ExpressionUUID->"e66caca1-2672-45cb-9bd9-\
+5558f3ef53fe"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{
+       SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+       SubscriptBox["\[Mu]", "SV"]}], "0", 
+      RowBox[{"-", 
+       SubsuperscriptBox["\[Lambda]", "SV", "DV"]}], "0"},
+     {"0", 
+      RowBox[{
+       SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+       SubscriptBox["\[Mu]", "SH"]}], "0", 
+      RowBox[{"-", 
+       SubsuperscriptBox["\[Lambda]", "SH", "DH"]}]},
+     {
+      RowBox[{"-", 
+       SubsuperscriptBox["\[Lambda]", "DV", "SV"]}], "0", 
+      RowBox[{
+       SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+       SubscriptBox["\[Mu]", "DV"]}], "0"},
+     {"0", 
+      RowBox[{"-", 
+       SubsuperscriptBox["\[Lambda]", "DH", "SH"]}], "0", 
+      RowBox[{
+       SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+       SubscriptBox["\[Mu]", "DH"]}]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.789484173743582*^9},
+ CellLabel->
+  "Out[4]//MatrixForm=",ExpressionUUID->"44a25354-c281-4630-83a9-\
+26fc84f8846a"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.789249023428042*^9, 3.78924903174429*^9}, 
+   3.7894841836187763`*^9},ExpressionUUID->"ab0142e0-1915-4071-94b2-\
+97a48ed18a04"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.789484187284135*^9, 
+  3.7894841873050985`*^9}},ExpressionUUID->"9622306f-dee4-46a3-a2dc-\
+71fc1afd0909"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Vinv", "=", 
+    RowBox[{"Inverse", "[", "V", "]"}]}], ";", 
+   RowBox[{"Nmat", "=", 
+    RowBox[{"F", ".", "Vinv"}]}], " ", ";"}], " "}]], "Input",
+ CellChangeTimes->{{3.789248588525738*^9, 3.7892486134190173`*^9}, {
+  3.789248703666111*^9, 3.789248719202503*^9}, {3.789248850911329*^9, 
+  3.7892488824679403`*^9}, {3.7892492110505996`*^9, 3.7892492305382414`*^9}, {
+  3.7894842162551975`*^9, 3.789484223011073*^9}, {3.7894842835719657`*^9, 
+  3.7894842840023637`*^9}},
+ CellLabel->"In[12]:=",ExpressionUUID->"41cac91a-ed17-4d33-90c7-88c7c75cee3b"],
+
+Cell[TextData[{
+ "Note that Nmat is said to be 0 but that if we look at Vinv we see every \
+index has the same denominator of ",
+ Cell[BoxData[
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+      SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+      SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+       SubscriptBox["\[Mu]", "DV"]}], "+", 
+      RowBox[{
+       SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+       SubscriptBox["\[Mu]", "SV"]}], "+", 
+      RowBox[{
+       SubscriptBox["\[Mu]", "DV"], " ", 
+       SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], "-", 
+   RowBox[{
+    SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+       SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+       SubscriptBox["\[Mu]", "DV"]}], "+", 
+      RowBox[{
+       SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+       SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+       SubscriptBox["\[Mu]", "SV"]}], "+", 
+      RowBox[{
+       SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+       SubscriptBox["\[Mu]", "DV"], " ", 
+       SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}]}]],
+  CellChangeTimes->{3.789248947414463*^9},ExpressionUUID->
+  "a1700ff5-6f7e-440f-a837-70269994409a"],
+ "\n"
+}], "Text",
+ CellChangeTimes->{{3.7892491877251544`*^9, 
+  3.7892492658255696`*^9}},ExpressionUUID->"63a07fb6-23d1-4daf-a261-\
+9b232a8ef0a3"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.789248670528023*^9, 3.7892487218569613`*^9}, {
+  3.789249171448393*^9, 
+  3.7892491727612667`*^9}},ExpressionUUID->"f9314044-05fd-47be-94a2-\
+6800f9a4fd49"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7892491763593545`*^9, 
+  3.789249176430707*^9}},ExpressionUUID->"67de57f6-2afb-420b-a7d9-\
+d815b33ac74b"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"denominator", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+       SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+       SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+        SubscriptBox["\[Mu]", "DV"]}], "+", 
+       RowBox[{
+        SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+        SubscriptBox["\[Mu]", "SV"]}], "+", 
+       RowBox[{
+        SubscriptBox["\[Mu]", "DV"], " ", 
+        SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], "-", 
+    RowBox[{
+     SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+        SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+        SubscriptBox["\[Mu]", "DV"]}], "+", 
+       RowBox[{
+        SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+        SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+        SubscriptBox["\[Mu]", "SV"]}], "+", 
+       RowBox[{
+        SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+        SubscriptBox["\[Mu]", "DV"], " ", 
+        SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"VinvReduced", "=", 
+   RowBox[{"Vinv", "*", "denominator"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"NmatReduced", "=", 
+   RowBox[{"F", ".", "VinvReduced"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"NmatReduced", "//", "MatrixForm"}], "\[IndentingNewLine]", 
+ RowBox[{"Simplify", "[", 
+  RowBox[{"Eigenvalues", "[", "Nmat", "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.789249272606868*^9, 3.78924931478624*^9}, {
+   3.7892494465534115`*^9, 3.7892495215816755`*^9}, {3.7894839974784575`*^9, 
+   3.789484004680498*^9}, 3.7894840580183325`*^9, 3.7894842465255523`*^9},
+ CellLabel->"In[13]:=",ExpressionUUID->"056dfa2a-c5ac-4e62-a11f-e48330934b76"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {"0", 
+      RowBox[{
+       SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+         SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+          SubscriptBox["\[Mu]", "DV"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+          SubscriptBox["\[Mu]", "SV"]}], "+", 
+         RowBox[{
+          SubscriptBox["\[Mu]", "DV"], " ", 
+          SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], "0", 
+      RowBox[{
+       SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+          SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+          SubscriptBox["\[Mu]", "DV"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+          SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+          SubscriptBox["\[Mu]", "SV"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+          SubscriptBox["\[Mu]", "DV"], " ", 
+          SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}]},
+     {
+      RowBox[{
+       SubsuperscriptBox["a", "SH", "SV"], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+         SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+          SubscriptBox["\[Mu]", "DH"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+          SubscriptBox["\[Mu]", "SH"]}], "+", 
+         RowBox[{
+          SubscriptBox["\[Mu]", "DH"], " ", 
+          SubscriptBox["\[Mu]", "SH"]}]}], ")"}]}], "0", 
+      RowBox[{
+       SubsuperscriptBox["a", "SH", "SV"], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+          SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+          SubscriptBox["\[Mu]", "DH"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+          SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+          SubscriptBox["\[Mu]", "SH"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+          SubscriptBox["\[Mu]", "DH"], " ", 
+          SubscriptBox["\[Mu]", "SH"]}]}], ")"}]}], "0"},
+     {"0", 
+      RowBox[{
+       SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+          SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+          SubscriptBox["\[Mu]", "DV"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+          SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+          SubscriptBox["\[Mu]", "SV"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+          SubscriptBox["\[Mu]", "DV"], " ", 
+          SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], "0", 
+      RowBox[{
+       SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+         SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+          SubscriptBox["\[Mu]", "DV"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+          SubscriptBox["\[Mu]", "SV"]}], "+", 
+         RowBox[{
+          SubscriptBox["\[Mu]", "DV"], " ", 
+          SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}]},
+     {
+      RowBox[{
+       SubsuperscriptBox["\[Alpha]", "DH", "DV"], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+          SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+          SubscriptBox["\[Mu]", "DH"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+          SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+          SubscriptBox["\[Mu]", "SH"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+          SubscriptBox["\[Mu]", "DH"], " ", 
+          SubscriptBox["\[Mu]", "SH"]}]}], ")"}]}], "0", 
+      RowBox[{
+       SubsuperscriptBox["\[Alpha]", "DH", "DV"], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+          SubscriptBox["\[Mu]", "DH"]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+          SubscriptBox["\[Mu]", "SH"]}], "+", 
+         RowBox[{
+          SubscriptBox["\[Mu]", "DH"], " ", 
+          SubscriptBox["\[Mu]", "SH"]}]}], ")"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+         SubscriptBox["\[Mu]", "SV"]}], ")"}]}], "0"}
+    },
+    GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.789249522337841*^9, 3.789484251583832*^9, 
+  3.789484296426836*^9},
+ CellLabel->
+  "Out[16]//MatrixForm=",ExpressionUUID->"5f236f44-3463-4fbc-b29a-\
+f06e56098ab7"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"-", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"\[Sqrt]", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", 
+            RowBox[{"2", " ", "SH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "DV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", 
+            RowBox[{"2", " ", "DH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", 
+            RowBox[{"2", " ", "DH"}]], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", 
+            RowBox[{"2", " ", "SH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", 
+            RowBox[{"2", " ", "SH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", 
+            RowBox[{"2", " ", "DH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", 
+            RowBox[{"2", " ", "DH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"4", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", 
+            RowBox[{"2", " ", "DH"}]], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["\[Alpha]", "DH", "DV"], " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+              SubscriptBox["\[Mu]", "DH"]}], "+", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+              SubscriptBox["\[Mu]", "SH"]}]}], ")"}], " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+              SubscriptBox["\[Mu]", "DV"]}], "+", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+              SubscriptBox["\[Mu]", "SV"]}]}], ")"}], " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+              SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+              SubsuperscriptBox["\[Lambda]", "SH", "DH"]}], "+", 
+             RowBox[{
+              SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+              RowBox[{"(", 
+               RowBox[{
+                SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+                SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+              RowBox[{"(", 
+               RowBox[{
+                SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+                SubscriptBox["\[Mu]", "SV"]}], ")"}]}]}], ")"}]}], "-", 
+          RowBox[{"\[Sqrt]", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox[
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{
+                 SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                 SubscriptBox["\[Mu]", "DH"]}], "+", 
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                   SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                 SubscriptBox["\[Mu]", "SH"]}]}], ")"}], "2"], " ", 
+             SuperscriptBox[
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{
+                 SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                 SubscriptBox["\[Mu]", "DV"]}], "+", 
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                   SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+                 SubscriptBox["\[Mu]", "SV"]}]}], ")"}], "2"], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{
+                SubsuperscriptBox["a", "SH", 
+                 RowBox[{"2", " ", "SV"}]], " ", 
+                SuperscriptBox[
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{
+                    SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"]}], "+", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}]}], ")"}], "2"]}], 
+               "+", 
+               RowBox[{
+                SubsuperscriptBox["\[Alpha]", "DH", 
+                 RowBox[{"2", " ", "DV"}]], " ", 
+                SuperscriptBox[
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{
+                    SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"]}], "+", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+                    SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+                    SubscriptBox["\[Mu]", "SV"]}], ")"}]}]}], ")"}], "2"]}], 
+               "+", 
+               RowBox[{"2", " ", 
+                SubsuperscriptBox["a", "SH", "SV"], " ", 
+                SubsuperscriptBox["\[Alpha]", "DH", "DV"], " ", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{
+                   SubsuperscriptBox["\[Alpha]", "SV", 
+                    RowBox[{"2", " ", "SH"}]], " ", 
+                   SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                   SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "+", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Alpha]", "DV", 
+                    RowBox[{"2", " ", "DH"}]], " ", 
+                   SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                   SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+                    SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+                    SubscriptBox["\[Mu]", "SV"]}], ")"}]}], "+", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                   SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "-", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "-", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], "+", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubscriptBox["\[Mu]", "DH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "-", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "+", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"2", " ", 
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"]}], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}]}], ")"}]}], "+", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "-", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}]}], ")"}]}]}], 
+                 ")"}]}]}], ")"}]}], ")"}]}]}], ")"}]}], ")"}], "/", 
+      RowBox[{"(", 
+       RowBox[{
+        SqrtBox["2"], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubscriptBox["\[Mu]", "DH"]}], "+", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+             SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+           SubscriptBox["\[Mu]", "SH"]}]}], ")"}], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubscriptBox["\[Mu]", "DV"]}], "+", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+             SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+           SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], ")"}]}], ")"}]}], ",", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"\[Sqrt]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", 
+          RowBox[{"2", " ", "SH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "DV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", 
+          RowBox[{"2", " ", "DH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", 
+          RowBox[{"2", " ", "DH"}]], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", 
+          RowBox[{"2", " ", "SH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", 
+          RowBox[{"2", " ", "SH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", 
+          RowBox[{"2", " ", "DH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", 
+          RowBox[{"2", " ", "DH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"4", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", 
+          RowBox[{"2", " ", "DH"}]], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["\[Alpha]", "DH", "DV"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+            SubscriptBox["\[Mu]", "DH"]}], "+", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+              SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+            SubscriptBox["\[Mu]", "SH"]}]}], ")"}], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+            SubscriptBox["\[Mu]", "DV"]}], "+", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+              SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+            SubscriptBox["\[Mu]", "SV"]}]}], ")"}], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+            SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+            SubsuperscriptBox["\[Lambda]", "SH", "DH"]}], "+", 
+           RowBox[{
+            SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+              SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+              SubscriptBox["\[Mu]", "SV"]}], ")"}]}]}], ")"}]}], "-", 
+        RowBox[{"\[Sqrt]", 
+         RowBox[{"(", 
+          RowBox[{
+           SuperscriptBox[
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{
+               SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+               SubscriptBox["\[Mu]", "DH"]}], "+", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                 SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+               SubscriptBox["\[Mu]", "SH"]}]}], ")"}], "2"], " ", 
+           SuperscriptBox[
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{
+               SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+               SubscriptBox["\[Mu]", "DV"]}], "+", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                 SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+               SubscriptBox["\[Mu]", "SV"]}]}], ")"}], "2"], " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              SubsuperscriptBox["a", "SH", 
+               RowBox[{"2", " ", "SV"}]], " ", 
+              SuperscriptBox[
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{
+                  SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                  SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                  SubsuperscriptBox["\[Lambda]", "SV", "DV"]}], "+", 
+                 RowBox[{
+                  SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                  RowBox[{"(", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                  RowBox[{"(", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}]}], ")"}], "2"]}], 
+             "+", 
+             RowBox[{
+              SubsuperscriptBox["\[Alpha]", "DH", 
+               RowBox[{"2", " ", "DV"}]], " ", 
+              SuperscriptBox[
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{
+                  SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                  SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                  SubsuperscriptBox["\[Lambda]", "SH", "DH"]}], "+", 
+                 RowBox[{
+                  SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                  RowBox[{"(", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+                    SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+                  RowBox[{"(", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+                    SubscriptBox["\[Mu]", "SV"]}], ")"}]}]}], ")"}], "2"]}], 
+             "+", 
+             RowBox[{"2", " ", 
+              SubsuperscriptBox["a", "SH", "SV"], " ", 
+              SubsuperscriptBox["\[Alpha]", "DH", "DV"], " ", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{
+                 SubsuperscriptBox["\[Alpha]", "SV", 
+                  RowBox[{"2", " ", "SH"}]], " ", 
+                 SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                 SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                   SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                   SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "+", 
+                RowBox[{
+                 SubsuperscriptBox["\[Alpha]", "DV", 
+                  RowBox[{"2", " ", "DH"}]], " ", 
+                 SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                 SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+                   SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+                   SubscriptBox["\[Mu]", "SV"]}], ")"}]}], "+", 
+                RowBox[{
+                 SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                 SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "-", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "-", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], "+", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubscriptBox["\[Mu]", "DH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "-", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "+", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"2", " ", 
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"]}], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}]}], ")"}]}], "+", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "-", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}]}], ")"}]}]}], 
+               ")"}]}]}], ")"}]}], ")"}]}]}], ")"}]}], ")"}], "/", 
+    RowBox[{"(", 
+     RowBox[{
+      SqrtBox["2"], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubscriptBox["\[Mu]", "DH"]}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+           SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+         SubscriptBox["\[Mu]", "SH"]}]}], ")"}], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubscriptBox["\[Mu]", "DV"]}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+           SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+         SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], ")"}]}], ",", 
+   RowBox[{"-", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"\[Sqrt]", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", 
+            RowBox[{"2", " ", "SH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "DV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", 
+            RowBox[{"2", " ", "DH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", 
+            RowBox[{"2", " ", "DH"}]], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", 
+            RowBox[{"2", " ", "SH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", 
+            RowBox[{"2", " ", "SH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", 
+            RowBox[{"2", " ", "DH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", 
+            RowBox[{"2", " ", "DV"}]], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", 
+            RowBox[{"2", " ", "DH"}]], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"4", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubscriptBox["\[Mu]", "DV"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", 
+            RowBox[{"2", " ", "DH"}]], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{"2", " ", 
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+           SubscriptBox["\[Mu]", "DH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["a", "SH", "SV"], " ", 
+           SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+           SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+           SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+           SubscriptBox["\[Mu]", "SH"], " ", 
+           SubscriptBox["\[Mu]", "SV"]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["\[Alpha]", "DH", "DV"], " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+              SubscriptBox["\[Mu]", "DH"]}], "+", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+              SubscriptBox["\[Mu]", "SH"]}]}], ")"}], " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+              SubscriptBox["\[Mu]", "DV"]}], "+", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+              SubscriptBox["\[Mu]", "SV"]}]}], ")"}], " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+              SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+              SubsuperscriptBox["\[Lambda]", "SH", "DH"]}], "+", 
+             RowBox[{
+              SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+              RowBox[{"(", 
+               RowBox[{
+                SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+                SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+              RowBox[{"(", 
+               RowBox[{
+                SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+                SubscriptBox["\[Mu]", "SV"]}], ")"}]}]}], ")"}]}], "+", 
+          RowBox[{"\[Sqrt]", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox[
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{
+                 SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                 SubscriptBox["\[Mu]", "DH"]}], "+", 
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                   SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                 SubscriptBox["\[Mu]", "SH"]}]}], ")"}], "2"], " ", 
+             SuperscriptBox[
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{
+                 SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                 SubscriptBox["\[Mu]", "DV"]}], "+", 
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                   SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+                 SubscriptBox["\[Mu]", "SV"]}]}], ")"}], "2"], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{
+                SubsuperscriptBox["a", "SH", 
+                 RowBox[{"2", " ", "SV"}]], " ", 
+                SuperscriptBox[
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{
+                    SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"]}], "+", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}]}], ")"}], "2"]}], 
+               "+", 
+               RowBox[{
+                SubsuperscriptBox["\[Alpha]", "DH", 
+                 RowBox[{"2", " ", "DV"}]], " ", 
+                SuperscriptBox[
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{
+                    SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"]}], "+", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+                    SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+                    SubscriptBox["\[Mu]", "SV"]}], ")"}]}]}], ")"}], "2"]}], 
+               "+", 
+               RowBox[{"2", " ", 
+                SubsuperscriptBox["a", "SH", "SV"], " ", 
+                SubsuperscriptBox["\[Alpha]", "DH", "DV"], " ", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{
+                   SubsuperscriptBox["\[Alpha]", "SV", 
+                    RowBox[{"2", " ", "SH"}]], " ", 
+                   SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                   SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "+", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Alpha]", "DV", 
+                    RowBox[{"2", " ", "DH"}]], " ", 
+                   SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                   SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+                    SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+                    SubscriptBox["\[Mu]", "SV"]}], ")"}]}], "+", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                   SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "-", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "-", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], "+", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubscriptBox["\[Mu]", "DH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "-", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "+", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"2", " ", 
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"]}], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}]}], ")"}]}], "+", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "-", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}]}], ")"}]}]}], 
+                 ")"}]}]}], ")"}]}], ")"}]}]}], ")"}]}], ")"}], "/", 
+      RowBox[{"(", 
+       RowBox[{
+        SqrtBox["2"], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+           SubscriptBox["\[Mu]", "DH"]}], "+", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+             SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+           SubscriptBox["\[Mu]", "SH"]}]}], ")"}], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+           SubscriptBox["\[Mu]", "DV"]}], "+", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+             SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+           SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], ")"}]}], ")"}]}], ",", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"\[Sqrt]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", 
+          RowBox[{"2", " ", "SH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "DV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", 
+          RowBox[{"2", " ", "DH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", 
+          RowBox[{"2", " ", "DH"}]], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", 
+          RowBox[{"2", " ", "SH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", 
+          RowBox[{"2", " ", "SH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", 
+          RowBox[{"2", " ", "DH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", 
+          RowBox[{"2", " ", "DV"}]], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", 
+          RowBox[{"2", " ", "DH"}]], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"4", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubscriptBox["\[Mu]", "DV"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", 
+          RowBox[{"2", " ", "DH"}]], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{"2", " ", 
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+         SubscriptBox["\[Mu]", "DH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["a", "SH", "SV"], " ", 
+         SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+         SubsuperscriptBox["\[Mu]", "DH", "2"], " ", 
+         SubsuperscriptBox["\[Mu]", "DV", "2"], " ", 
+         SubscriptBox["\[Mu]", "SH"], " ", 
+         SubscriptBox["\[Mu]", "SV"]}], "+", 
+        RowBox[{
+         SubsuperscriptBox["\[Alpha]", "DH", "DV"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+            SubscriptBox["\[Mu]", "DH"]}], "+", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+              SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+            SubscriptBox["\[Mu]", "SH"]}]}], ")"}], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+            SubscriptBox["\[Mu]", "DV"]}], "+", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+              SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+            SubscriptBox["\[Mu]", "SV"]}]}], ")"}], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+            SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+            SubsuperscriptBox["\[Lambda]", "SH", "DH"]}], "+", 
+           RowBox[{
+            SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+              SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+              SubscriptBox["\[Mu]", "SV"]}], ")"}]}]}], ")"}]}], "+", 
+        RowBox[{"\[Sqrt]", 
+         RowBox[{"(", 
+          RowBox[{
+           SuperscriptBox[
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{
+               SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+               SubscriptBox["\[Mu]", "DH"]}], "+", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                 SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+               SubscriptBox["\[Mu]", "SH"]}]}], ")"}], "2"], " ", 
+           SuperscriptBox[
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{
+               SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+               SubscriptBox["\[Mu]", "DV"]}], "+", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                 SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+               SubscriptBox["\[Mu]", "SV"]}]}], ")"}], "2"], " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              SubsuperscriptBox["a", "SH", 
+               RowBox[{"2", " ", "SV"}]], " ", 
+              SuperscriptBox[
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{
+                  SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                  SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                  SubsuperscriptBox["\[Lambda]", "SV", "DV"]}], "+", 
+                 RowBox[{
+                  SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                  RowBox[{"(", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                  RowBox[{"(", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}]}], ")"}], "2"]}], 
+             "+", 
+             RowBox[{
+              SubsuperscriptBox["\[Alpha]", "DH", 
+               RowBox[{"2", " ", "DV"}]], " ", 
+              SuperscriptBox[
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{
+                  SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                  SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                  SubsuperscriptBox["\[Lambda]", "SH", "DH"]}], "+", 
+                 RowBox[{
+                  SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                  RowBox[{"(", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+                    SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+                  RowBox[{"(", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+                    SubscriptBox["\[Mu]", "SV"]}], ")"}]}]}], ")"}], "2"]}], 
+             "+", 
+             RowBox[{"2", " ", 
+              SubsuperscriptBox["a", "SH", "SV"], " ", 
+              SubsuperscriptBox["\[Alpha]", "DH", "DV"], " ", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{
+                 SubsuperscriptBox["\[Alpha]", "SV", 
+                  RowBox[{"2", " ", "SH"}]], " ", 
+                 SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                 SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                   SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                   SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "+", 
+                RowBox[{
+                 SubsuperscriptBox["\[Alpha]", "DV", 
+                  RowBox[{"2", " ", "DH"}]], " ", 
+                 SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                 SubsuperscriptBox["\[Lambda]", "SV", "DV"], " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "DH", "SH"], "+", 
+                   SubscriptBox["\[Mu]", "SH"]}], ")"}], " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   SubsuperscriptBox["\[Lambda]", "DV", "SV"], "+", 
+                   SubscriptBox["\[Mu]", "SV"]}], ")"}]}], "+", 
+                RowBox[{
+                 SubsuperscriptBox["\[Alpha]", "DV", "DH"], " ", 
+                 SubsuperscriptBox["\[Alpha]", "SV", "SH"], " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "-", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "-", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], "+", 
+                   RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    SubscriptBox["\[Mu]", "DH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "-", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}], "+", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"2", " ", 
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"]}], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}]}]}], ")"}]}], "+", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SH", "DH"], "-", 
+                    SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+                    SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+                    SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}]}], ")"}]}]}], 
+               ")"}]}]}], ")"}]}], ")"}]}]}], ")"}]}], ")"}], "/", 
+    RowBox[{"(", 
+     RowBox[{
+      SqrtBox["2"], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DH", "SH"], " ", 
+         SubscriptBox["\[Mu]", "DH"]}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           SubsuperscriptBox["\[Lambda]", "SH", "DH"], "+", 
+           SubscriptBox["\[Mu]", "DH"]}], ")"}], " ", 
+         SubscriptBox["\[Mu]", "SH"]}]}], ")"}], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         SubsuperscriptBox["\[Lambda]", "DV", "SV"], " ", 
+         SubscriptBox["\[Mu]", "DV"]}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           SubsuperscriptBox["\[Lambda]", "SV", "DV"], "+", 
+           SubscriptBox["\[Mu]", "DV"]}], ")"}], " ", 
+         SubscriptBox["\[Mu]", "SV"]}]}], ")"}]}], ")"}]}]}], "}"}]], "Output",
+ CellChangeTimes->{3.789249522337841*^9, 3.789484251583832*^9, 
+  3.7894844247116103`*^9},
+ CellLabel->"Out[17]=",ExpressionUUID->"0428558b-4363-40c2-85b8-c01ddec47489"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.789249624404538*^9, 3.78924962497199*^9}, {
+  3.789484273271927*^9, 
+  3.7894842789976673`*^9}},ExpressionUUID->"1931645e-30e6-4508-8ad9-\
+b65914d97ed7"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.789484275083398*^9},
+ CellLabel->"Out[11]=",ExpressionUUID->"c859ef8a-0d99-476d-9638-68b06a4f83a0"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.789249330228346*^9, 3.7892493672421074`*^9}, 
+   3.7892497109690714`*^9},ExpressionUUID->"ce18cd97-0a51-4127-bd53-\
+9d55d8dedb9b"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7892497081712933`*^9, 
+  3.7892497082123637`*^9}},ExpressionUUID->"3508d084-8ddb-4863-b495-\
+b38a47f68a04"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7892487311409354`*^9, 3.7892487353136873`*^9}, 
+   3.789249705648735*^9},ExpressionUUID->"f20c0a22-66ac-4748-a9ce-\
+01085c95a3f6"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7892497042889957`*^9, 
+  3.7892497043250275`*^9}},ExpressionUUID->"7875927f-bf0f-4cf7-bdcb-\
+e5bb9c4873e8"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7892487396462736`*^9, 3.789248744092163*^9}, 
+   3.789249702131158*^9},ExpressionUUID->"ffd5bed0-484e-4e46-b7e0-\
+e50b256a8e79"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7892496929946995`*^9, 
+  3.789249693393181*^9}},ExpressionUUID->"37deb917-c34f-456f-ac6c-\
+9aeaa5157602"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{
+  3.7892487479138665`*^9, 3.7892488788204994`*^9, {3.7892489435970073`*^9, 
+   3.789248946839804*^9}, {3.7892491558599544`*^9, 3.7892491563281317`*^9}, 
+   3.7892497002055297`*^9},ExpressionUUID->"99915c5f-0335-49b2-aa94-\
+82c5db858150"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.789249670992094*^9, 
+  3.7892496747312517`*^9}},ExpressionUUID->"f18e4bc9-4a91-47ec-8562-\
+dc262d0728be"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7892488771332283`*^9, 
+  3.7892488772019167`*^9}},ExpressionUUID->"abaef831-4ca6-4a9b-b3c7-\
+163386c7446f"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.789248750467308*^9, 3.7892487565600305`*^9}, 
+   3.789248872203893*^9},ExpressionUUID->"c9963315-f478-420c-b3f7-\
+79e08d452f16"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7892488751454716`*^9, 
+  3.789248875175171*^9}},ExpressionUUID->"0b771a56-9655-42e7-b289-\
+a0ccdd79786a"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{
+  3.789249012444002*^9, {3.7892496822375617`*^9, 
+   3.789249682765371*^9}},ExpressionUUID->"62927038-cbc1-4e8d-b6ad-\
+ba54d5c5fa13"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7892496778529067`*^9, 
+  3.7892496779468994`*^9}},ExpressionUUID->"f81db0ed-8df5-456f-a343-\
+26c8570ee630"]
+}, Open  ]]
+},
+WindowSize->{1264, 637},
+WindowMargins->{{-8, Automatic}, {Automatic, 0}},
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 181, 6, 69, "Subsubsection",ExpressionUUID->"8bb04f87-83e8-4081-add7-759f1a95e98b"],
+Cell[764, 30, 160, 3, 34, "Text",ExpressionUUID->"29d0113c-3ad0-42f7-9061-ed5af839a6eb"],
+Cell[CellGroupData[{
+Cell[949, 37, 4247, 115, 234, "Input",ExpressionUUID->"304a59a2-b589-4e42-86e9-5f4777ec0cf8"],
+Cell[5199, 154, 155, 2, 32, "Output",ExpressionUUID->"ba8fc492-d597-41d9-97ae-36cf235523dd"]
+}, Open  ]],
+Cell[5369, 159, 155, 3, 34, "Text",ExpressionUUID->"a1d9db66-1675-4fc0-9cec-6081e3a4db7f"],
+Cell[5527, 164, 2420, 61, 213, "Input",ExpressionUUID->"1a3c82e6-620e-451c-b612-ee3ca0c310c7"],
+Cell[CellGroupData[{
+Cell[7972, 229, 318, 5, 48, "Input",ExpressionUUID->"0ccbd7e5-ea81-4385-8514-de035f7d7364"],
+Cell[8293, 236, 866, 25, 108, "Output",ExpressionUUID->"e66caca1-2672-45cb-9bd9-5558f3ef53fe"],
+Cell[9162, 263, 1393, 41, 108, "Output",ExpressionUUID->"44a25354-c281-4630-83a9-26fc84f8846a"]
+}, Open  ]],
+Cell[10570, 307, 176, 3, 28, "Input",ExpressionUUID->"ab0142e0-1915-4071-94b2-97a48ed18a04"],
+Cell[10749, 312, 154, 3, 28, InheritFromParent,ExpressionUUID->"9622306f-dee4-46a3-a2dc-71fc1afd0909"],
+Cell[10906, 317, 596, 12, 28, "Input",ExpressionUUID->"41cac91a-ed17-4d33-90c7-88c7c75cee3b"],
+Cell[11505, 331, 1678, 47, 78, "Text",ExpressionUUID->"63a07fb6-23d1-4daf-a261-9b232a8ef0a3"],
+Cell[13186, 380, 205, 4, 28, "Input",ExpressionUUID->"f9314044-05fd-47be-94a2-6800f9a4fd49"],
+Cell[13394, 386, 154, 3, 28, "Input",ExpressionUUID->"67de57f6-2afb-420b-a7d9-d815b33ac74b"],
+Cell[CellGroupData[{
+Cell[13573, 393, 2097, 53, 109, "Input",ExpressionUUID->"056dfa2a-c5ac-4e62-a11f-e48330934b76"],
+Cell[15673, 448, 5807, 154, 108, "Output",ExpressionUUID->"5f236f44-3463-4fbc-b29a-f06e56098ab7"],
+Cell[21483, 604, 95423, 2069, 929, "Output",ExpressionUUID->"0428558b-4363-40c2-85b8-c01ddec47489"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[116943, 2678, 202, 4, 28, "Input",ExpressionUUID->"1931645e-30e6-4508-8ad9-b65914d97ed7"],
+Cell[117148, 2684, 490, 12, 32, "Output",ExpressionUUID->"c859ef8a-0d99-476d-9638-68b06a4f83a0"]
+}, Open  ]],
+Cell[117653, 2699, 179, 3, 28, "Input",ExpressionUUID->"ce18cd97-0a51-4127-bd53-9d55d8dedb9b"],
+Cell[117835, 2704, 156, 3, 28, "Input",ExpressionUUID->"3508d084-8ddb-4863-b495-b38a47f68a04"],
+Cell[117994, 2709, 179, 3, 28, "Input",ExpressionUUID->"f20c0a22-66ac-4748-a9ce-01085c95a3f6"],
+Cell[118176, 2714, 156, 3, 28, "Input",ExpressionUUID->"7875927f-bf0f-4cf7-bdcb-e5bb9c4873e8"],
+Cell[118335, 2719, 177, 3, 28, "Input",ExpressionUUID->"ffd5bed0-484e-4e46-b7e0-e50b256a8e79"],
+Cell[118515, 2724, 154, 3, 28, "Input",ExpressionUUID->"37deb917-c34f-456f-ac6c-9aeaa5157602"],
+Cell[118672, 2729, 284, 5, 28, "Input",ExpressionUUID->"99915c5f-0335-49b2-aa94-82c5db858150"],
+Cell[118959, 2736, 154, 3, 28, "Input",ExpressionUUID->"f18e4bc9-4a91-47ec-8562-dc262d0728be"],
+Cell[119116, 2741, 156, 3, 28, "Input",ExpressionUUID->"abaef831-4ca6-4a9b-b3c7-163386c7446f"],
+Cell[119275, 2746, 177, 3, 28, "Input",ExpressionUUID->"c9963315-f478-420c-b3f7-79e08d452f16"],
+Cell[119455, 2751, 154, 3, 28, "Input",ExpressionUUID->"0b771a56-9655-42e7-b289-a0ccdd79786a"],
+Cell[119612, 2756, 180, 4, 28, "Input",ExpressionUUID->"62927038-cbc1-4e8d-b6ad-ba54d5c5fa13"],
+Cell[119795, 2762, 156, 3, 28, "Input",ExpressionUUID->"f81db0ed-8df5-456f-a343-26c8570ee630"]
+}, Open  ]]
+}
+]
+*)
+

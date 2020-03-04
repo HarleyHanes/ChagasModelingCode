@@ -269,7 +269,7 @@ switch ParamSettings.paramset
         p.V_R=.05*p.V_R;
         q.V_R=.05*q.V_R;
     
-    case 'scaled'
+    case {'scaled','Identicle Compartments (Scaled)'}
     %Update vec infection prob
 %     p.S_V=.001;
     %Update Rodent Population
@@ -306,9 +306,23 @@ switch ParamSettings.paramset
 %         p.R_V=.5*p.S_V;
 %         q.V_S=.5*q.V_S;
         q.V_R=.05*q.V_R;
+    
 end
 %% Model Parameters-- These generally should not be changed
 %Population Sizes
+switch ParamSettings.paramset
+    case 'Identicle Compartments (Scaled)'
+        N.SV=Density.SV*SylvaticArea;
+        N.DV=Density.DV*PeridomesticArea;
+        
+        N.SR=(Density.SR)*SylvaticArea;
+        N.DR=(Density.DR)*PeridomesticArea;
+        
+        N.SS=N.SR;
+        N.DS=N.DR;
+        
+        N.DD=N.DR;
+    otherwise
     %Vectors 
         N.SV=Density.SV*SylvaticArea;
         N.DV=Density.DV*PeridomesticArea;
@@ -320,6 +334,7 @@ end
         N.DR=(Density.DR)*PeridomesticArea;
     %Domestic Mammals
         N.DD=Density.DD*PeridomesticArea;
+end
 %Death Rates -%weighted averages of each death rate according to density
     %Vectors
         gamma.SV=1/Lifespan.V;
@@ -391,11 +406,56 @@ end
     c.SS_ST=N.SS/(N.SS+N.SR);
     c.DS_DT=N.DS/(N.DS+N.DR);
     c.DD_DH=N.DD/(N.DS+N.DR+N.DD);
-    d.SS=.99;
-    d.DS=.99;
-    d.SR=.15;
-    d.DR=.15;
-    d.DD=.4;
+    d.SS=.998187882806565;
+    d.DS=.998577012338577;
+    d.SR=.147830790713987;
+    d.DR=.148358620803791;
+    d.DD=.397765472604401;
+    switch ParamSettings.paramset
+        case 'Identicle Compartments (Scaled)'
+                %Set equal biting rates
+                b.SS=b.SR;
+                b.DS=b.DR; b.DD=b.DR;
+
+                %Set equal p's and q's
+                p.S_V=p.R_V; p.D_V=p.R_V;
+                p.V_S=p.V_R; p.V_D=p.V_R;
+                q.V_S=q.V_R; q.V_D=q.V_R;
+
+                %Set equal rho's
+                rho.SS=rho.SR;
+                rho.DS=rho.DR; rho.DD=rho.DR;
+                gamma.SS=gamma.SR;
+                gamma.DS=gamma.DR; gamma.DD=gamma.DD;
+                
+                %Set equal gamma's
+                gamma.SS=gamma.SR;
+                gamma.DS=gamma.DR; gamma.DD=gamma.DR;
+                
+                %Note that the formula's for alpha contain a conversion in
+                %population units from vectors to host which is dependent
+                %upon each's relative size. This way of doing it ignores
+                %that which may be inaccurate.
+                %Set equal alpha's
+                alpha.SS_SV=alpha.SR_SV; alpha.SV_SS=alpha.SV_SR;
+                alpha.DS_DV=alpha.DR_DV; alpha.DV_DS=alpha.DV_DR;
+                alpha.DD_DV=alpha.DR_DV; alpha.DV_DD=alpha.DV_DR;
+                
+                %Set equal beta's
+                beta.SV_SS=beta.SV_SR;
+                beta.DV_DS=beta.DV_DR; beta.DV_DD=beta.DV_DR;
+                
+                %Set eqaul lambda's
+                lambda.S=lambda.R;
+        
+                %Set equal r's
+                 r.R=0;
+%         d.SS=.168400361814803;
+%         d.DS=.168920082403009;
+%         d.SR=.169433222736276;
+%         d.DR=.169796111192311;
+%         d.DD=.171800889326599;
+    end
 % Compile Variables
     params.b=b;
     params.bio.p=p;

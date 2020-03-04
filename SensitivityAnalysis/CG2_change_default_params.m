@@ -45,7 +45,33 @@ switch str.QOI_model_name
         str.POI_min=str.POI_baseline*.8;
         str.POI_max=str.POI_baseline*1.2;
         str.POI_mode=str.POI_baseline;
-    case 'Assumptions Error 2'
+    case 'Assumptions Error: d'
+        str.POI_names={'d_{SS}','d_{SR}',...
+            'd_{DS}','d_{DR}','d_{DD}'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium Error', 'Error in R_0', 'Time Derivatives at t=0 Err'};
+            str.nQOI=length(str.QOI_names);
+            
+       str.POI_baseline=[d.SS d.SR d.DS d.DR d.DD]';
+       str.POI_min(1:5,1)=zeros(5,1)+.1;
+       str.POI_max(1:5,1)=ones(5,1)-.1;
+       str.POI_mode=str.POI_baseline;
+        
+    case 'Assumptions Error: All Assumptions'
+        str.POI_names={'c^{SS}_{ST}','c^{DS}_{DT}','c^{DD}_{DH}','d_{SS}','d_{SR}',...
+            'd_{DS}','d_{DR}','d_{DD}'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium Error', 'Error in R_0'};
+            str.nQOI=length(str.QOI_names);
+            
+       str.POI_baseline=[c.SS_ST c.DS_DT c.DD_DH d.SS d.SR d.DS d.DR d.DD]';
+       str.POI_min(1:3,1)=.8*str.POI_baseline(1:3);
+       str.POI_min(4:8,1)=zeros(1,5)+.1;
+       str.POI_max(1:3,1)=1.2*str.POI_baseline(1:3);
+       str.POI_max(4:8,1)=ones(1,5)-.1;
+       str.POI_mode=str.POI_baseline;
+        
+    case 'Assumptions: d'
         str.POI_names={'d_{SS}','d_{SR}',...
             'd_{DS}','d_{DR}','d_{DD}'};
             str.nPOI=length(str.POI_names);
@@ -57,7 +83,7 @@ switch str.QOI_model_name
        str.POI_max(1:5,1)=ones(5,1)-.1;
        str.POI_mode=str.POI_baseline;
         
-    case 'Assumptions Error'
+    case 'Assumptions: All Assumptions'
         str.POI_names={'c^{SS}_{ST}','c^{DS}_{DT}','c^{DD}_{DH}','d_{SS}','d_{SR}',...
             'd_{DS}','d_{DR}','d_{DD}'};
             str.nPOI=length(str.POI_names);
@@ -132,6 +158,24 @@ switch str.QOI_model_name
         str.POI_baseline=[alpha.SS_SV alpha.SR_SV alpha.DS_DV alpha.DR_DV alpha.DD_DV...
             alpha.SV_SS alpha.SV_SR alpha.DV_DS alpha.DV_DR alpha.DV_DD...
             beta.SV_SS beta.SV_SR beta.DV_DS beta.DV_DR beta.DV_DD]';
+        if length(str.POI_baseline)~=str.nPOI
+            error("Different number of parameters named than entered")
+        end
+        str.POI_min=str.POI_baseline-.8*str.POI_baseline;
+        str.POI_max=str.POI_baseline+.8*str.POI_baseline;
+        str.POI_mode=str.POI_baseline;
+        
+    case 'Death Rates'
+        str.POI_names={'\gamma_{SV}', '\gamma_{DV}','\gamma_{SS}','\gamma_{DS}',...
+            '\gamma_{SR}','\gamma_{DR}','\gamma_{DD}'};
+        %str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
+        str.QOI_names={'Proportion I_{DV} at equilibirium','R_0'};
+        str.nQOI=length(str.QOI_names);
+        str.nPOI=length(str.POI_names);
+        
+        
+        str.POI_baseline=[gamma.SV gamma.DV gamma.SS gamma.DS...
+            gamma.SR gamma.DR gamma.DD]';
         if length(str.POI_baseline)~=str.nPOI
             error("Different number of parameters named than entered")
         end

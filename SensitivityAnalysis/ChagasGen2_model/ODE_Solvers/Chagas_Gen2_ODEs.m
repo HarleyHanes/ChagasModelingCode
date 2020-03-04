@@ -17,15 +17,24 @@ r=params.r;
 
 
 if N.SR==0 && N.DR==0
-    N.SR=10^(-12);
-    N.DR=10^(-12);
+    if y(5)~=0||y(6)~=0||y(11)~=0||y(12)~=0
+        error('N.SR or N.DR set at 0 but infected or susceptible comparments are not')
+    end
+    N.SR=10^(-18);
+    N.DR=10^(-18);
 end
 if N.SS==0 && N.DS==0
-    N.SS=10^(-12);
-    N.DS=10^(-12);
+    if y(3)~=0||y(4)~=0||y(9)~=0||y(10)~=0
+        error('N.SS or N.DS set at 0 but infected or susceptible comparments are not')
+    end
+    N.SS=10^(-18);
+    N.DS=10^(-18);
 end
 if N.DD==0
-    N.DD=10^(-12);
+    if y(13)~=0||y(14)~=0
+        error('N.SS or N.DS set at 0 but infected or susceptible comparments are not')
+    end
+    N.DD=10^(-18);
 end
 
 %Redefine b's in case beta is in sensitivity analysis

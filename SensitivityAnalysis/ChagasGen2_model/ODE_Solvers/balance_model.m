@@ -1,7 +1,7 @@
 function [new_init] = balance_model(init, params)
 
 balance_init = init;
-balance_init(2:2:length(init))=.0001; %Set all infectous compartments to .0001
+balance_init(2:2:length(init))=.01*balance_init(2:2:length(init)); %Set all infectous compartments to .0001
 % for i=1:2:7
 %     balance_init(i)=init(i)+init(i+1)-balance_init(i+1);
 % end

@@ -8,7 +8,7 @@ select.POI={"null"};%{"\gamma_{SV}", "\gamma_{DV}"};
 [QOIs,soln]=BBB_Chagas_Gen2_model(POIs,select,params);
 %Check %infected
 %Plot Vectors
-plot(soln.x(1:10:end)/365,soln.py(1:10:end,[2,8]))
+%plot(soln.x(1:10:end)/365,soln.py(1:10:end,[2,8]))
 hold on
 %plot Synanthropes
 plot(soln.x(1:10:end)/365,soln.py(1:10:end,[4,10]),"--","MarkerSize",2)
@@ -20,6 +20,21 @@ legend("I_{SV}","I_{DV}","I_{SS}","I_{DS}","I_{SR}","I_{DR}","I_{DD}","Interpret
 %legend("SV","SS","SR","DV","DS","DR","DD")
 xlabel('Years')
 ylabel('Proportion Infected')
+
+timeDerivatives=QOI_Time_Derivatives(soln,params);
+
+figure
+hold on
+%plot Synanthropes
+plot(soln.x(1:10:end)/365,timeDerivatives(1:10:end,[4,10]),"--","MarkerSize",2)
+%Plot Rodents
+plot(soln.x(1:10:end)/365,timeDerivatives(1:10:end,[6,12]),".-","MarkerSize",2)
+%Plot Pets
+plot(soln.x(1:10:end)/365,timeDerivatives(1:10:end,14),":","MarkerSize",.2)
+legend("I_{SV}","I_{DV}","I_{SS}","I_{DS}","I_{SR}","I_{DR}","I_{DD}","Interpreter","LaTex")
+%legend("SV","SS","SR","DV","DS","DR","DD")
+xlabel('Years')
+ylabel('d/dt*Proportion Infected')
 
 figure
 %Check Popsizes
