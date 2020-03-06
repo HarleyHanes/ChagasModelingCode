@@ -17,13 +17,13 @@ function str= CG2_change_default_params(str)
         str.QOI_model_eval = @BBB_Chagas_Gen2_model;
 switch str.QOI_model_name
     case 'High Sensitivities'
-        str.POI_names={'\alpha^{DR}_{DV}','\alpha^{DV}_{DR}','\beta^{DV}_{DS}','\gamma_{DR}','\gamma_{SR}','\gamma_{DV}'};
+        str.POI_names={'\gamma_{DR}','\gamma_{SR}','\gamma_{DV}'};
             str.nPOI=length(str.POI_names);
         str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
             str.nQOI=length(str.QOI_names);
-        str.POI_baseline=[alpha.DR_DV alpha.DV_DR beta.DV_DS gamma.DR gamma.SR gamma.DV]';
+        str.POI_baseline=[gamma.DR gamma.SR gamma.DV]';
         str.POI_min=str.POI_baseline*.8;
-        str.POI_max=str.POI_baseline*1.2;
+        str.POI_max=str.POI_baseline*2;
         str.POI_mode=str.POI_baseline;
     case 'All Params'
          str.POI_names ={'\lambda_R','\lambda_S','\lambda_V',... %Movement Rates

@@ -269,7 +269,7 @@ switch ParamSettings.paramset
         p.V_R=.05*p.V_R;
         q.V_R=.05*q.V_R;
     
-    case {'scaled','Identicle Compartments (Scaled)'}
+    case {'scaled','Identicle Compartments (Scaled)','Mathematica Compression'}
     %Update vec infection prob
 %     p.S_V=.001;
     %Update Rodent Population
@@ -306,7 +306,6 @@ switch ParamSettings.paramset
 %         p.R_V=.5*p.S_V;
 %         q.V_S=.5*q.V_S;
         q.V_R=.05*q.V_R;
-    
 end
 %% Model Parameters-- These generally should not be changed
 %Population Sizes
@@ -322,6 +321,21 @@ switch ParamSettings.paramset
         N.DS=N.DR;
         
         N.DD=N.DR;
+    case 'Mathematica Compression'
+        lambda.S=0;
+        lambda.V=0;
+        lambda.R=0;
+    %Vectors 
+        N.SV=Density.SV*SylvaticArea;
+        N.DV=Density.DV*PeridomesticArea;
+    %Synanthropic Hosts
+        N.SS=(Density.SS)*SylvaticArea;
+        N.DS=(Density.DS)*PeridomesticArea;
+    %Rodents
+        N.SR=(Density.SR)*SylvaticArea;
+        N.DR=(Density.DR)*PeridomesticArea;
+    %Domestic Mammals
+        N.DD=Density.DD*PeridomesticArea;
     otherwise
     %Vectors 
         N.SV=Density.SV*SylvaticArea;

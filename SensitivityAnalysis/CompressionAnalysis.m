@@ -29,3 +29,24 @@ figure
 % 
 % for i=1:length(str.POI_names)
 
+%% Test Mathematica Derived Compression
+clear;close all;
+%Set Test Settings
+POIs=0;%;[.0001,.00001]; 
+select.QOI={'Proportion I_{DV} at equilibirium'};
+select.POI={"null"};%{"\gamma_{SV}", "\gamma_{DV}"};
+%Get Full Model Params
+ParamSettings.paramset='Mathematica Compression';
+paramsFull=Gen2_params(ParamSettings);
+% Run Full Chagas Model
+[QOIsFull,solnFull]=BBB_Chagas_Gen2_model(POIs,select,paramsFull);
+
+% Get Compressed Parameters
+paramsCompressed=CG2toCG1params(paramsFull);
+%Run Compressed Model
+[QOIsCompressed,solnCompressed]=BBB_Chagas_Gen2_model(POIs,select,paramsCompressed);
+% Plot the two side by side
+%Plot Full Vectors
+plot(soln.x(1:10:end)/365,solnFull.py(1:10:end,8))
+hold on
+plot(soln.x(1:10:end)/365,solnCompressed.py(1:10:end,8))
