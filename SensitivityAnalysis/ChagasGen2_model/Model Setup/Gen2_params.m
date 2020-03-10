@@ -26,7 +26,7 @@ fprintf("Loading '%s' parameters\n",ParamSettings.paramset)
 %assess.
 %Define areas in in hectares and densities in per hecatre
 SylvaticArea=5;
-PeridomesticArea=5;
+PeridomesticArea=2;
 DensityOfHouseholds=3;
 tmax=5; %In years
 
@@ -270,7 +270,7 @@ switch ParamSettings.paramset
         q.V_R=.05*q.V_R;
     
     case {'scaled','Identicle Compartments (Scaled)','Mathematica Compression'}
-    %Update vec infection prob
+%Update vec infection prob
 %     p.S_V=.001;
     %Update Rodent Population
          Density.SS=Density.SS*2;
@@ -306,6 +306,42 @@ switch ParamSettings.paramset
 %         p.R_V=.5*p.S_V;
 %         q.V_S=.5*q.V_S;
         q.V_R=.05*q.V_R;
+%     %Update vec infection prob
+% %     p.S_V=.001;
+%     %Update Rodent Population
+%          Density.SS=Density.SS*2;
+%          Density.DS=Density.DS*2;
+% %          Density.SV=Density.SR/100;
+% %          Density.DV=Density.DR/100;
+%          Density.SR=Density.SBrown;
+%          Density.DR=Density.DBrown;
+%     %Update Host feeding rates
+% %             b.DV=.0001;
+% %             b.SV=.0001;
+% %              b.SS=.0001;
+% %              b.DS=.0001;
+% %              b.SR=.0001*min(1,Density.SV/(10*Density.SR));
+% %              b.DR=.0001*min(1,Density.DV/(10*Density.DR));
+% %              b.DD=.0001;
+%          b.SR=.015*b.SR;
+%          b.DR=.015*b.DR;
+%          b.DD=.015*b.DD;
+%      %Adjust rhos to pop %s
+%                 
+%            rho.SS=.98*(Density.SS)/(Density.SS+Density.SR)*8;
+%            rho.SR=.98-rho.SS;
+%            rho.DS=rho.DS/5;
+%            rho.DR=rho.DR*10;
+%           rho.DD=rho.DD/10;
+% %          rho.DS=.6545*(Density.DS)/(Density.DS+Density.DR+Density.DD)*2;
+% %          rho.DR=.6545*(Density.DR)/(Density.DS+Density.DR+Density.DD)/8;
+% %          rho.DD=.6545*-rho.DR-rho.DS;
+% %     %Update probability of stechorian infection
+%         p.V_R=.05*p.V_R;
+% %         p.S_V=.5*p.S_V;
+% %         p.R_V=.5*p.S_V;
+% %         q.V_S=.5*q.V_S;
+%         q.V_R=.05*q.V_R;
 end
 %% Model Parameters-- These generally should not be changed
 %Population Sizes
