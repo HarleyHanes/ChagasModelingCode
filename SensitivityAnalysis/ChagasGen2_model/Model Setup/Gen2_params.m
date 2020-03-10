@@ -25,7 +25,7 @@ fprintf("Loading '%s' parameters\n",ParamSettings.paramset)
 %These are Parameters that are variable based on the conditions we wish to
 %assess.
 %Define areas in in hectares and densities in per hecatre
-SylvaticArea=5;
+SylvaticArea=5;  %aboout 220m by 220m
 PeridomesticArea=2;
 DensityOfHouseholds=3;
 tmax=5; %In years
@@ -80,10 +80,11 @@ fracinfect.DD=.01;
             Density.DD=Density.DDog+Density.DCat;
 %Lifespans
     %Vectors
-        Lifespan.V=456.6;%1346.86;
+        Lifespan.V=-456.6/log(16/213);%456.6;%1346.86;
     %Synanthropes
         Lifespan.Raccoon=912.5;
         Lifespan.Opossum=439.76;
+        Lifespan.Armadillo=1087.7;
     %Rodents
         %Lifespan.RBlack=NaN;
         Lifespan.Brown=121.839;
