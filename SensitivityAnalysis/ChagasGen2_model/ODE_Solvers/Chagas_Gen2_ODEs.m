@@ -8,10 +8,10 @@ function [dydt] = Chagas_Gen2_ODEs(t,y,params)
 
 %Abridging parameter names
 N=params.N;
-b=params.b;
 gamma=params.gamma;
+sigma=params.sigma;
+mu=params.mu;
 alpha=params.alpha;
-beta=params.beta;
 lambda=params.lambda;
 r=params.r;
 
@@ -44,13 +44,13 @@ end
 %sensitivity analysis because we can't change one without changing the
 %other
 lambda.DV_SV=lambda.V;
-lambda.SV_DV=lambda.V*(N.SV/N.DV);   %Check this is correct
+lambda.SV_DV=lambda.V*(N.DV/N.SV);   %Check this is correct
 
 lambda.DS_SS=lambda.S;
-lambda.SS_DS=lambda.S*(N.SS/N.DS);   %Check this is correct
+lambda.SS_DS=lambda.S*(N.DS/N.SS);   %Check this is correct
 
 lambda.DR_SR=lambda.R;
-lambda.SR_DR=lambda.R*(N.SR/N.DR);   %Check this is correct
+lambda.SR_DR=lambda.R*(N.DR/N.SR);   %Check this is correct
 
 S_SV=y(1);
 I_SV=y(2);
@@ -71,26 +71,26 @@ I_DD=y(14);
 
 %
 dydt=NaN(length(y),1);
-     dydt(1)=gamma.SV*I_SV-(alpha.SS_SV*(I_SS/N.SS)+alpha.SR_SV*(I_SR/N.SR))*S_SV+(b.SS*N.SS+b.SR*N.SR)*(I_SV/N.SV)+lambda.DV_SV*S_DV-lambda.SV_DV*S_SV;
-     dydt(2)=-gamma.SV*I_SV+(alpha.SS_SV*(I_SS/N.SS)+alpha.SR_SV*(I_SR/N.SR))*S_SV-(b.SS*N.SS+b.SR*N.SR)*(I_SV/N.SV)+lambda.DV_SV*I_DV-lambda.SV_DV*I_SV;
+     dydt(1)=sigma.SV-(alpha.SS_SV*(I_SS/N.SS)+alpha.SR_SV*(I_SR/N.SR))*S_SV+lambda.DV_SV*S_DV-lambda.SV_DV*S_SV-gamma.SV*S_SV;
+     dydt(2)=(alpha.SS_SV*(I_SS/N.SS)+alpha.SR_SV*(I_SR/N.SR))*S_SV+lambda.DV_SV*I_DV-lambda.SV_DV*I_SV-gamma.SV*I_SV;
 
-     dydt(3)=gamma.SS*I_SS-(alpha.SV_SS+beta.SV_SS)*(I_SV/N.SV)*S_SS+lambda.DS_SS*S_DS-lambda.SS_DS*S_SS;
-     dydt(4)=-gamma.SS*I_SS+(alpha.SV_SS+beta.SV_SS)*(I_SV/N.SV)*S_SS+lambda.DS_SS*I_DS-lambda.SS_DS*I_SS;
+     dydt(3)=sigma.SS-(alpha.SV_SS)*(I_SV/N.SV)*S_SS+lambda.DS_SS*S_DS-lambda.SS_DS*S_SS-gamma.SS*S_SS;
+     dydt(4)=alpha.SV_SS*(I_SV/N.SV)*S_SS+lambda.DS_SS*I_DS-lambda.SS_DS*I_SS-gamma.SS*I_SS;
      
-     dydt(5)=gamma.SR*(1-r.R)*I_SR-(alpha.SV_SR+beta.SV_SR)*(I_SV/N.SV)*S_SR+lambda.DR_SR*S_DR-lambda.SR_DR*S_SR;
-     dydt(6)=-gamma.SR*(1-r.R)*I_SR+(alpha.SV_SR+beta.SV_SR)*(I_SV/N.SV)*S_SR+lambda.DR_SR*I_DR-lambda.SR_DR*I_SR;
+     dydt(5)=(sigma.SR-gamma.SR*r.R*I_SR)-alpha.SV_SR*(I_SV/N.SV)*S_SR+lambda.DR_SR*S_DR-lambda.SR_DR*S_SR-gamma.SR*S_SR;
+     dydt(6)=alpha.SV_SR*(I_SV/N.SV)*S_SR+lambda.DR_SR*I_DR-lambda.SR_DR*I_SR-gamma.SR*I_SR*(1-r.R);
      
-     dydt(7)=gamma.DV*I_DV-(alpha.DS_DV*(I_DS/N.DS)+alpha.DR_DV*(I_DR/N.DR)+alpha.DD_DV*(I_DD/N.DD))*S_DV+(b.DS*N.DS+b.DR*N.DR+b.DD*N.DD)*(I_DV/N.DV)+lambda.SV_DV*S_SV-lambda.DV_SV*S_DV;
-     dydt(8)=-gamma.DV*I_DV+(alpha.DS_DV*(I_DS/N.DS)+alpha.DR_DV*(I_DR/N.DR)+alpha.DD_DV*(I_DD/N.DD))*S_DV-(b.DS*N.DS+b.DR*N.DR+b.DD*N.DD)*(I_DV/N.DV)+lambda.SV_DV*I_SV-lambda.DV_SV*I_DV;
+     dydt(7)=sigma.DV-(alpha.DS_DV*(I_DS/N.DS)+alpha.DR_DV*(I_DR/N.DR)+alpha.DD_DV*(I_DD/N.DD))*S_DV+lambda.SV_DV*S_SV-lambda.DV_SV*S_DV-gamma.DV*S_DV;
+     dydt(8)=(alpha.DS_DV*(I_DS/N.DS)+alpha.DR_DV*(I_DR/N.DR)+alpha.DD_DV*(I_DD/N.DD))*S_DV+lambda.SV_DV*I_SV-lambda.DV_SV*I_DV-gamma.DV*I_DV;
 
-     dydt(9)=gamma.DS*I_DS-(alpha.DV_DS+beta.DV_DS)*(I_DV/N.DV)*S_DS+lambda.SS_DS*S_SS-lambda.DS_SS*S_DS;
-     dydt(10)=-gamma.DS*I_DS+(alpha.DV_DS+beta.DV_DS)*(I_DV/N.DV)*S_DS+lambda.SS_DS*I_SS-lambda.DS_SS*I_DS;
+     dydt(9)=sigma.DS-(alpha.DV_DS)*(I_DV/N.DV)*S_DS+lambda.SS_DS*S_SS-lambda.DS_SS*S_DS-gamma.DS*S_DS;
+     dydt(10)=(alpha.DV_DS)*(I_DV/N.DV)*S_DS+lambda.SS_DS*I_SS-lambda.DS_SS*I_DS-gamma.DS*I_DS;
      
-     dydt(11)=gamma.DR*(1-r.R)*I_DR-(alpha.DV_DR+beta.DV_DR)*(I_DV/N.DV)*S_DR+lambda.SR_DR*S_SR-lambda.DR_SR*S_DR;
-     dydt(12)=-gamma.DR*(1-r.R)*I_DR+(alpha.DV_DR+beta.DV_DR)*(I_DV/N.DV)*S_DR+lambda.SR_DR*I_SR-lambda.DR_SR*I_DR;
+     dydt(11)=(sigma.DR-gamma.DR*r.R*I_DR)-(alpha.DV_DR)*(I_DV/N.DV)*S_DR+lambda.SR_DR*S_SR-lambda.DR_SR*S_DR-gamma.DR*S_DR;
+     dydt(12)=(alpha.DV_DR)*(I_DV/N.DV)*S_DR+lambda.SR_DR*I_SR-lambda.DR_SR*I_DR-gamma.DR*(1-r.R)*I_DR;
      
-     dydt(13)=gamma.DD*I_DD-(alpha.DV_DD+beta.DV_DD)*(I_DV/N.DV)*S_DD;
-     dydt(14)=-gamma.DD*I_DD+(alpha.DV_DD+beta.DV_DD)*(I_DV/N.DV)*S_DD;
+     dydt(13)=sigma.DD-(alpha.DV_DD)*(I_DV/N.DV)*S_DD-gamma.DD*S_DD;
+     dydt(14)=(alpha.DV_DD)*(I_DV/N.DV)*S_DD-mu.DD*I_DD;
 
 end
 

@@ -1,10 +1,10 @@
 function params= get_p_struct_CG2(POIs,pnames,baseParams)
 %Parameter Loading
 params=baseParams;
-beta=params.beta;
+%beta=params.beta;
 alpha=params.alpha;
 gamma=params.gamma;
-b=params.b;
+%b=params.b;
 lambda=params.lambda;
 for i=1:length(pnames)
     switch pnames{i}
@@ -28,21 +28,6 @@ for i=1:length(pnames)
             alpha.DR_DV=POIs(i);
         case '\alpha^{DD}_{DV}'
             alpha.DD_DV=POIs(i); 
-        case '\beta^{SV}_{SS}'  %Changing beta also changes b
-            b.SS=b.SS*POIs(i)/beta.SV_SS;
-            beta.SV_SS=POIs(i);
-        case '\beta^{SV}_{SR}'
-            b.SR=b.SR*POIs(i)/beta.SV_SR;
-            beta.SV_SR=POIs(i);
-        case '\beta^{DV}_{DS}'
-            b.DS=b.DS*POIs(i)/beta.DV_DS;
-            beta.SV_DS=POIs(i);
-        case '\beta^{DV}_{DR}'
-            b.DR=b.DR*POIs(i)/beta.DV_DR;
-            beta.DV_DR=POIs(i);
-        case '\beta^{DV}_{DD}'
-            b.DD=b.DD*POIs(i)/beta.DV_DD;
-            beta.DV_DD=POIs(i);
         case'\gamma_{SV}'
             gamma.SV=POIs(i);
         case'\gamma_{SS}'
@@ -87,7 +72,7 @@ end
 
 params.alpha=alpha;
 params.gamma=gamma;
-params.b=b;
+%params.b=b;
 params.lambda=lambda;
 
 end
