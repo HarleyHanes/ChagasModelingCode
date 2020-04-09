@@ -3,12 +3,12 @@ function str= CG2_change_default_params(str)
 %Load parameters
     str.baseParams=Gen2_params(str.ParamSettings);
         N=str.baseParams.N;
+        sigma=str.baseParams.sigma;
         alpha=str.baseParams.alpha;
-        beta=str.baseParams.beta;
-        b=str.baseParams.b;
         r=str.baseParams.r;
         lambda=str.baseParams.lambda;
         gamma=str.baseParams.gamma;
+        mu=str.baseParams.mu;
         if isfield(str.baseParams,'PopProportions')
             c=str.baseParams.PopProportions.c;
             d=str.baseParams.PopProportions.d;
@@ -16,7 +16,7 @@ function str= CG2_change_default_params(str)
         %SelectModel 
         str.QOI_model_eval = @BBB_Chagas_Gen2_model;
 switch str.QOI_model_name
-    case 'High Sensitivities'
+    case 'High Sensitivities' %Not been adjusted for new model
         str.POI_names={'\gamma_{DR}','\gamma_{SR}','\gamma_{DV}'};
             str.nPOI=length(str.POI_names);
         str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
@@ -25,23 +25,41 @@ switch str.QOI_model_name
         str.POI_min=str.POI_baseline*.8;
         str.POI_max=str.POI_baseline*2;
         str.POI_mode=str.POI_baseline;
+    case 'Low Confidence Params'
+         str.POI_names ={'\lambda_R','\lambda_S','\lambda_V',... %Movement Rates
+            '\alpha^{SS}_{SV}' '\alpha^{SR}_{SV}' '\alpha^{DS}_{DV}'...
+            '\alpha^{DR}_{DV}' '\alpha^{DD}_{DV}'... %Vec Infection'
+            '\mu_{DD}','r_R'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'Proportion I_{DD} at equilibirium',...
+            'Proportion I_{DR} at equilibirium', 'Proportion I_{DS} at equilibirium'};
+            str.nQOI=length(str.QOI_names);
+        str.POI_baseline=[lambda.R lambda.S lambda.V...
+            alpha.SS_SV alpha.SR_SV alpha.DS_DV alpha.DR_DV alpha.DD_DV...
+            mu.DD r.R]';
+        str.POI_min=str.POI_baseline*.8;
+        str.POI_max=str.POI_baseline*1.2;
+        str.POI_mode=str.POI_baseline;
     case 'All Params'
          str.POI_names ={'\lambda_R','\lambda_S','\lambda_V',... %Movement Rates
-             '\alpha^{SS}_{SV}' '\alpha^{SR}_{SV}' '\alpha^{DS}_{DV}'...
+            '\sigma_{SV}' '\sigma_{SS}' '\sigma_{SR}' '\sigma_{DV}'...
+            '\sigma_{DS}' '\sigma_{DR}' '\sigma_{DD}'... %Recruitment Rates
+            '\alpha^{SS}_{SV}' '\alpha^{SR}_{SV}' '\alpha^{DS}_{DV}'...
             '\alpha^{DR}_{DV}' '\alpha^{DD}_{DV}'... %Vec Infection
             '\alpha^{SV}_{SS}' '\alpha^{SV}_{SR}' '\alpha^{DV}_{DS}'...
-            '\alpha^{DV}_{DR}' '\alpha^{DV}_{DD}' '\beta^{SV}_{SS}' '\beta^{SV}_{SR}'...
-            '\beta^{DV}_{DS}' '\beta^{DV}_{DR}' '\beta^{DV}_{DD}'... %Host Infection
+            '\alpha^{DV}_{DR}' '\alpha^{DV}_{DD}' ... %Host Infection
             '\gamma_{SS}','\gamma_{SR}','\gamma_{SV}',...
-            '\gamma_{DS}','\gamma_{DR}','\gamma_{DV}','\gamma_{DD}'};
+            '\gamma_{DS}','\gamma_{DR}','\gamma_{DV}',... %DeathRates
+            '\gamma_{DD}','\mu_{DD}','r_R'};
             str.nPOI=length(str.POI_names);
         str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
             str.nQOI=length(str.QOI_names);
         str.POI_baseline=[lambda.R lambda.S lambda.V...
+            sigma.SV sigma.SS sigma.SR sigma.DV sigma.DS sigma.DR sigma.DD...
             alpha.SS_SV alpha.SR_SV alpha.DS_DV alpha.DR_DV alpha.DD_DV...
             alpha.SV_SS alpha.SV_SR alpha.DV_DS alpha.DV_DR alpha.DV_DD...
-            beta.SV_SS beta.SV_SR beta.DV_DS beta.DV_DR beta.DV_DD...
-            gamma.SS gamma.SR gamma.SV gamma.DS gamma.DR gamma.DV gamma.DD]';
+            gamma.SS gamma.SR gamma.SV gamma.DS gamma.DR gamma.DV gamma.DD...
+            mu.DD r.R]';
         str.POI_min=str.POI_baseline*.8;
         str.POI_max=str.POI_baseline*1.2;
         str.POI_mode=str.POI_baseline;
@@ -101,7 +119,9 @@ switch str.QOI_model_name
         %Select POI's and QOI's
         str.POI_names =  {'\lambda_R','\lambda_S','\lambda_V'};
                       str.nPOI=length(str.POI_names);
-        str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
+%         str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'Proportion I_{DD} at equilibirium',...
+            'Proportion I_{DR} at equilibirium', 'Proportion I_{DS} at equilibirium'};
         str.nQOI=length(str.QOI_names);
         
         %Set parameter Sampling
@@ -129,15 +149,13 @@ switch str.QOI_model_name
         str.POI_mode=str.POI_baseline;
     case 'Host Infection'
                 str.POI_names={'\alpha^{SV}_{SS}' '\alpha^{SV}_{SR}' '\alpha^{DV}_{DS}'...
-            '\alpha^{DV}_{DR}' '\alpha^{DV}_{DD}' '\beta^{SV}_{SS}' '\beta^{SV}_{SR}'...
-            '\beta^{DV}_{DS}' '\beta^{DV}_{DR}' '\beta^{DV}_{DD}'};
-        str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
+            '\alpha^{DV}_{DR}' '\alpha^{DV}_{DD}'};
+        str.QOI_names ={'Proportion I_{DV} at equilibirium', 'R_0'};
         str.nQOI=length(str.QOI_names);
         str.nPOI=length(str.POI_names);
         
         
-        str.POI_baseline=[alpha.SV_SS alpha.SV_SR alpha.DV_DS alpha.DV_DR alpha.DV_DD...
-            beta.SV_SS beta.SV_SR beta.DV_DS beta.DV_DR beta.DV_DD]';
+        str.POI_baseline=[alpha.SV_SS alpha.SV_SR alpha.DV_DS alpha.DV_DR alpha.DV_DD]';
         if length(str.POI_baseline)~=str.nPOI
             error("Different number of parameters named than entered")
         end
@@ -147,8 +165,7 @@ switch str.QOI_model_name
     case 'All Infection'
         str.POI_names={'\alpha^{SS}_{SV}' '\alpha^{SR}_{SV}' '\alpha^{DS}_{DV}'...
             '\alpha^{DR}_{DV}' '\alpha^{DD}_{DV}' '\alpha^{SV}_{SS}' '\alpha^{SV}_{SR}' '\alpha^{DV}_{DS}'...
-            '\alpha^{DV}_{DR}' '\alpha^{DV}_{DD}' '\beta^{SV}_{SS}' '\beta^{SV}_{SR}'...
-            '\beta^{DV}_{DS}' '\beta^{DV}_{DR}' '\beta^{DV}_{DD}'};
+            '\alpha^{DV}_{DR}' '\alpha^{DV}_{DD}'};
         %str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
         str.QOI_names={'Proportion I_{DV} at equilibirium','R_0'};
         str.nQOI=length(str.QOI_names);
@@ -156,8 +173,7 @@ switch str.QOI_model_name
         
         
         str.POI_baseline=[alpha.SS_SV alpha.SR_SV alpha.DS_DV alpha.DR_DV alpha.DD_DV...
-            alpha.SV_SS alpha.SV_SR alpha.DV_DS alpha.DV_DR alpha.DV_DD...
-            beta.SV_SS beta.SV_SR beta.DV_DS beta.DV_DR beta.DV_DD]';
+            alpha.SV_SS alpha.SV_SR alpha.DV_DS alpha.DV_DR alpha.DV_DD]';
         if length(str.POI_baseline)~=str.nPOI
             error("Different number of parameters named than entered")
         end
@@ -167,7 +183,7 @@ switch str.QOI_model_name
         
     case 'Death Rates'
         str.POI_names={'\gamma_{SV}', '\gamma_{DV}','\gamma_{SS}','\gamma_{DS}',...
-            '\gamma_{SR}','\gamma_{DR}','\gamma_{DD}'};
+            '\gamma_{SR}','\gamma_{DR}','\gamma_{DD}','\mu_{DD}','r_R'};
         %str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
         str.QOI_names={'Proportion I_{DV} at equilibirium','R_0'};
         str.nQOI=length(str.QOI_names);
@@ -175,7 +191,7 @@ switch str.QOI_model_name
         
         
         str.POI_baseline=[gamma.SV gamma.DV gamma.SS gamma.DS...
-            gamma.SR gamma.DR gamma.DD]';
+            gamma.SR gamma.DR gamma.DD mu.DD r.R]';
         if length(str.POI_baseline)~=str.nPOI
             error("Different number of parameters named than entered")
         end

@@ -25,9 +25,10 @@ fprintf("Loading '%s' parameters\n",ParamSettings.paramset)
 %These are Parameters that are variable based on the conditions we wish to
 %assess.
 %Define areas in in hectares and densities in per hecatre
-Area.S=5;  %aboout 220m by 220m
-Area.D=2;
-tmax=5; %In years
+Area.S=20;  %600x600
+Area.D=16; % 400x400
+tmax=20; %In years
+tstep=2;
 
 %Initial Conditions
 fracinfect.SV=.01;
@@ -69,7 +70,7 @@ fracinfect.DD=.01;
             Lifespan.Squirrel=300;
         %Domestic Mammals
             Lifespan.Dog=4197.5;
-            Lifespan.InfectedDog=200;
+            Lifespan.InfectedDog=1474.7973;
             Lifespan.Cow=2190;
     %% Contact Rates 
         %Vector Feeding 
@@ -93,7 +94,7 @@ fracinfect.DD=.01;
         %Host --> Vector (From parisitemia levels)
             p.Raccoon_V=.788;
             p.Armadillo_V=.767;
-            p.Squirrel_V=7097;
+            p.Squirrel_V=.7097;
             p.Dog_V=.823;
             p.Cow_V=p.Dog_V;
         %Vector --> Host (Stecorian)
@@ -114,12 +115,11 @@ fracinfect.DD=.01;
             r.R=.091;
     %Movement Rates
         %Vectors
-            lambda.V=.06775;
+            lambda.V=1/7;
         %Synanthropic Mammals
-            lambda.S=.1;
+            lambda.S=1/7;
         %Rodents
-            lambda.R=.05;
-
+            lambda.R=1/7;
 %% Model Parameter Calculation
     %% Population Sizes
         N.SV=D.V*Area.S;
@@ -153,23 +153,46 @@ fracinfect.DD=.01;
         rho.AmplificationFactor=(rho.Armadillo+rho.Raccoon+rho.Squirrel+rho.Dog+rho.Cow)/(rho.Raccoon+rho.Armadillo+rho.Squirrel);
         alpha.SS_SV=alpha.DS_DV*rho.AmplificationFactor;
         alpha.SR_SV=alpha.DR_DV*rho.AmplificationFactor;
+        
     %Vector -> Host Contacts
         %Stecorian Rates- Same as Host->Vector but rescaled by population
         %proportions according to species
-        alphaStecorian.DV_DS=b.Vector*(D.V/D.S)*(rho.Armadillo*p.V_Armadillo*+rho.Raccoon*p.V_Raccoon); 
+        alphaStecorian.DV_DS=b.Vector*(D.V/D.S)*(rho.Armadillo*p.V_Armadillo+rho.Raccoon*p.V_Raccoon); 
         alphaStecorian.DV_DR=b.Vector*(D.V/D.R)*rho.Squirrel*p.V_Squirrel;
         alphaStecorian.DV_DD=b.Vector*(D.V/D.D)*(rho.Dog*p.V_Dog+rho.Cow*p.V_Cow);
         alphaStecorian.SV_SS=alphaStecorian.DV_DS*rho.AmplificationFactor;
         alphaStecorian.SV_SR=alphaStecorian.DV_DR*rho.AmplificationFactor;
+        switch ParamSettings.paramset
+            case 'Test StecorianpHost'
+                alphaStecorian.DV_DS=alphaStecorian.DV_DS*ParamSettings.pScale;
+                alphaStecorian.DV_DR=alphaStecorian.DV_DR*ParamSettings.pScale;
+                alphaStecorian.DV_DD=alphaStecorian.DV_DD*ParamSettings.pScale;
+                alphaStecorian.SV_SS=alphaStecorian.SV_SS*ParamSettings.pScale;
+                alphaStecorian.SV_SR=alphaStecorian.SV_SR*ParamSettings.pScale;
+        end
     	%Oral Rates
         alpha.DV_DS=alphaStecorian.DV_DS+(D.Armadillo*b.Armadillo*q.V_Armadillo+D.Raccoon*b.Raccoon*q.V_Raccoon)/(D.S);
         alpha.DV_DR=alphaStecorian.DV_DR+b.Squirrel*q.V_Squirrel;
         alpha.DV_DD=alphaStecorian.DV_DD+(D.Dog*b.Dog*q.V_Dog+D.Cow*b.Cow*q.V_Cow)/(D.D);
         alpha.SV_SS=alphaStecorian.SV_SS+(D.Armadillo*b.Armadillo*q.V_Armadillo+D.Raccoon*b.Raccoon*q.V_Raccoon)/(D.S);
-        alpha.SV_SR=alphaStecorian.SV_SS+b.Squirrel*q.V_Squirrel;
+        alpha.SV_SR=alphaStecorian.SV_SR+b.Squirrel*q.V_Squirrel;
+        switch ParamSettings.paramset
+            case 'scaled'
+                alpha.DV_DS=alpha.DV_DS*.0013;
+                alpha.DV_DR=alpha.DV_DR*.008;
+                alpha.DV_DD=alpha.DV_DD*.000007;
+                alpha.SV_SS=alpha.SV_SS*.0013;
+                alpha.SV_SR=alpha.SV_SR*.008;
+            case 'Test pHost'
+                alpha.DV_DS=alpha.DV_DS*ParamSettings.pScale;
+                alpha.DV_DR=alpha.DV_DR*ParamSettings.pScale;
+                alpha.DV_DD=alpha.DV_DD*ParamSettings.pScale;
+                alpha.SV_SS=alpha.SV_SS*ParamSettings.pScale;
+                alpha.SV_SR=alpha.SV_SR*ParamSettings.pScale;
+        end
 %% Simulation Parameters 
     %Time
-        tspan=0:tmax*365;
+        tspan=0:tstep:tmax*365;
 % Initial Conditions
     init=NaN(14,1);
     %Sylvatic
@@ -256,7 +279,8 @@ fracinfect.DD=.01;
     params.bio.p=p;
     params.bio.q=q;
     params.bio.rho=rho;
-    params.bio.Density=D;
+    params.bio.D=D;
+    params.bio.Area=Area;
     params.N=N;
     params.gamma=gamma;
     params.mu=mu;

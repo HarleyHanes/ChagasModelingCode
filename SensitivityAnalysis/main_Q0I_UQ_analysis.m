@@ -7,7 +7,7 @@ if nargin>=1
         str.ParamSettings.paramset=varargin{2};       %parameter settings are second input
     end
 else
-    ModelName={'CG2' 'High Sensitivities'};
+    ModelName={'CG2' 'lambda'};
     str.ParamSettings.paramset='scaled';
 end
 

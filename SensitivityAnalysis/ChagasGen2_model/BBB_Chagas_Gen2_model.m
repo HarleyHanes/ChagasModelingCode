@@ -50,6 +50,12 @@ for i=1:length(qnames)
 %              W=1;
         case 'Proportion I_{DV} at equilibirium'
              QOIs(i)= QOI_DV_prop_infected_final_time(soln);
+        case 'Proportion I_{DD} at equilibirium'
+             QOIs(i)= QOI_DD_prop_infected_final_time(soln);
+        case 'Proportion I_{DR} at equilibirium'
+             QOIs(i)= QOI_DR_prop_infected_final_time(soln);
+        case 'Proportion I_{DS} at equilibirium'
+             QOIs(i)= QOI_DS_prop_infected_final_time(soln);
 %         case 'Number of I_{DV} at t=5'
 %              QOIs(i) = QOI_DV_number_infected_fixed_time(soln,5);
         case 'Proportion I_{DV} at t=1'

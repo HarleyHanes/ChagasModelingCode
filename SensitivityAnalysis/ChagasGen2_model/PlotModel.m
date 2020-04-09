@@ -1,8 +1,8 @@
 %Plot Chagas Model
 clear; close all; clc;
-
+set(0,'DefaultAxesFontSize',18,'defaultlinelinewidth',2);set(gca,'FontSize',18);close(gcf);% increase font size
 %% Get model Results
-ParamSettings.paramset='base';
+ParamSettings.paramset='scaled';
 params=Gen2_params(ParamSettings);
 POIs=0;%;[.0001,.00001]; 
 select.QOI={'Proportion I_{DV} at equilibirium'};
@@ -12,15 +12,19 @@ select.POI={"null"};%{"\gamma_{SV}", "\gamma_{DV}"};
 
 
 %% Check % infected
-%Plot Vectors
-%plot(soln.x(1:10:end)/365,soln.py(1:10:end,[2,8]))
+figure
 hold on
+%Plot Vectors
+plot(soln.x(1:10:end)/365,soln.py(1:10:end,2),"r--","MarkerSize",2)
+plot(soln.x(1:10:end)/365,soln.py(1:10:end,8),"r:","MarkerSize",2)
 %plot Synanthropes
-plot(soln.x(1:10:end)/365,soln.py(1:10:end,[4,10]),"--","MarkerSize",2)
+plot(soln.x(1:10:end)/365,soln.py(1:10:end,4),"b--","MarkerSize",2)
+plot(soln.x(1:10:end)/365,soln.py(1:10:end,10),"b:","MarkerSize",2)
 %Plot Rodents
-plot(soln.x(1:10:end)/365,soln.py(1:10:end,[6,12]),".-","MarkerSize",2)
+plot(soln.x(1:10:end)/365,soln.py(1:10:end,6),"m--","MarkerSize",2)
+plot(soln.x(1:10:end)/365,soln.py(1:10:end,12),"m:","MarkerSize",2)
 %Plot Pets
-plot(soln.x(1:10:end)/365,soln.py(1:10:end,14),":","MarkerSize",.2)
+plot(soln.x(1:10:end)/365,soln.py(1:10:end,14),"k:","MarkerSize",.2)
 legend("I_{SV}","I_{DV}","I_{SS}","I_{DS}","I_{SR}","I_{DR}","I_{DD}","Interpreter","LaTex")
 %legend("SV","SS","SR","DV","DS","DR","DD")
 xlabel('Years')
@@ -47,9 +51,9 @@ figure
 hold on
 legendString=cell(1,0);
 %plot Vectors
-% plot(soln.x/365,soln.y(:,1)+soln.y(:,2))
-% plot(soln.x/365,soln.y(:,7)+soln.y(:,8))
-% legendString=[legendString {"N_{SV}"} {"N_{DV}"}];
+plot(soln.x/365,soln.y(:,1)+soln.y(:,2))
+plot(soln.x/365,soln.y(:,7)+soln.y(:,8))
+legendString=[legendString {"N_{SV}"} {"N_{DV}"}];
 %plot synanthropes
 plot(soln.x/365,soln.y(:,3)+soln.y(:,4))
 plot(soln.x/365,soln.y(:,9)+soln.y(:,10))
@@ -66,4 +70,3 @@ title('Changes in total population sizes')
 xlabel('Time (years)')
 ylabel('Total Individuals')
 legend(legendString,"Interpreter","LaTex")
-%soln.py(end,2:2:end)
