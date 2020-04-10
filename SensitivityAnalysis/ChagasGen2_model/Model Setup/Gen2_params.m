@@ -25,8 +25,8 @@ fprintf("Loading '%s' parameters\n",ParamSettings.paramset)
 %These are Parameters that are variable based on the conditions we wish to
 %assess.
 %Define areas in in hectares and densities in per hecatre
-Area.S=20;  %600x600
-Area.D=16; % 400x400
+Area.S=2;%20;  %600x600
+Area.D=1.6;%16; % 400x400
 tmax=20; %In years
 tstep=2;
 
@@ -46,6 +46,8 @@ fracinfect.DD=.01;
 %parameters.
     %% Population Densities
             D.Households=.81614;
+            D.Humans=2.556;
+            N.Humans=D.Humans*Area.D;
         %Vectors
             D.V=319;
         %Synanthropes
@@ -57,8 +59,8 @@ fracinfect.DD=.01;
             D.R=D.Squirrel;
     %Peridomestic
         %Domestic Mammals
-            D.Dog=.629*D.Households/Area.D;
-            D.Cow=.0629*D.Households/Area.D;
+            D.Dog=.629*D.Households;
+            D.Cow=.0629*D.Households;
             D.D=D.Dog+D.Cow;
     %% Lifespans
         %Vectors
@@ -77,6 +79,7 @@ fracinfect.DD=.01;
             b.Vector=.187;          %Hays1965Longevity
             %Proportion of feeding
                 %Periomestic
+                    rho.Humans=.3313;
                     rho.Raccoon=.1791;
                     rho.Armadillo=.1861;
                     rho.Squirrel=.0461;
@@ -178,11 +181,20 @@ fracinfect.DD=.01;
         alpha.SV_SR=alphaStecorian.SV_SR+b.Squirrel*q.V_Squirrel;
         switch ParamSettings.paramset
             case 'scaled'
-                alpha.DV_DS=alpha.DV_DS*.0013;
-                alpha.DV_DR=alpha.DV_DR*.008;
-                alpha.DV_DD=alpha.DV_DD*.000007;
-                alpha.SV_SS=alpha.SV_SS*.0013;
-                alpha.SV_SR=alpha.SV_SR*.008;
+                Scale=[0.452570670767227   0.001261826225713   0.008922234245436...
+                    0.001453469348131   0.011266869442432   0.000120370079587];
+                %Hosts
+                alpha.SV_SS=alpha.SV_SS*Scale(2);%.000788;
+                alpha.SV_SR=alpha.SV_SR*Scale(3);%.0057;
+                alpha.DV_DS=alpha.DV_DS*Scale(4);%.000788;
+                alpha.DV_DR=alpha.DV_DR*Scale(5);%.0057;
+                alpha.DV_DD=alpha.DV_DD*Scale(6);%000161;
+                %Vectors  
+                alpha.SS_SV=alpha.SS_SV*Scale(1);%.000788;
+                alpha.SR_SV=alpha.SR_SV*Scale(1);%.0057;
+                alpha.DS_DV=alpha.DS_DV*Scale(1);%.000788;
+                alpha.DR_DV=alpha.DR_DV*Scale(1);%.0057;
+                alpha.DD_DV=alpha.DD_DV*Scale(1);%000161;
             case 'Test pHost'
                 alpha.DV_DS=alpha.DV_DS*ParamSettings.pScale;
                 alpha.DV_DR=alpha.DV_DR*ParamSettings.pScale;
