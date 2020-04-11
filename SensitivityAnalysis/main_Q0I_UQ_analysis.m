@@ -7,7 +7,7 @@ if nargin>=1
         str.ParamSettings.paramset=varargin{2};       %parameter settings are second input
     end
 else
-    ModelName={'CG2' 'lambda'};
+    ModelName={'CG2' 'All Params'};
     str.ParamSettings.paramset='scaled';
 end
 
@@ -58,10 +58,10 @@ end
 %  str.QOI_pre_analysis(str);
 % 
 % % 2. local sensitivity analysis
-% [POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
+ [POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
 % 
 % % 3. extended sensitivity analysis
- [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;
+% [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;
 % 
 % %4. global sensitivity analysis
 % [POI_GSA,QOI_GSA]=str.QOI_GSA(str); POI.GSA=POI_GSA; QOI.GSA=QOI_GSA;
