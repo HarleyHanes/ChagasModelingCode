@@ -119,7 +119,7 @@ switch str.QOI_model_name
         %Select POI's and QOI's
         str.POI_names =  {'\lambda_R','\lambda_S','\lambda_V'};
                       str.nPOI=length(str.POI_names);
-        str.QOI_names =  {'Proportion I_{DV} at equilibirium','Infected Feedings per Person'};
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium','Infected Feedings per Person per Day'};
 %         str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'Proportion I_{DD} at equilibirium',...
 %             'Proportion I_{DR} at equilibirium', 'Proportion I_{DS} at equilibirium'};
         str.nQOI=length(str.QOI_names);

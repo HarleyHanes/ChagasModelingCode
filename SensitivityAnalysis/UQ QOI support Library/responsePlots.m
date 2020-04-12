@@ -55,17 +55,20 @@ for i=1:nQuants
         x_ = squeeze(param_range(j,:));
         y_ = squeeze(quant_range(j,i,:))';
 
+        %Move up axis legend and adjust plot height
+        ax = gca;
+        ax.Position(2)=ax.Position(2)+.04;
+        ax.Position(4)=ax.Position(4)-.04;
         hold(a,'on')
         plot(a, x_, y_, ...
             paramData.base(j), quantData.base(i), '*','MarkerSize',14);
-      
         xlim(a, [xpt_min(j) xpt_max(j)])
         ylim(a, [min(yval_min(:,i)) max(yval_max(:,i))+10^(-12)])
         xlabel(a,[paramNames{j}],'fontsize',22)
         if j > 1
             set(a,'YTickLabel',{})
         else
-            ylabel(a, ['QOI = ',quantNames{i}],'fontsize',18)
+            ylabel(a,quantNames{i},'fontsize',18)
         end
 %         keyboard
 %        ylim(a, [yval_min(j,i) yval_max(j,i)+eps])
