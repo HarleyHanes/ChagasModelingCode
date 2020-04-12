@@ -119,7 +119,7 @@ switch str.QOI_model_name
         %Select POI's and QOI's
         str.POI_names =  {'\lambda_R','\lambda_S','\lambda_V'};
                       str.nPOI=length(str.POI_names);
-        str.QOI_names =  {'Proportion I_{DV} at equilibirium','Number I_{DV} at equilibirium', 'R_0'};
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium','Infected Feedings per Person'};
 %         str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'Proportion I_{DD} at equilibirium',...
 %             'Proportion I_{DR} at equilibirium', 'Proportion I_{DS} at equilibirium'};
         str.nQOI=length(str.QOI_names);
@@ -130,7 +130,7 @@ switch str.QOI_model_name
             error("Different number of parameters named than entered")
         end
         str.POI_min=zeros(size(str.POI_baseline));
-        str.POI_max=str.POI_baseline+.8*str.POI_baseline;
+        str.POI_max=str.POI_baseline+1.5*str.POI_baseline;
         str.POI_mode=str.POI_baseline;
     case 'Vec Infection'
         str.POI_names={'\alpha^{SS}_{SV}' '\alpha^{SR}_{SV}' '\alpha^{DS}_{DV}'...

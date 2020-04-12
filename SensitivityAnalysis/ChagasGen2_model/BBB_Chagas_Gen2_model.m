@@ -49,7 +49,7 @@ for i=1:length(qnames)
 %              QOIs(i) = QOI_DV_number_infected_final_time(soln);
 %              W=1;
         case 'Infected Feedings per Person'
-             QOIs(i)= QOI_num_infected_feedings_per_human(params,soln;
+             QOIs(i)= QOI_num_infected_feedings_per_human(params,soln);
         case 'Number I_{DV} at equilibirium'
              QOIs(i)= QOI_DV_num_infected_final_time(soln);
         case 'Proportion I_{DV} at equilibirium'
