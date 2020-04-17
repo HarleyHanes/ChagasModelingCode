@@ -2,8 +2,10 @@ function [params] = CG2toODE10params(CG2)
 %CG2toODE10params Derives Parameters for 10 ODE model from a given set of
 %14 ODE Params
 %   Detailed explanation goes here
+%fprintf('Loading Parameters for 10 ODE Model\n')
 c=CG2.PopProportions.c;
 d=CG2.PopProportions.d;
+        N.Humans=CG2.N.Humans;
         N.SV=CG2.N.SV;
         N.DV=CG2.N.DV;
     %Synanthropic Hosts
@@ -15,6 +17,8 @@ d=CG2.PopProportions.d;
     %Domestic Mammals
         N.DD=CG2.N.DD;
 %Recruitment Rates-Sums of initial compartments recruitment rates
+        sigma.SS=0;
+        sigma.DS=0;
         sigma.SV=CG2.sigma.SV;
         sigma.DV=CG2.sigma.DV;
         sigma.SR=CG2.sigma.SS+CG2.sigma.SR;
@@ -71,9 +75,9 @@ d=CG2.PopProportions.d;
     params.bio=CG2.bio;
     params.N=N;
     params.sigma=sigma;
+    params.mu=CG2.mu;
     params.gamma=gamma;
     params.alpha=alpha;
-    params.beta=beta;
     params.lambda=lambda;
     params.r=r;
     params.init=init;

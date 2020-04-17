@@ -7,7 +7,7 @@ if nargin>=1
         str.ParamSettings.paramset=varargin{2};       %parameter settings are second input
     end
 else
-    ModelName={'CG2' 'Vector Demography'};
+    ModelName={'8ODE' 'Assumptions Error: d'};
     str.ParamSettings.paramset='scaled';
 end
 

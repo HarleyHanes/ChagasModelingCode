@@ -67,7 +67,9 @@ switch str.QOI_model_name
         str.POI_names={'d_{SS}','d_{SR}',...
             'd_{DS}','d_{DR}','d_{DD}'};
             str.nPOI=length(str.POI_names);
-        str.QOI_names =  {'Proportion I_{DV} at equilibirium Error', 'Error in R_0', 'Time Derivatives at t=0 Err'};
+        str.QOI_names =  {'Infected Feedings per Person per Day Error' 'Infected Feedings per Person per Day' 'Proportion I_{DV} at equilibirium Error'};
+        %str.QOI_names =  {'Infected Feedings per Person per Day' 'Proportion I_{DV} at equilibirium Error'};
+        %str.QOI_names =  {'Proportion I_{DV} at equilibirium Error'};
             str.nQOI=length(str.QOI_names);
             
        str.POI_baseline=[d.SS d.SR d.DS d.DR d.DD]';
@@ -93,9 +95,8 @@ switch str.QOI_model_name
         str.POI_names={'d_{SS}','d_{SR}',...
             'd_{DS}','d_{DR}','d_{DD}'};
             str.nPOI=length(str.POI_names);
-        str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
+        str.QOI_names =  {'Infected Feedings per Person per Day Error'};
             str.nQOI=length(str.QOI_names);
-            
        str.POI_baseline=[d.SS d.SR d.DS d.DR d.DD]';
        str.POI_min(1:5,1)=zeros(5,1)+.1;
        str.POI_max(1:5,1)=ones(5,1)-.1;

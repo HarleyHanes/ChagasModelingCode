@@ -233,14 +233,19 @@ fracinfect.DD=.01;
             
 % Scaling Assumptions- Commented out because I haven't checked if they're
 % still good with the host change
+     EquilNDD=0.8527*N.DD; % THis proportion is at the base spatial level but I think its conserved
      c.SS_ST=N.SS/(N.SS+N.SR);
+     c.SR_ST=N.SR/(N.SS+N.SR);
      c.DS_DT=N.DS/(N.DS+N.DR);
-     c.DD_DH=N.DD/(N.DS+N.DR+N.DD);
-%     d.SS=.998187882806565;
-%     d.DS=.998577012338577;
-%     d.SR=.147830790713987;
-%     d.DR=.148358620803791;
-%     d.DD=.397765472604401;
+     c.DR_DT=N.DR/(N.DS+N.DR);
+     c.DD_DH=EquilNDD/(N.DS+N.DR+EquilNDD);
+     c.DT_DH=(N.DS+N.DR)/(N.DS+N.DR+EquilNDD);
+     d.SS=.5001756;
+     d.DS=.49969649;
+     d.SR=.15001910;
+     d.DR=.149971758;
+     d.DD=.160043318;
+     d.DT=c.DS_DT*d.DS+c.DR_DT*d.DR;
     switch ParamSettings.paramset
         case 'Identicle Compartments'
                 %Set equal biting rates
@@ -303,6 +308,6 @@ fracinfect.DD=.01;
     params.init=init;
     params.fracinfect=fracinfect;
     params.tspan=tspan; 
-     params.PopProportions.c=c;
-%     params.PopProportions.d=d;
+    params.PopProportions.c=c;
+    params.PopProportions.d=d;
 end
