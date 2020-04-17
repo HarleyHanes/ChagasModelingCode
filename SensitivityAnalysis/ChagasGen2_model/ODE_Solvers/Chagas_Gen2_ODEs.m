@@ -15,7 +15,7 @@ alpha=params.alpha;
 lambda=params.lambda;
 r=params.r;
 
-
+% Compression Updated
 if N.SR==0 && N.DR==0
     if y(5)~=0||y(6)~=0||y(11)~=0||y(12)~=0
         error('N.SR or N.DR set at 0 but infected or susceptible comparments are not')
@@ -35,6 +35,10 @@ if N.DD==0
         error('N.SS or N.DS set at 0 but infected or susceptible comparments are not')
     end
     N.DD=10^(-18);
+end
+if ~isfield(r.SR)||~isfield(r.DR)
+    r.SR=r.R;
+    r.DR=r.R;
 end
 
 %Redefine b's in case beta is in sensitivity analysis
@@ -77,8 +81,8 @@ dydt=NaN(length(y),1);
      dydt(3)=sigma.SS-(alpha.SV_SS)*(I_SV/(y(1)+y(2)))*S_SS+lambda.DS_SS*S_DS-lambda.SS_DS*S_SS-gamma.SS*S_SS;
      dydt(4)=alpha.SV_SS*(I_SV/(y(1)+y(2)))*S_SS+lambda.DS_SS*I_DS-lambda.SS_DS*I_SS-gamma.SS*I_SS;
      
-     dydt(5)=sigma.SR*(1-y(6)/(y(5)+y(6))*r.R)-alpha.SV_SR*(I_SV/(y(1)+y(2)))*S_SR+lambda.DR_SR*S_DR-lambda.SR_DR*S_SR-gamma.SR*S_SR;
-     dydt(6)=sigma.SR*y(6)/(y(5)+y(6))*r.R+alpha.SV_SR*(I_SV/(y(1)+y(2)))*S_SR+lambda.DR_SR*I_DR-lambda.SR_DR*I_SR-gamma.SR*I_SR;
+     dydt(5)=sigma.SR*(1-y(6)/(y(5)+y(6))*r.SR)-alpha.SV_SR*(I_SV/(y(1)+y(2)))*S_SR+lambda.DR_SR*S_DR-lambda.SR_DR*S_SR-gamma.SR*S_SR;
+     dydt(6)=sigma.SR*y(6)/(y(5)+y(6))*r.SR+alpha.SV_SR*(I_SV/(y(1)+y(2)))*S_SR+lambda.DR_SR*I_DR-lambda.SR_DR*I_SR-gamma.SR*I_SR;
      
      dydt(7)=sigma.DV-(alpha.DS_DV*(I_DS/(y(9)+y(10)))+alpha.DR_DV*(I_DR/(y(11)+y(12)))+alpha.DD_DV*(I_DD/(y(13)+y(14))))*S_DV+lambda.SV_DV*S_SV-lambda.DV_SV*S_DV-gamma.DV*S_DV;
      dydt(8)=(alpha.DS_DV*(I_DS/(y(9)+y(10)))+alpha.DR_DV*(I_DR/(y(11)+y(12)))+alpha.DD_DV*(I_DD/(y(13)+y(14))))*S_DV+lambda.SV_DV*I_SV-lambda.DV_SV*I_DV-gamma.DV*I_DV;
@@ -86,8 +90,8 @@ dydt=NaN(length(y),1);
      dydt(9)=sigma.DS-(alpha.DV_DS)*(I_DV/(y(7)+y(8)))*S_DS+lambda.SS_DS*S_SS-lambda.DS_SS*S_DS-gamma.DS*S_DS;
      dydt(10)=(alpha.DV_DS)*(I_DV/(y(7)+y(8)))*S_DS+lambda.SS_DS*I_SS-lambda.DS_SS*I_DS-gamma.DS*I_DS;
      
-     dydt(11)=sigma.DR*(1-r.R*y(12)/(y(11)+y(12)))-(alpha.DV_DR)*(I_DV/(y(7)+y(8)))*S_DR+lambda.SR_DR*S_SR-lambda.DR_SR*S_DR-gamma.DR*S_DR;
-     dydt(12)=sigma.DR*r.R*y(12)/(y(11)+y(12))+(alpha.DV_DR)*(I_DV/(y(7)+y(8)))*S_DR+lambda.SR_DR*I_SR-lambda.DR_SR*I_DR-gamma.DR*I_DR;
+     dydt(11)=sigma.DR*(1-r.DR*y(12)/(y(11)+y(12)))-(alpha.DV_DR)*(I_DV/(y(7)+y(8)))*S_DR+lambda.SR_DR*S_SR-lambda.DR_SR*S_DR-gamma.DR*S_DR;
+     dydt(12)=sigma.DR*r.DR*y(12)/(y(11)+y(12))+(alpha.DV_DR)*(I_DV/(y(7)+y(8)))*S_DR+lambda.SR_DR*I_SR-lambda.DR_SR*I_DR-gamma.DR*I_DR;
      
      dydt(13)=sigma.DD-alpha.DV_DD*(I_DV/(y(7)+y(8)))*S_DD-gamma.DD*S_DD;
      dydt(14)=alpha.DV_DD*(I_DV/(y(7)+y(8)))*S_DD-mu.DD*I_DD;
