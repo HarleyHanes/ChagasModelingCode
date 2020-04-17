@@ -233,9 +233,9 @@ fracinfect.DD=.01;
             
 % Scaling Assumptions- Commented out because I haven't checked if they're
 % still good with the host change
-%     c.SS_ST=N.SS/(N.SS+N.SR);
-%     c.DS_DT=N.DS/(N.DS+N.DR);
-%     c.DD_DH=N.DD/(N.DS+N.DR+N.DD);
+     c.SS_ST=N.SS/(N.SS+N.SR);
+     c.DS_DT=N.DS/(N.DS+N.DR);
+     c.DD_DH=N.DD/(N.DS+N.DR+N.DD);
 %     d.SS=.998187882806565;
 %     d.DS=.998577012338577;
 %     d.SR=.147830790713987;
@@ -303,6 +303,6 @@ fracinfect.DD=.01;
     params.init=init;
     params.fracinfect=fracinfect;
     params.tspan=tspan; 
-%     params.PopProportions.c=b;
+     params.PopProportions.c=c;
 %     params.PopProportions.d=d;
 end

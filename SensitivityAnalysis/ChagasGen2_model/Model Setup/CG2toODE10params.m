@@ -1,96 +1,83 @@
 function [params] = CG2toODE10params(CG2)
-%UNTITLED Summary of this function goes here
+%CG2toODE10params Derives Parameters for 10 ODE model from a given set of
+%14 ODE Params
 %   Detailed explanation goes here
 c=CG2.PopProportions.c;
 d=CG2.PopProportions.d;
         N.SV=CG2.N.SV;
         N.DV=CG2.N.DV;
     %Synanthropic Hosts
-        N.SS=CG2.N.SS+CG2.N.SR;
-        N.DS=CG2.N.DS+CG2.N.DR;
+        N.SS=0;
+        N.DS=0;
     %Rodents
-        N.SR=0;
-        N.DR=0;
+        N.SR=CG2.N.SS+CG2.N.SR;
+        N.DR=CG2.N.DS+CG2.N.DR;
     %Domestic Mammals
         N.DD=CG2.N.DD;
+%Recruitment Rates-Sums of initial compartments recruitment rates
+        sigma.SV=CG2.sigma.SV;
+        sigma.DV=CG2.sigma.DV;
+        sigma.SR=CG2.sigma.SS+CG2.sigma.SR;
+        sigma.DR=CG2.sigma.DS+CG2.sigma.DR;
+        sigma.DD=CG2.sigma.DD;
 %Death Rates -%weighted averages of each death rate according to density
     %Vectors
         gamma.SV=CG2.gamma.SV;
         gamma.DV=CG2.gamma.DV;
     %Synanthropic Hosts
-        gamma.SS=(CG2.gamma.SS*c.SS_ST*d.SS+CG2.gamma.SR*(1-CG2.r.R)*(1-c.SS_ST)*d.SR)...
-            /(c.SS_ST*d.SS+(1-c.SS_ST)*d.SR);
-        gamma.DS=(CG2.gamma.DS*c.DS_DT*d.DS+CG2.gamma.DR*(1-CG2.r.R)*(1-c.DS_DT)*d.DR)...
-            /(c.DS_DT*d.DS+(1-c.DS_DT)*d.DR);
+        gamma.SS=0;
+        gamma.DS=0;
     %Rodents
-        gamma.SR=0;
-        gamma.DR=0;
+        gamma.SR=c.SS_ST*CG2.gamma.SS+c.SR_ST*CG2.gamma.SR;
+        gamma.DR=gamma.SR;
     %Domestic Mammals
         gamma.DD=CG2.gamma.DD;
 %Host-->Vector transmission rates
      %Sylvatic Vectors
-        alpha.SS_SV=(CG2.alpha.SS_SV*d.SS+CG2.alpha.SR_SV*d.SR)...
-            /(d.SS*c.SS_ST+d.SR*(1-c.SS_ST));
-        alpha.SR_SV=0;
+        alpha.SR_SV=(CG2.alpha.SS_SV*d.SS+CG2.alpha.SR_SV*d.SR)...
+            /(d.SS*c.SS_ST+d.SR*c.SR_ST);
+        alpha.SS_SV=0;
      %Peridomestic Vectors
-        alpha.DS_DV=(CG2.alpha.DS_DV*d.DS+CG2.alpha.DR_DV*d.DR)...
-            /(d.DS*c.DS_DT+d.DR*(1-c.DS_DT));
-        alpha.DR_DV=0;
+        alpha.DR_DV=(CG2.alpha.DS_DV*d.DS+CG2.alpha.DR_DV*d.DR)...
+            /(d.DS*c.DS_DT+d.DR*c.DR_DT);
+        alpha.DS_DV=0;
         alpha.DD_DV=CG2.alpha.DD_DV;
-%Vector-->Host transmission rates (stechorian)
+%Vector-->Host transmission rates
     %Sylvatic Hosts
-        alpha.SV_SS=(CG2.alpha.SV_SS*d.SS+CG2.alpha.SV_SR*d.SR)...
-            /(d.SS*c.SS_ST+d.SR*(1-c.SS_ST));
-        alpha.SV_SR=0;
+        alpha.SV_SR=(CG2.alpha.SV_SS*(1-d.SS)*c.SS_ST+CG2.alpha.SV_SR*(1-d.SR)*c.SR_ST)...
+            /((1-d.SS)*c.SS_ST+(1-d.SR)*c.SR_ST);
+        alpha.SV_SS=0; %This was bugged in the first draft
     %Peridomestic Hosts
-        alpha.DV_DS=((CG2.alpha.DV_DS+CG2.beta.DV_DS)*c.DS_DT*(1-d.DS)+(CG2.alpha.DV_DR+CG2.beta.DV_DR)*(1-c.DS_DT)*(1-d.DR))...
-            /(c.DS_DT*(1-d.DS)+(1-c.DS_DT)*(1-d.DR));
-        alpha.DV_DR=0;
+        alpha.DV_DR=(CG2.alpha.DV_DS*c.DS_DT*(1-d.DS)+CG2.alpha.DV_DR*c.DR_DT*(1-d.DR))...
+            /(c.DS_DT*(1-d.DS)+c.DR_DT*(1-d.DR));
+        alpha.DV_DS=0;
         alpha.DV_DD=CG2.alpha.DV_DD;
-%Vector-->Host transmission rates (oral)
-    %Sylvatic Hosts
-        beta.SV_SS=0;%q_V_H*b_SH;
-        beta.SV_SR=0;%q_V_H*b_SH;
-    %Peridomestic Hosts
-        beta.DV_DS=0;%q_V_H*b_SH;
-        beta.DV_DR=0;%q_V_H*b_SH;
-        beta.DV_DD=0;%q_V_H*b_SH;
 %Movement rates
-        lambda.R=0;
-        lambda.S=c.SS_ST*CG2.lambda.S+(1-c.SS_ST)*CG2.lambda.R;
+        lambda.S=0;
+        lambda.R=c.SS_ST*CG2.lambda.S+c.SR_ST*CG2.lambda.R;
         lambda.V=CG2.lambda.V;
-%Host feeding rates
-    b.SR=0;
-    b.SS=CG2.b.SS*c.SS_ST+CG2.b.SR*(1-c.SS_ST);
-    
-    b.DR=0;
-    b.DS=CG2.b.DS*c.DS_DT+CG2.b.DR*(1-c.DS_DT);
-    b.DD=CG2.b.DD;
-        
+%Vertical Transmission
+        r.R=CG2.sigma.SR/sigma.SR*CG2.r.R*d.SR/(d.SS*c.SS_ST+d.SR*c.SR_ST);
 %Inits
     init=CG2.init;
-    init(3:4,1)=init(3:4,1)+init(5:6,1);
-    init(5:6,1)=zeros(2,1);
-    init(9:10,1)=init(9:10,1)+init(11:12,1);
-    init(11:12,1)=zeros(2,1);
-    
-    %Deprecated
-    r.R=0;
+    init(5:6,1)=init(3:4,1)+init(5:6,1);
+    init(3:4,1)=zeros(2,1);
+    init(11:12,1)=init(9:10,1)+init(11:12,1);
+    init(9:10,1)=zeros(2,1);
 %fracinfect
-    fracinfect=CG2.fracinfect;
     fracinfect.SR=0;
     fracinfect.DR=0;
     params.PopProportions=CG2.PopProportions;
-    params.b=b;
     params.bio=CG2.bio;
     params.N=N;
+    params.sigma=sigma;
     params.gamma=gamma;
     params.alpha=alpha;
     params.beta=beta;
     params.lambda=lambda;
     params.r=r;
     params.init=init;
-    params.fracinfect=fracinfect;
+    params.fracinfect=CG2.fracinfect;
     params.tspan=CG2.tspan;    
 end
 

@@ -56,7 +56,11 @@ for i=1:length(pnames)
         case'\gamma_{DR}'
             gamma.DR=POIs(i);
         case'\gamma_{DD}'
-            gamma.DD=POIs(i);        
+            gamma.DD=POIs(i); 
+        case'^{1}/{\gamma_{SV}}'
+            gamma.SV=1/POIs(i);
+        case'^{1}/{\gamma_{DV}}'
+            gamma.DV=1/POIs(i);
         case'\mu_{DD}'
             mu.DD=POIs(i);        
         case'r_R'

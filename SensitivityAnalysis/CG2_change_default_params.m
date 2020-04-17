@@ -126,6 +126,7 @@ switch str.QOI_model_name
         
         %Set parameter Sampling
         str.POI_baseline=[lambda.R lambda.S lambda.V]';
+        str.POI_baseline=[lambda.R lambda.S .05]';
         if length(str.POI_baseline)~=str.nPOI
             error("Different number of parameters named than entered")
         end
@@ -135,7 +136,7 @@ switch str.QOI_model_name
     case 'Vec Infection'
         str.POI_names={'\alpha^{SS}_{SV}' '\alpha^{SR}_{SV}' '\alpha^{DS}_{DV}'...
             '\alpha^{DR}_{DV}' '\alpha^{DD}_{DV}'};
-        str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'Infected Feedings per Person per Day'};
         str.nQOI=length(str.QOI_names);
         str.nPOI=length(str.POI_names);
         
@@ -150,7 +151,7 @@ switch str.QOI_model_name
     case 'Host Infection'
                 str.POI_names={'\alpha^{SV}_{SS}' '\alpha^{SV}_{SR}' '\alpha^{DV}_{DS}'...
             '\alpha^{DV}_{DR}' '\alpha^{DV}_{DD}'};
-        str.QOI_names ={'Proportion I_{DV} at equilibirium', 'R_0'};
+        str.QOI_names ={'Proportion I_{DV} at equilibirium', 'Infected Feedings per Person per Day'};
         str.nQOI=length(str.QOI_names);
         str.nPOI=length(str.POI_names);
         
@@ -181,24 +182,38 @@ switch str.QOI_model_name
         str.POI_max=str.POI_baseline+.5*str.POI_baseline;
         str.POI_mode=str.POI_baseline;
         
-    case 'Death Rates'
-        str.POI_names={'\gamma_{SV}', '\gamma_{DV}','\gamma_{SS}','\gamma_{DS}',...
-            '\gamma_{SR}','\gamma_{DR}','\gamma_{DD}','\mu_{DD}','r_R'};
+    case 'Vector Demography'
+        str.POI_names={'^{1}/{\gamma_{SV}}', '^{1}/{\gamma_{DV}}','\sigma_{SV}', '\sigma_{DV}'};
         %str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
-        str.QOI_names={'Proportion I_{DV} at equilibirium','R_0'};
+        str.QOI_names={'Proportion I_{DV} at equilibirium','Infected Feedings per Person per Day'};
         str.nQOI=length(str.QOI_names);
         str.nPOI=length(str.POI_names);
         
         
-        str.POI_baseline=[gamma.SV gamma.DV gamma.SS gamma.DS...
-            gamma.SR gamma.DR gamma.DD mu.DD r.R]';
+        str.POI_baseline=[1/gamma.SV 1/gamma.DV sigma.SV sigma.DV]';
         if length(str.POI_baseline)~=str.nPOI
             error("Different number of parameters named than entered")
         end
         str.POI_min=str.POI_baseline-.8*str.POI_baseline;
         str.POI_max=str.POI_baseline+.8*str.POI_baseline;
         str.POI_mode=str.POI_baseline;
+    case 'Recruitment'
+        str.POI_names={'\sigma_{SV}', '\sigma_{DV}','\sigma_{SS}','\sigma_{DS}',...
+            '\sigma_{SR}','\sigma_{DR}','\sigma_{DD}'};
+        %str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
+        str.QOI_names={'Proportion I_{DV} at equilibirium','Infected Feedings per Person per Day'};
+        str.nQOI=length(str.QOI_names);
+        str.nPOI=length(str.POI_names);
         
+        
+        str.POI_baseline=[sigma.SV sigma.DV sigma.SS sigma.DS...
+            sigma.SR sigma.DR sigma.DD]';
+        if length(str.POI_baseline)~=str.nPOI
+            error("Different number of parameters named than entered")
+        end
+        str.POI_min=str.POI_baseline-.8*str.POI_baseline;
+        str.POI_max=str.POI_baseline+.8*str.POI_baseline;
+        str.POI_mode=str.POI_baseline;        
     otherwise
         error([' str.QOI_model =',str.QOI_model,' is not available'])
 end
