@@ -21,9 +21,9 @@ d=CG2.PopProportions.d;
         sigma.DS=0;
         sigma.SV=CG2.sigma.SV;
         sigma.DV=CG2.sigma.DV;
+        sigma.DD=CG2.sigma.DD;
         sigma.SR=CG2.sigma.SS+CG2.sigma.SR;
         sigma.DR=CG2.sigma.DS+CG2.sigma.DR;
-        sigma.DD=CG2.sigma.DD;
 %Death Rates -%weighted averages of each death rate according to density
     %Vectors
         gamma.SV=CG2.gamma.SV;
@@ -61,7 +61,7 @@ d=CG2.PopProportions.d;
         lambda.R=c.SS_ST*CG2.lambda.S+c.SR_ST*CG2.lambda.R;
         lambda.V=CG2.lambda.V;
 %Vertical Transmission
-        r.R=CG2.sigma.SR/sigma.SR*CG2.r.R*d.SR/(d.SS*c.SS_ST+d.SR*c.SR_ST);
+        r.R=CG2.sigma.SR/sigma.SR*(CG2.r.R*d.SR)/(d.SS*c.SS_ST+d.SR*c.SR_ST);
 %Inits
     init=CG2.init;
     init(5:6,1)=init(3:4,1)+init(5:6,1);

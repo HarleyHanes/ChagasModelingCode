@@ -63,18 +63,53 @@ switch str.QOI_model_name
         str.POI_min=str.POI_baseline*.8;
         str.POI_max=str.POI_baseline*1.2;
         str.POI_mode=str.POI_baseline;
+    case 'All Params Error'
+         str.POI_names ={'\lambda_R','\lambda_S','\lambda_V',... %Movement Rates
+            '\sigma_{SV}' '\sigma_{SS}' '\sigma_{SR}' '\sigma_{DV}'...
+            '\sigma_{DS}' '\sigma_{DR}' '\sigma_{DD}'... %Recruitment Rates
+            '\alpha^{SS}_{SV}' '\alpha^{SR}_{SV}' '\alpha^{DS}_{DV}'...
+            '\alpha^{DR}_{DV}' '\alpha^{DD}_{DV}'... %Vec Infection
+            '\alpha^{SV}_{SS}' '\alpha^{SV}_{SR}' '\alpha^{DV}_{DS}'...
+            '\alpha^{DV}_{DR}' '\alpha^{DV}_{DD}' ... %Host Infection
+            '\gamma_{SS}','\gamma_{SR}','\gamma_{SV}',...
+            '\gamma_{DS}','\gamma_{DR}','\gamma_{DV}',... %DeathRates
+            '\gamma_{DD}','\mu_{DD}','r_R'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Percent Error in Human Risk Estimation'};
+            str.nQOI=length(str.QOI_names);
+        str.POI_baseline=[lambda.R lambda.S lambda.V...
+            sigma.SV sigma.SS sigma.SR sigma.DV sigma.DS sigma.DR sigma.DD...
+            alpha.SS_SV alpha.SR_SV alpha.DS_DV alpha.DR_DV alpha.DD_DV...
+            alpha.SV_SS alpha.SV_SR alpha.DV_DS alpha.DV_DR alpha.DV_DD...
+            gamma.SS gamma.SR gamma.SV gamma.DS gamma.DR gamma.DV gamma.DD...
+            mu.DD r.R]';
+        str.POI_min=str.POI_baseline*.8;
+        str.POI_max=str.POI_baseline*1.2;
+        str.POI_mode=str.POI_baseline;
+    case 'Model Params Error: Most Sensitive'
+        
+         str.POI_names ={'\alpha^{SS}_{SV}', '\alpha^{SV}_{SR}', '\alpha^{DV}_{DR}' ... %Host Infection
+            '\gamma_{SR}','\gamma_{SV}'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Percent Error in Human Risk Estimation'};
+            str.nQOI=length(str.QOI_names);
+        str.POI_baseline=[alpha.SS_SV alpha.SV_SR alpha.DV_DR...
+            gamma.SR gamma.SV]';
+        str.POI_min=str.POI_baseline*.8;
+        str.POI_max=str.POI_baseline*1.2;
+        str.POI_mode=str.POI_baseline;
     case 'Assumptions Error: d'
         str.POI_names={'d_{SS}','d_{SR}',...
             'd_{DS}','d_{DR}','d_{DD}'};
             str.nPOI=length(str.POI_names);
-        str.QOI_names =  {'Infected Feedings per Person per Day Error' 'Infected Feedings per Person per Day' 'Proportion I_{DV} at equilibirium Error'};
+        str.QOI_names =  {'Percent Error in Human Risk Estimation'};
         %str.QOI_names =  {'Infected Feedings per Person per Day' 'Proportion I_{DV} at equilibirium Error'};
         %str.QOI_names =  {'Proportion I_{DV} at equilibirium Error'};
             str.nQOI=length(str.QOI_names);
             
        str.POI_baseline=[d.SS d.SR d.DS d.DR d.DD]';
-       str.POI_min(1:5,1)=zeros(5,1)+.1;
-       str.POI_max(1:5,1)=ones(5,1)-.1;
+       str.POI_min(1:5,1)=zeros(5,1);
+       str.POI_max(1:5,1)=ones(5,1);
        str.POI_mode=str.POI_baseline;
         
     case 'Assumptions Error: All Assumptions'
@@ -191,6 +226,19 @@ switch str.QOI_model_name
         str.nPOI=length(str.POI_names);
         
         
+        str.POI_baseline=[1/gamma.SV 1/gamma.DV sigma.SV sigma.DV]';
+        if length(str.POI_baseline)~=str.nPOI
+            error("Different number of parameters named than entered")
+        end
+        str.POI_min=str.POI_baseline-.8*str.POI_baseline;
+        str.POI_max=str.POI_baseline+.8*str.POI_baseline;
+        str.POI_mode=str.POI_baseline;
+    case 'Vector Demography Error'
+        str.POI_names={'^{1}/{\gamma_{SV}}', '^{1}/{\gamma_{DV}}','\sigma_{SV}', '\sigma_{DV}'};
+        %str.QOI_names =  {'Proportion I_{DV} at equilibirium', 'R_0'};
+        str.QOI_names={'Percent Error in Human Risk Estimation'};
+        str.nQOI=length(str.QOI_names);
+        str.nPOI=length(str.POI_names);
         str.POI_baseline=[1/gamma.SV 1/gamma.DV sigma.SV sigma.DV]';
         if length(str.POI_baseline)~=str.nPOI
             error("Different number of parameters named than entered")

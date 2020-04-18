@@ -50,6 +50,8 @@ for i=1:length(qnames)
 %              W=1;
         case 'Infected Feedings per Person per Day Error' 
              QOIs(i)= QOI_num_infected_feedings_per_humanErr(params,soln,POIs,select,baseParams);
+        case 'Percent Error in Human Risk Estimation' 
+             QOIs(i)= QOI_num_infected_feedings_per_humanErrProp(params,soln,POIs,select,baseParams);
         case 'Infected Feedings per Person per Day'
              QOIs(i)= QOI_num_infected_feedings_per_human(params,soln);
         case 'Number I_{DV} at equilibirium'

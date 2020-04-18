@@ -179,8 +179,7 @@ fracinfect.DD=.01;
         alpha.DV_DD=alphaStecorian.DV_DD+(D.Dog*b.Dog*q.V_Dog+D.Cow*b.Cow*q.V_Cow)/(D.D);
         alpha.SV_SS=alphaStecorian.SV_SS+(D.Armadillo*b.Armadillo*q.V_Armadillo+D.Raccoon*b.Raccoon*q.V_Raccoon)/(D.S);
         alpha.SV_SR=alphaStecorian.SV_SR+b.Squirrel*q.V_Squirrel;
-        switch ParamSettings.paramset
-            case 'scaled'
+        if strcmpi(ParamSettings.paramset,'scaled') || strcmpi(ParamSettings.paramset,'test')
                 Scale=[0.452570670767227   0.001261826225713   0.008922234245436...
                     0.001453469348131   0.011266869442432   0.000120370079587];
                 %Hosts
@@ -195,13 +194,19 @@ fracinfect.DD=.01;
                 alpha.DS_DV=alpha.DS_DV*Scale(1);%.000788;
                 alpha.DR_DV=alpha.DR_DV*Scale(1);%.0057;
                 alpha.DD_DV=alpha.DD_DV*Scale(1);%000161;
-            case 'Test pHost'
+        elseif strcmpi(ParamSettings.paramset,'Test pHost')
                 alpha.DV_DS=alpha.DV_DS*ParamSettings.pScale;
                 alpha.DV_DR=alpha.DV_DR*ParamSettings.pScale;
                 alpha.DV_DD=alpha.DV_DD*ParamSettings.pScale;
                 alpha.SV_SS=alpha.SV_SS*ParamSettings.pScale;
                 alpha.SV_SR=alpha.SV_SR*ParamSettings.pScale;
         end
+        if strcmpi(ParamSettings.paramset,'test')
+            mu.DD=0;
+            r.R=0;
+            
+        end
+        
 %% Simulation Parameters 
     %Time
         tspan=0:tstep:tmax*365;

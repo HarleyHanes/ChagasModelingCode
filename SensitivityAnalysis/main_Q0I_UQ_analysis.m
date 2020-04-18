@@ -7,7 +7,7 @@ if nargin>=1
         str.ParamSettings.paramset=varargin{2};       %parameter settings are second input
     end
 else
-    ModelName={'8ODE' 'Assumptions Error: d'};
+    ModelName={'10ODE' 'Assumptions Error: d'};
     str.ParamSettings.paramset='scaled';
 end
 
@@ -58,7 +58,7 @@ end
 %  str.QOI_pre_analysis(str);
 % 
 % % 2. local sensitivity analysis
-% [POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
+%[POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
 % 
 % % 3. extended sensitivity analysis
  [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;
