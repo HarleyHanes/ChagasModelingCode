@@ -16,6 +16,26 @@ function str= CG2_change_default_params(str)
         %SelectModel 
         str.QOI_model_eval = @BBB_Chagas_Gen2_model;
 switch str.QOI_model_name
+    case 'Algebraic Compression'
+%         str.POI_names={'\gamma_{DS}','\gamma_{DR}','\gamma_{DV}'... %Death
+%             '\sigma_{DS}', '\sigma_{DR}' ,'\sigma_{DV}'... %Recruitment
+%             '\alpha^{DS}_{DV}', '\alpha^{DR}_{DV}'... %Vec Infection
+%              '\alpha^{DV}_{DS}', '\alpha^{DV}_{DR}'}; %Host Infection
+          str.POI_names={'\gamma_{DR}','\gamma_{DV}'... %Death Rates
+            '\alpha^{DS}_{DV}', '\alpha^{DR}_{DV}'... %Vec Infection
+             '\alpha^{DV}_{DR}'}; %Host Infection
+        str.QOI_names =  {'Algebraic I^*_{DV} Error','Algebraic I^*_{DV}/_{N^*_{DV}} Error'};
+            str.nQOI=length(str.QOI_names);
+        str.POI_baseline=[gamma.DR gamma.DV...
+            alpha.DS_DV alpha.DR_DV ...
+            alpha.DV_DR]';
+%         str.POI_baseline=[gamma.DS gamma.DR gamma.DV...
+%             sigma.DS sigma.DR sigma.DV  ...
+%             alpha.DS_DV alpha.DR_DV ...
+%             alpha.DV_DS alpha.DV_DR]';
+        str.POI_min=str.POI_baseline*.8;
+        str.POI_max=str.POI_baseline*1.2;
+        str.POI_mode=str.POI_baseline;
     case 'High Sensitivities' %Not been adjusted for new model
         str.POI_names={'\gamma_{DR}','\gamma_{SR}','\gamma_{DV}'};
             str.nPOI=length(str.POI_names);

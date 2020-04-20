@@ -13,7 +13,7 @@ tspan=params.tspan;
 yzero = balance_model(yzero, params);
 dydt_fn = @(t,y) Chagas_Gen2_ODEs(t, y, params);
 %% Solve ODE
-if ~(strcmpi(qnames{1},'R_0') && length(qnames)==1)
+if ~((strcmpi(qnames{1},'R_0')||(strcmpi(qnames{1},'Algebraic Equilibrium Error'))) && length(qnames)==1)
 %soln = ode23tb(dydt_fn, tspan, yzero);
 [soln.x,soln.y]=ode45(dydt_fn, tspan, yzero);
 %soln.y=soln.y'
@@ -48,6 +48,10 @@ for i=1:length(qnames)
 %         case 'Final Number of Infected DV'
 %              QOIs(i) = QOI_DV_number_infected_final_time(soln);
 %              W=1;
+        case 'Algebraic I^*_{DV} Error'
+            QOIs(i)=QOI_Algebraic_Equil_Err(params);
+        case 'Algebraic I^*_{DV}/_{N^*_{DV}} Error'
+            QOIs(i)=QOI_Algebraic_Equil_PerErr(params);
         case 'Infected Feedings per Person per Day Error' 
              QOIs(i)= QOI_num_infected_feedings_per_humanErr(params,soln,POIs,select,baseParams);
         case 'Percent Error in Human Risk Estimation' 

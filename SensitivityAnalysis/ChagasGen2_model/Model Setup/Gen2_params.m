@@ -204,8 +204,18 @@ fracinfect.DD=.01;
         if strcmpi(ParamSettings.paramset,'test')
             mu.DD=0;
             r.R=0;
-            
         end
+        if strcmpi(ParamSettings.paramset,'Compression')
+            %Remove DD compartment
+                sigma.DD=0;
+                gamma.DD=0;mu.DD=0;
+                alpha.DV_DD=0; alpha.DD_DV=0;
+            %disconnect sylvatic compartments
+                lambda.S=0; lambda.V=0; lambda.R=0;
+            %Remove vertical infection
+                r.R=0;
+        end
+        
         
 %% Simulation Parameters 
     %Time
