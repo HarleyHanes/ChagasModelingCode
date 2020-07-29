@@ -7,8 +7,8 @@ if nargin>=1
         str.ParamSettings.paramset=varargin{2};       %parameter settings are second input
     end
 else
-    ModelName={'CG2' 'Algebraic Compression'};
-    str.ParamSettings.paramset='compression';
+    ModelName={'CG2' 'lambdaV'};
+    str.ParamSettings.paramset='scaled';
 end
 
 % the user must a code to generate the QOIs from the POIs 

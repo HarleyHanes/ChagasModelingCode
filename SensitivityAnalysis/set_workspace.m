@@ -13,8 +13,13 @@ addpath(genpath([prefix(1:dirs(end))]))
 switch model
     case "CG1"
         rmpath(genpath(sprintf('%s\\ChagasGen2_model',pwd)))
+        rmpath(genpath(sprintf('%s\\ChagasModel_withNymphs',pwd)))
     case "CG2"
         rmpath(genpath(sprintf('%s\\ChagasGen1_model',pwd)))
+        rmpath(genpath(sprintf('%s\\ChagasModel_withNymphs',pwd)))
+    case "CG2Nymph"
+        rmpath(genpath(sprintf('%s\\ChagasGen1_model',pwd)))
+        rmpath(genpath(sprintf('%s\\ChagasGen2_model',pwd)))
     otherwise
 end
 %% Set a default for plot text style
