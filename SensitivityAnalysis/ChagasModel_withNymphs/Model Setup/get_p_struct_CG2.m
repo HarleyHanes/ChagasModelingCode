@@ -4,6 +4,7 @@ params=baseParams;
 alpha=params.alpha;
 sigma=params.sigma;
 gamma=params.gamma;
+epsilon=params.epsilon;
 r=params.r;
 mu=params.mu;
 lambda=params.lambda;
@@ -87,6 +88,12 @@ for i=1:length(pnames)
             params.PopProportions.c.DD_DH=POIs(i);
         case'd_{DD}'
             params.PopProportions.d.DD=POIs(i);
+        case '\epsilon_N'
+            epsilon.H=POIs(i);
+        case '\gamma_{SN}'
+            gamma.SN=POIs(i);
+        case '\gamma_{DN}'
+            gamma.DN=POIs(i);
         case 'null'
         otherwise
             warning("Error!! '%s' could not be identified as a parameter",pnames{i})
@@ -99,5 +106,6 @@ params.sigma=sigma;
 params.mu=mu;
 params.r=r;
 params.lambda=lambda;
+params.epsilon=epsilon;
 
 end

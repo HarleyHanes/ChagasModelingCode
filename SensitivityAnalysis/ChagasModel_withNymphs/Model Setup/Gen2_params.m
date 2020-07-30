@@ -38,6 +38,8 @@ fracinfect.DS=.01;
 fracinfect.SR=.01;
 fracinfect.DR=.01;
 fracinfect.DD=.01;
+fracinfect.SN=.01;
+fracinfect.DN=.01;
 
 
 %% Biological Parameters
@@ -64,7 +66,9 @@ fracinfect.DD=.01;
             D.D=D.Dog+D.Cow;
     %% Lifespans
         %Vectors
-            Lifespan.V=-456.6/log(16/213);%456.6;%1346.86;
+            DevTime.N=359.69;
+            Lifespan.V=456.6-DevTime.N;%456.6;%1346.86;
+            Lifespan.N=(1/.0751)*DevTime.N;
         %Synanthropes
             Lifespan.Raccoon=912.5;
             Lifespan.Armadillo=1087.795;
@@ -125,14 +129,19 @@ fracinfect.DD=.01;
             lambda.R=1/7;
 %% Model Parameter Calculation
     %% Population Sizes
-        N.SV=D.V*Area.S;
-        N.DV=D.V*Area.D;
+        N.SV=D.V*.0751*Area.S;
+        N.DV=D.V*.0751*Area.D;
         N.SS=(D.Armadillo+D.Raccoon)*Area.S;
         N.DS=(D.Armadillo+D.Raccoon)*Area.D;
         N.SR=D.Squirrel*Area.S;
         N.DR=D.Squirrel*Area.D;
         N.DD=(D.Cow+D.Dog)*Area.D*D.Households;
+        N.SN=D.V*(1-.0751)*Area.S;
+        N.DN=D.V*(1-.0751)*Area.D;
     %% Lifespan
+        gamma.SN=1/Lifespan.N;
+        gamma.DN=gamma.SN;
+        epsilon.N=1/DevTime.N;
         gamma.SV=1/Lifespan.V;
         gamma.DV=gamma.SV;
         gamma.SS=(D.Raccoon*1/Lifespan.Raccoon+D.Armadillo*1/Lifespan.Armadillo)/(D.Raccoon+D.Armadillo);
@@ -245,6 +254,13 @@ fracinfect.DD=.01;
         %Domestic Mammals
             init(13,1)=N.DD*(1-fracinfect.DD); %Susceptible
             init(14,1)=N.DD*fracinfect.DD; %Infected
+    %Nymphs
+        %Sylvatic Nymphs
+            init(15,1)=N.SN*(1-fracinfect.SN);
+            init(16,1)=N.SN*fracinfect.SN;
+        %Peridomestic Nymphs
+            init(17,1)=N.DN*(1-fracinfect.DN);
+            init(18,1)=N.DN*fracinfect.DN;
             
 % Scaling Assumptions- Commented out because I haven't checked if they're
 % still good with the host change
@@ -315,6 +331,7 @@ fracinfect.DD=.01;
     params.bio.Area=Area;
     params.N=N;
     params.gamma=gamma;
+    params.epsilon=epsilon;
     params.mu=mu;
     params.sigma=sigma;
     params.alpha=alpha;

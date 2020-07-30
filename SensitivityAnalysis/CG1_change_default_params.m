@@ -162,7 +162,7 @@ switch str.QOI_model_name
         str.POI_max=2*str.POI_baseline;
         str.POI_mode=str.POI_baseline;
     otherwise
-        error([' str.QOI_model =',str.QOI_model,' is not available'])
+        error([' str.QOI_model =',str.QOI_model_name,' is not available'])
 end
 
 %Set Common Properties

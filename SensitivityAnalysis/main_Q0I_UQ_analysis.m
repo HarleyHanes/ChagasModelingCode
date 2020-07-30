@@ -7,7 +7,7 @@ if nargin>=1
         str.ParamSettings.paramset=varargin{2};       %parameter settings are second input
     end
 else
-    ModelName={'CG2' 'lambdaV'};
+    ModelName={'CG2Nymph' 'Vec Infection'};
     str.ParamSettings.paramset='scaled';
 end
 
@@ -46,6 +46,11 @@ elseif strcmpi(ModelName{1},'CG2')||strcmpi(ModelName{1},'10ODE')||strcmpi(Model
         elseif strcmpi(ModelName{1},'8ODE')
             str.select.model='8ODE';
         end
+elseif strcmpi(ModelName{1},'CG2Nymph')
+        set_workspace('CG2Nymph')
+        str=QOI_define_default_params(str);
+        str.QOI_model_name=ModelName{2};   %Model to run if no inputs
+        str=CG2Nymph_change_default_params(str);% set the default parameter values
 else
         error('Unrecognized Model Name')
 end
@@ -58,7 +63,7 @@ end
 %  str.QOI_pre_analysis(str);
 % 
 % % 2. local sensitivity analysis
-%[POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
+% [POI_LSA,QOI_LSA]=str.QOI_LSA(str); POI.LSA=POI_LSA; QOI.LSA=QOI_LSA;
 % 
 % % 3. extended sensitivity analysis
  [POI_ESA,QOI_ESA]=str.QOI_ESA(str); POI.ESA=POI_ESA; QOI.ESA=QOI_ESA;

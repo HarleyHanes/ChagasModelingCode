@@ -1,4 +1,4 @@
-function str= CG2_change_default_params(str)
+function str= CG2Nymph_change_default_params(str)
 %% QOI_change_default_params change default parameters
 %Load parameters
     str.baseParams=Gen2_params(str.ParamSettings);
@@ -9,6 +9,7 @@ function str= CG2_change_default_params(str)
         lambda=str.baseParams.lambda;
         gamma=str.baseParams.gamma;
         mu=str.baseParams.mu;
+        epsilon=str.baseParams.epsilon;
         if isfield(str.baseParams,'PopProportions')
             c=str.baseParams.PopProportions.c;
             d=str.baseParams.PopProportions.d;
@@ -60,6 +61,18 @@ switch str.QOI_model_name
         str.POI_min=str.POI_baseline*.8;
         str.POI_max=str.POI_baseline*1.2;
         str.POI_mode=str.POI_baseline;
+    case 'Lifespans'
+        str.POI_names={'\gamma_{SS}','\gamma_{SR}','\gamma_{SV}','\gamma_{SN}',...
+            '\gamma_{DS}','\gamma_{DR}','\gamma_{DV}','\gamma_{DN}',... %DeathRates
+            '\gamma_{DD}','\mu_{DD}','r_R','\epsilon_N'};
+            str.nPOI=length(str.POI_names);
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium','Infected Feedings per Person per Day'};
+            str.nQOI=length(str.QOI_names);
+        str.POI_baseline=[gamma.SS gamma.SR gamma.SV gamma.SN gamma.DS gamma.DR gamma.DV gamma.DN gamma.DD...
+            mu.DD r.R  epsilon.N]';
+        str.POI_min=str.POI_baseline*.8;
+        str.POI_max=str.POI_baseline*1.2;
+        str.POI_mode=str.POI_baseline;
     case 'All Params'
          str.POI_names ={'\lambda_R','\lambda_S','\lambda_V',... %Movement Rates
             '\sigma_{SV}' '\sigma_{SS}' '\sigma_{SR}' '\sigma_{DV}'...
@@ -70,16 +83,17 @@ switch str.QOI_model_name
             '\alpha^{DV}_{DR}' '\alpha^{DV}_{DD}' ... %Host Infection
             '\gamma_{SS}','\gamma_{SR}','\gamma_{SV}',...
             '\gamma_{DS}','\gamma_{DR}','\gamma_{DV}',... %DeathRates
-            '\gamma_{DD}','\mu_{DD}','r_R'};
+            '\gamma_{DD}','\mu_{DD}','r_R',...
+            '\gamma_{SN}','\gamma_{DN}','\epsilon_N'};
             str.nPOI=length(str.POI_names);
-        str.QOI_names =  {'Proportion I_{DV} at equilibirium','Infected Feedings per Person'};
+        str.QOI_names =  {'Proportion I_{DV} at equilibirium','Infected Feedings per Person per Day'};
             str.nQOI=length(str.QOI_names);
         str.POI_baseline=[lambda.R lambda.S lambda.V...
             sigma.SV sigma.SS sigma.SR sigma.DV sigma.DS sigma.DR sigma.DD...
             alpha.SS_SV alpha.SR_SV alpha.DS_DV alpha.DR_DV alpha.DD_DV...
             alpha.SV_SS alpha.SV_SR alpha.DV_DS alpha.DV_DR alpha.DV_DD...
             gamma.SS gamma.SR gamma.SV gamma.DS gamma.DR gamma.DV gamma.DD...
-            mu.DD r.R]';
+            mu.DD r.R gamma.SN gamma.DN epsilon.N]';
         str.POI_min=str.POI_baseline*.8;
         str.POI_max=str.POI_baseline*1.2;
         str.POI_mode=str.POI_baseline;
@@ -302,7 +316,7 @@ switch str.QOI_model_name
         end
         str.POI_min=str.POI_baseline-.8*str.POI_baseline;
         str.POI_max=str.POI_baseline+.8*str.POI_baseline;
-        str.POI_mode=str.POI_baseline;        
+        str.POI_mode=str.POI_baseline; 
     otherwise
         error([' str.QOI_model =',str.QOI_model_name,' is not available'])
 end
