@@ -2,24 +2,28 @@
 
 %Find scaling parameters
 %initScale=[0.4533 0.0009 0.0087 0.0021 0.0117 0.0001];
-%initScale=[.5,.5,.5,.5,.5,.5];
-initScale=[.5, .001, .01, .001,.01,  .0005];
+%initScale=[.5,.5,.5,.5];
+initScale=[.5, .001, .01,  .0005];
+    %Add radnomness
+    initScale=initScale+10*randn(1,4).*initScale;
+    initScale(initScale<0)=zeros(1,length(sum(initScale<0)));
+
+params=Gen2_params;
 
 %Run lsq nonlin
 %%Scale=lsqnonlin(@(scale)OptomizeInfection(scale),initScale)
-Scale=fminsearch(@(scale)OptomizeInfection(scale,1),initScale);
+Scale=fminsearch(@(scale)OptomizeInfection(scale,params,1),initScale);
 
 %Plot model with scaling
-params=Gen2_params;
 alpha=params.alpha;
 params.tmax=60;
 %Apply Scaling
     %Hosts
     alpha.SV_SS=alpha.SV_SS*Scale(2);%.000788;
     alpha.SV_SR=alpha.SV_SR*Scale(3);%.0057;
-    alpha.DV_DS=alpha.DV_DS*Scale(4);%.000788;
-    alpha.DV_DR=alpha.DV_DR*Scale(5);%.0057;
-    alpha.DV_DD=alpha.DV_DD*Scale(6);%000161;
+    alpha.DV_DS=alpha.DV_DS*Scale(2);%.000788;
+    alpha.DV_DR=alpha.DV_DR*Scale(3);%.0057;
+    alpha.DV_DD=alpha.DV_DD*Scale(4);%000161;
     %Vectors  
     alpha.SS_SV=alpha.SS_SV*Scale(1);%.000788;
     alpha.SR_SV=alpha.SR_SV*Scale(1);%.0057;
@@ -55,16 +59,15 @@ ylabel('Proportion Infected')
 
 
 %function
-function pyError=OptomizeInfection(Scale,printBool)
-params=Gen2_params;
+function pyError=OptomizeInfection(Scale,params,printBool)
 alpha=params.alpha;
 %Apply Scaling
     %Hosts
     alpha.SV_SS=alpha.SV_SS*Scale(2);%.000788;
     alpha.SV_SR=alpha.SV_SR*Scale(3);%.0057;
-    alpha.DV_DS=alpha.DV_DS*Scale(4);%.000788;
-    alpha.DV_DR=alpha.DV_DR*Scale(5);%.0057;
-    alpha.DV_DD=alpha.DV_DD*Scale(6);%000161;
+    alpha.DV_DS=alpha.DV_DS*Scale(2);%.000788;
+    alpha.DV_DR=alpha.DV_DR*Scale(3);%.0057;
+    alpha.DV_DD=alpha.DV_DD*Scale(4);%000161;
     %Vectors  
     alpha.SS_SV=alpha.SS_SV*Scale(1);%.000788;
     alpha.SR_SV=alpha.SR_SV*Scale(1);%.0057;
@@ -77,7 +80,7 @@ params.alpha=alpha;
 POIs=0;%;[.0001,.00001]; 
 select.QOI={'Proportion I_{DV} at equilibirium'};
     select.POI=cell(1);
-select.POI={"null"};%{"\gamma_{SV}", "\gamma_{DV}"};
+select.POI{1}="null";%{"\gamma_{SV}", "\gamma_{DV}"};
 [~,soln]=BBB_Chagas_Gen2_model(POIs,select,params);
 pyPredicted=soln.py(end,2:2:14);
 
@@ -85,16 +88,16 @@ pyPredicted=soln.py(end,2:2:14);
     %weigting
         weights=[1 1 1 1 1 1 1];
     %Tikinov
-        lambdaTikinov=1e-6;
+        lambdaTikinov=1e-9;
     %negative penalty for Scalings
         lambdaNeg=100;
 pyExpected=[.75 .5 .15 .75 .5 .15 .16];
 pyError=sum(((pyPredicted-pyExpected).*weights).^2)+... %Nonlin-LeastSquares
-    lambdaTikinov*sum((pyPredicted-[1 1 1 1 1 1 1]).^2)+... %Tikinov Regularization
+    lambdaTikinov*sum((Scale-[1 1 1 1]).^2)+... %Tikinov Regularization
     lambdaNeg*sum(Scale(Scale<0).^2);
 %pyError=pyError(1);
 if printBool
-    fprintf(['\nPredicted Scalings: [%.3g, %.3g, %.3g, %.3g, %.3g, %.3g]\n'...
+    fprintf(['\nPredicted Scalings: [%.3g, %.3g, %.3g, %.3g]\n'...
              'pyError: %.4g\n'],...
              Scale,pyError)
 end
