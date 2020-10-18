@@ -2,12 +2,12 @@ function LaTeX_matrix(matrix, RowNames, ColNames, varargin)
 %
 %input:
 % matrix = the matrix to be writting as a LaTeX table
+% 'ColNames', string of column names
+% 'RowNames', string of row names
 
 % outputDir/filename  is written as LaTeX matrix
 %
-% variable input is of the form 'OptionName',value
-% 'ColNames', string of column names
-% 'RowNames', string of row names
+% variable input is of the form: 'OptionName',value
 % 'outputDir', name of output folder 
 % 'filename', name of output file
 % example:

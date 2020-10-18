@@ -1,10 +1,13 @@
 %% Optomize host and vector infection rates
 
 %Find scaling parameters
-initScale=[0.4533 0.0009 0.0087 0.0021 0.0117 0.0001];
+%initScale=[0.4533 0.0009 0.0087 0.0021 0.0117 0.0001];
+%initScale=[.5,.5,.5,.5,.5,.5];
+initScale=[.5, .001, .01, .001,.01,  .0005];
 
 %Run lsq nonlin
-Scale=lsqnonlin(@(scale)OptomizeInfection(scale),initScale)
+%%Scale=lsqnonlin(@(scale)OptomizeInfection(scale),initScale)
+Scale=fminsearch(@(scale)OptomizeInfection(scale,1),initScale);
 
 %Plot model with scaling
 params=Gen2_params;
@@ -28,7 +31,8 @@ params.alpha=alpha;
 %Run model
 POIs=0;%;[.0001,.00001]; 
 select.QOI={'Proportion I_{DV} at equilibirium'};
-select.POI={"null"};%{"\gamma_{SV}", "\gamma_{DV}"};
+    select.POI=cell(1);
+select.POI{1}="null";%{"\gamma_{SV}", "\gamma_{DV}"};
 [~,soln]=BBB_Chagas_Gen2_model(POIs,select,params);
 figure
 hold on
@@ -51,7 +55,7 @@ ylabel('Proportion Infected')
 
 
 %function
-function pyError=OptomizeInfection(Scale)
+function pyError=OptomizeInfection(Scale,printBool)
 params=Gen2_params;
 alpha=params.alpha;
 %Apply Scaling
@@ -72,11 +76,26 @@ params.alpha=alpha;
 %Run model
 POIs=0;%;[.0001,.00001]; 
 select.QOI={'Proportion I_{DV} at equilibirium'};
+    select.POI=cell(1);
 select.POI={"null"};%{"\gamma_{SV}", "\gamma_{DV}"};
 [~,soln]=BBB_Chagas_Gen2_model(POIs,select,params);
 pyPredicted=soln.py(end,2:2:14);
-weights=[1 1 1 1 1 1 1];
+
+%Add error terms
+    %weigting
+        weights=[1 1 1 1 1 1 1];
+    %Tikinov
+        lambdaTikinov=1e-6;
+    %negative penalty for Scalings
+        lambdaNeg=100;
 pyExpected=[.75 .5 .15 .75 .5 .15 .16];
-pyError=(pyPredicted-pyExpected).*weights;
+pyError=sum(((pyPredicted-pyExpected).*weights).^2)+... %Nonlin-LeastSquares
+    lambdaTikinov*sum((pyPredicted-[1 1 1 1 1 1 1]).^2)+... %Tikinov Regularization
+    lambdaNeg*sum(Scale(Scale<0).^2);
 %pyError=pyError(1);
+if printBool
+    fprintf(['\nPredicted Scalings: [%.3g, %.3g, %.3g, %.3g, %.3g, %.3g]\n'...
+             'pyError: %.4g\n'],...
+             Scale,pyError)
+end
 end
